@@ -1,0 +1,12 @@
+[submodule "vendor/fmt"]
+	path = vendor/fmt
+	url = git@github.com:fmtlib/fmt.git
+[submodule "vendor/glad_opengl_4.1"]
+	path = vendor/glad_opengl_4.1
+	url = git@github.com:cambalamas/glad_opengl_4.1.git
+[submodule "vendor/glm"]
+	path = vendor/glm
+	url = git@github.com:g-truc/glm.git
+[submodule "vendor/glfw"]
+	path = vendor/glfw
+	url = git@github.com:glfw/glfw.git
