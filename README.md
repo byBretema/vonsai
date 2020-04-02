@@ -1,6 +1,6 @@
-# WAFFLE Renderer
+# VONSAI Renderer
 
-> *C++17* and *Modern OpenGL* wrapper.
+> A toy engine on top of **OpenGL4** using *C++17*.
 
 !["Three monkeys screenshot"](./doc/images/screenshot.png)
 
