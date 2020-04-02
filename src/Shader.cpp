@@ -25,7 +25,7 @@ std::array<int, 5> constexpr SHADER_TYPES{
 };
 
 // Build pipeline from code as string
-void Shader::buildPipeline(ShaderCode const &rawCode) {
+void Shader::buildPipeline(ShaderCode const &a_rawCode) {
   if (!m_ok) {
     vo_err("ShaderPaths looks incorrect at some point");
     return;
@@ -46,7 +46,7 @@ void Shader::buildPipeline(ShaderCode const &rawCode) {
 
   for (auto i = 0; i < SHADER_TYPES.size(); ++i) {
 
-    if (rawCode[i].empty()) {
+    if (a_rawCode[i].empty()) {
       if (SHADER_TYPES[i] == GL_VERTEX_SHADER or SHADER_TYPES[i] == GL_FRAGMENT_SHADER) {
         onError();
         vo_err("Empty code for Vertex or Fragment shaders");
@@ -55,8 +55,8 @@ void Shader::buildPipeline(ShaderCode const &rawCode) {
       continue;
     }
 
-    char const *sourceChar = rawCode[i].c_str();
-    int         sourceLen  = rawCode[i].length();
+    char const *sourceChar = a_rawCode[i].c_str();
+    int         sourceLen  = a_rawCode[i].length();
 
     // Request shader to opengl
     unsigned int const shaderID = glCreateShader(SHADER_TYPES[i]);
