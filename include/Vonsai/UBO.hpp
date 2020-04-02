@@ -17,6 +17,7 @@ private:
   std::unordered_map<const char *, unsigned int> itemsOffset;
   unsigned int                                   totalSize = 0u;
 
+
 public:
   UBO();
   UBO(UBO &&)  = delete;

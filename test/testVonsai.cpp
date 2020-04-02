@@ -44,7 +44,7 @@ Vonsai::RenderableData parserObj(std::string const &filePath) {
     if ((token == "#") or (token == "s")) { continue; }
     if (token == "v") {
       assert(line.size() == 4);
-      out.positions.push_back({std::stof(line.at(1)), std::stof(line.at(2)), std::stof(line.at(3))});
+      out.vertices.push_back({std::stof(line.at(1)), std::stof(line.at(2)), std::stof(line.at(3))});
     }
     if (token == "vt") {
       assert(line.size() == 3);
@@ -58,8 +58,8 @@ Vonsai::RenderableData parserObj(std::string const &filePath) {
       std::call_once(resizeOnce, [&]() {
         exists.normals   = (normsTemp.size() > 0);
         exists.texCoords = (uvsTemp.size() > 0);
-        if (exists.normals) { out.normals.resize(out.positions.size()); }
-        if (exists.texCoords) { out.texCoords.resize(out.positions.size()); }
+        if (exists.normals) { out.normals.resize(out.vertices.size()); }
+        if (exists.texCoords) { out.texCoords.resize(out.vertices.size()); }
       });
 
       // Process vertex, normals and UVs indices

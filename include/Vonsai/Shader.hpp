@@ -65,44 +65,41 @@ public:
 
 class Shader : public Bindable {
 private:
-  unsigned int programID   = 0u;
-  char const * programName = "";
+  unsigned int m_programID   = 0u;
+  char const * m_programName = "";
 
-  mutable bool ok    = true;
-  mutable bool bound = false;
-  mutable bool built = false;
+  mutable bool m_ok    = true;
+  mutable bool m_bound = false;
+  mutable bool m_built = false;
 
-  mutable std::unordered_map<char const *, int>  uniformCache;
-  mutable std::unordered_map<char const *, bool> uniformAlertCache;
+  mutable std::unordered_map<char const *, int>  m_uniformCache;
+  mutable std::unordered_map<char const *, bool> m_uniformAlertCache;
 
-  mutable std::unordered_map<char const *, int>  uniformBlockCache;
-  mutable std::unordered_map<char const *, bool> uniformBlockAlertCache;
+  mutable std::unordered_map<char const *, int>  m_uniformBlockCache;
+  mutable std::unordered_map<char const *, bool> m_uniformBlockAlertCache;
+
+  void buildPipeline(ShaderCode const &a_rawCode);
 
 public:
-  explicit Shader(char const *name);
-  Shader(char const *name, ShaderPath const &paths);
-  Shader(char const *name, ShaderCode const &rawCode);
+  inline bool isReady() const { return m_ok && m_built && m_bound; }
+  int         getUniformLocation(char const *a_name) const;
+
+  void bind() const override;
+  void unbind() const override;
+
+  void setUniformMat4(char const *a_name, glm::mat4 const &a_mat) const;
+  void setUniformFloat1(char const *a_name, float a_float) const;
+  void setUniformFloat3(char const *a_name, float a_f1, float a_f2, float a_f3) const;
+  void setUniformFloat3(char const *a_name, glm::vec3 const &a_floats) const;
+  void setUniformInt1(char const *a_name, int a_int) const;
+  void setUniformBlock(char const *a_name, int uboBindPoint) const;
+
+  Shader(char const *a_name, ShaderPath const &a_paths);
+  Shader(char const *a_name, ShaderCode const &a_rawCode);
   Shader(Shader &&) = delete;
   Shader &operator=(Shader &&) = delete;
   Shader(Shader const &)       = delete;
   Shader &operator=(Shader const &) = delete;
-
-  void buildPipeline(ShaderPath const &paths);
-  void buildPipeline(ShaderCode const &rawCode);
-
-  inline bool isReady() const { return ok && built && bound; }
-
-  void unbind() const override;
-  void bind() const override;
-
-  int  getUniformLocation(char const *name) const;
-  void setUniformMat4(char const *name, glm::mat4 const &mat) const;
-  void setUniformFloat1(char const *name, float f) const;
-  void setUniformFloat3(char const *name, float f1, float f2, float f3) const;
-  void setUniformFloat3(char const *name, glm::vec3 const &floats) const;
-  void setUniformInt1(char const *name, int i) const;
-
-  void setUniformBlock(char const *name, int uboBindPoint) const;
 };
 
 } // namespace Vonsai

@@ -24,60 +24,24 @@ std::array<int, 5> constexpr SHADER_TYPES{
     GL_FRAGMENT_SHADER         //
 };
 
-void Shader::bind() const {
-  GL_ASSERT(glUseProgram(programID));
-  bound = true;
-}
-void Shader::unbind() const {
-  GL_ASSERT(glUseProgram(0));
-  bound = false;
-}
-/// Ctor just name
-Shader::Shader(char const *name) : programName(name) {}
-/// Ctor from files
-Shader::Shader(char const *name, ShaderPath const &paths) : Shader(name) { buildPipeline(paths); }
-/// Ctor from code as string
-Shader::Shader(char const *name, ShaderCode const &rawCode) : Shader(name) { buildPipeline(rawCode); }
-
-/// Build pipeline from files
-void Shader::buildPipeline(ShaderPath const &paths) {
-  if (built) {
-    vo_err("Shader '{}' is already built.", programName);
-    return;
-  };
-
-  ShaderCode rawCode;
-
-  for (auto i = 0; i < SHADER_TYPES.size(); ++i) {
-    if (paths[i].empty() or !Files::isValid(paths[i])) {
-      if (SHADER_TYPES[i] == GL_VERTEX_SHADER or SHADER_TYPES[i] == GL_FRAGMENT_SHADER) { ok = false; }
-      continue;
-    }
-    auto const code = Files::fromString(paths[i]);
-    rawCode[i]      = code;
-  }
-
-  buildPipeline(rawCode);
-}
-
-/// Build pipeline from code as string
+// Build pipeline from code as string
 void Shader::buildPipeline(ShaderCode const &rawCode) {
-  if (!ok) {
+  if (!m_ok) {
     vo_err("ShaderPaths looks incorrect at some point");
     return;
   };
-  if (built) {
-    vo_err("Shader '{}' is already built.", programName);
+  if (m_built) {
+    vo_err("Shader '{}' is already built.", m_programName);
     return;
   };
 
   // Request program to opengl
-  programID = glCreateProgram();
+  m_programID = glCreateProgram();
 
   auto onError = [&]() {
-    glDeleteProgram(programID);
-    programID = 0;
-    ok        = false;
+    glDeleteProgram(m_programID);
+    m_programID = 0;
+    m_ok        = false;
   };
 
   for (auto i = 0; i < SHADER_TYPES.size(); ++i) {
@@ -104,7 +68,7 @@ void Shader::buildPipeline(ShaderCode const &rawCode) {
       GLint compiled;
       glGetShaderiv(shaderID, GL_COMPILE_STATUS, &compiled);
       if (compiled) {
-        glAttachShader(programID, shaderID);
+        glAttachShader(m_programID, shaderID);
       } else {
         onError();
 
@@ -113,7 +77,7 @@ void Shader::buildPipeline(ShaderCode const &rawCode) {
         std::vector<char> msg(len);
         glGetShaderInfoLog(shaderID, len, &len, &msg[0]);
 
-        vo_err("SHADER ({}) - {}\n{}", SHADER_NAMES[i], programName, std::string_view(msg.data(), msg.size()));
+        vo_err("SHADER ({}) - {}\n{}", SHADER_NAMES[i], m_programName, std::string_view(msg.data(), msg.size()));
 
         return;
       }
@@ -123,83 +87,110 @@ void Shader::buildPipeline(ShaderCode const &rawCode) {
   }
 
   // Link the program
-  GL_ASSERT(glLinkProgram(programID));
+  GL_ASSERT(glLinkProgram(m_programID));
 
   // Check errors
   {
     int linked;
-    glGetProgramiv(programID, GL_LINK_STATUS, &linked);
+    glGetProgramiv(m_programID, GL_LINK_STATUS, &linked);
     if (linked) {
-      built = true;
+      m_built = true;
     } else {
       onError();
 
       int len = 0;
-      glGetProgramiv(programID, GL_INFO_LOG_LENGTH, &len);
+      glGetProgramiv(m_programID, GL_INFO_LOG_LENGTH, &len);
       std::vector<char> msg(len);
-      glGetProgramInfoLog(programID, len, &len, &msg[0]);
+      glGetProgramInfoLog(m_programID, len, &len, &msg[0]);
 
-      vo_err("PROGRAM {}\n{}", programName, std::string_view(msg.data(), msg.size()));
+      vo_err("PROGRAM {}\n{}", m_programName, std::string_view(msg.data(), msg.size()));
 
       return;
     }
   }
-};
+}
+
+void Shader::bind() const {
+  GL_ASSERT(glUseProgram(m_programID));
+  m_bound = true;
+}
+void Shader::unbind() const {
+  GL_ASSERT(glUseProgram(0));
+  m_bound = false;
+}
 
 /// Returns the ID of the uniform associated to that string,
 /// if its cached, return from cache, else request it to OpenGL
 /// and store on cache.
-int Shader::getUniformLocation(char const *name) const {
-  if (uniformCache.count(name) > 0) { return uniformCache.at(name); }
-  int uniformLocation = glGetUniformLocation(programID, name);
+int Shader::getUniformLocation(char const *a_name) const {
+  if (m_uniformCache.count(a_name) > 0) { return m_uniformCache.at(a_name); }
+  int uniformLocation = glGetUniformLocation(m_programID, a_name);
 
   if (uniformLocation > -1) {
-    uniformCache.emplace(name, uniformLocation);
-  } else if (!uniformAlertCache[name]) {
-    vo_log("({}) Not found/used uniform: {}", programName, name);
-    uniformAlertCache[name] = true;
+    m_uniformCache.emplace(a_name, uniformLocation);
+  } else if (!m_uniformAlertCache[a_name]) {
+    vo_log("({}) Not found/used uniform: {}", m_programName, a_name);
+    m_uniformAlertCache[a_name] = true;
   }
 
   return uniformLocation;
 }
 
 /// SET UNIFORMS
-void Shader::setUniformMat4(char const *name, glm::mat4 const &mat) const {
-  glProgramUniformMatrix4fv(programID, getUniformLocation(name), 1, GL_FALSE, glm::value_ptr(mat));
+void Shader::setUniformMat4(char const *a_name, glm::mat4 const &a_mat) const {
+  glProgramUniformMatrix4fv(m_programID, getUniformLocation(a_name), 1, GL_FALSE, glm::value_ptr(a_mat));
 }
-void Shader::setUniformFloat1(char const *name, float f) const {
-  glProgramUniform1f(programID, getUniformLocation(name), f);
+void Shader::setUniformFloat1(char const *a_name, float a_float) const {
+  glProgramUniform1f(m_programID, getUniformLocation(a_name), a_float);
 }
-void Shader::setUniformFloat3(char const *name, float f1, float f2, float f3) const {
-  glProgramUniform3f(programID, getUniformLocation(name), f1, f2, f3);
+void Shader::setUniformFloat3(char const *a_name, float a_float1, float a_float2, float a_float3) const {
+  glProgramUniform3f(m_programID, getUniformLocation(a_name), a_float1, a_float2, a_float3);
 }
-void Shader::setUniformFloat3(char const *name, glm::vec3 const &floats) const {
-  glProgramUniform3fv(programID, getUniformLocation(name), 1, glm::value_ptr(floats));
+void Shader::setUniformFloat3(char const *a_name, glm::vec3 const &a_floats) const {
+  glProgramUniform3fv(m_programID, getUniformLocation(a_name), 1, glm::value_ptr(a_floats));
 }
-void Shader::setUniformInt1(char const *name, int i) const {
-  glProgramUniform1i(programID, getUniformLocation(name), i);
+void Shader::setUniformInt1(char const *a_name, int a_int) const {
+  glProgramUniform1i(m_programID, getUniformLocation(a_name), a_int);
 }
 
 /// Connect a given UBO
-void Shader::setUniformBlock(char const *name, int uboBindPoint) const {
+void Shader::setUniformBlock(char const *a_name, int a_uboBindPoint) const {
   int ubShaderIdx = 0;
 
-  if (uniformBlockCache.count(name) > 0) {
-    ubShaderIdx = uniformBlockCache.at(name);
+  if (m_uniformBlockCache.count(a_name) > 0) {
+    ubShaderIdx = m_uniformBlockCache.at(a_name);
 
   } else {
-    ubShaderIdx = glGetUniformBlockIndex(programID, name);
+    ubShaderIdx = glGetUniformBlockIndex(m_programID, a_name);
 
     if (ubShaderIdx > -1) {
-      uniformBlockCache.emplace(name, ubShaderIdx);
+      m_uniformBlockCache.emplace(a_name, ubShaderIdx);
 
-    } else if (!uniformBlockAlertCache[name]) {
-      vo_log("({}) Not found uniform_block: {}", programName, name);
-      uniformBlockAlertCache[name] = true;
+    } else if (!m_uniformBlockAlertCache[a_name]) {
+      vo_log("({}) Not found uniform_block: {}", m_programName, a_name);
+      m_uniformBlockAlertCache[a_name] = true;
       return;
     }
   }
-  glUniformBlockBinding(programID, ubShaderIdx, uboBindPoint);
+  glUniformBlockBinding(m_programID, ubShaderIdx, a_uboBindPoint);
 }
+
+// CONSTRUCTOR <- Files
+Shader::Shader(char const *a_name, ShaderPath const &a_paths) : m_programName(a_name) {
+  ShaderCode rawCode;
+
+  for (auto i = 0; i < SHADER_TYPES.size(); ++i) {
+    if (a_paths[i].empty() or !Files::isValid(a_paths[i])) {
+      if (SHADER_TYPES[i] == GL_VERTEX_SHADER or SHADER_TYPES[i] == GL_FRAGMENT_SHADER) { m_ok = false; }
+      continue;
+    }
+    rawCode[i] = Files::fromString(a_paths[i]);
+  }
+
+  buildPipeline(rawCode);
+}
+// CCONSTRUCTOR <- Code as string
+Shader::Shader(char const *a_name, ShaderCode const &a_rawCode) : m_programName(a_name) { buildPipeline(a_rawCode); }
+
 
 } // namespace Vonsai
