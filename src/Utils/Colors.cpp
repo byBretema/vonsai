@@ -9,7 +9,7 @@ inline glm::vec3 const FALLBACK_COLOR = glm::vec3{1.f, -0.123f, 1.f};
 
 glm::vec3 random() { return {Random::Float01(), Random::Float01(), Random::Float01()}; }
 
-glm::vec3 rgbFromHex(std::string const &a_hex) {
+glm::vec3 rgbFromHEX(std::string const &a_hex) {
   std::string hex = a_hex.substr(1);
 
   if (hex.size() == 3) {
@@ -32,9 +32,16 @@ glm::vec3 rgbFromHex(std::string const &a_hex) {
   return FALLBACK_COLOR;
 }
 
-glm::vec3 glslFromHex(std::string const &a_hex) {
-  glm::vec3 C = rgbFromHex(a_hex);
+glm::vec3 glslFromHEX(std::string const &a_hex) {
+  glm::vec3 C = rgbFromHEX(a_hex);
+  return glslFromRGB(rgbFromHEX(a_hex));
+}
+
+glm::vec3 glslFromRGB(glm::vec3 const &a_color) {
+  auto &C = a_color;
   return (C != FALLBACK_COLOR) ? glm::vec3{C.r / 255.f, C.g / 255.f, C.b / 255.f} : FALLBACK_COLOR;
 }
+
+glm::vec3 glslFromRGB(int a_R, int a_G, int a_B) { return glslFromRGB({a_R, a_G, a_B}); }
 
 } // namespace Vonsai::Colors

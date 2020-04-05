@@ -1,6 +1,8 @@
 #pragma once
 
 #include "Bindable.hpp"
+#include "Shader.hpp"
+#include "Texture.hpp"
 #include "Transform.hpp"
 #include "Wraps/_glm.hpp"
 
@@ -36,7 +38,7 @@ private:
 public:
   Transform transform;
 
-  void draw() const;
+  void draw(Shader const &a_shader, glm::mat4 const &a_view, Texture const *a_texture = nullptr) const;
 
   void setEBO(const std::vector<unsigned int> &a_data);
   void addVBO(const std::vector<glm::vec3> &a_data);

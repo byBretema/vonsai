@@ -1,4 +1,5 @@
 #pragma once
+
 #include "Transform.hpp"
 #include "Wraps/_glm.hpp"
 
@@ -23,9 +24,9 @@ public:
   void zoom(float a_variation);
   void frame(float a_aspectRatio, glm::vec3 const &a_target = INF3);
 
-  inline glm::mat4 getView() { return m_view; }
-  inline glm::mat4 getProj() { return m_proj; }
-  inline glm::mat4 getViewProj() { return m_viewproj; }
+  inline glm::mat4 const &getView() const { return m_view; }
+  inline glm::mat4 const &getProj() const { return m_proj; }
+  inline glm::mat4 const &getViewProj() const { return m_viewproj; }
 
   void info();
 };

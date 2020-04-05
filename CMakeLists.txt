@@ -31,9 +31,11 @@ add_subdirectory(vendor/glad_opengl_4.1)
 add_library(${lib_name} STATIC
     ./src/Utils/Colors.cpp
     ./src/Utils/Files.cpp
-    ./src/Utils/Colors.cpp
+    ./src/Utils/Random.cpp
     ./src/Utils/Strings.cpp
 
+    ./src/App.cpp
+    ./src/Bindable.cpp
     ./src/Camera.cpp
     ./src/Renderable.cpp
     ./src/Shader.cpp

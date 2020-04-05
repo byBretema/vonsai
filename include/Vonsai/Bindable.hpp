@@ -14,13 +14,13 @@ private:
   Bindable const *m_ptr = nullptr;
 
 public:
-  explicit BindGuard(Bindable const &a_bindable) : m_ptr(&a_bindable) {
-    if (m_ptr) { m_ptr->bind(); }
-  }
-  ~BindGuard() {
-    if (m_ptr) { m_ptr->unbind(); }
-    m_ptr = nullptr;
-  }
+  void inject(Bindable const *a_bindable);
+  void inject(Bindable const &a_bindable);
+
+  BindGuard();
+  explicit BindGuard(Bindable const *a_bindable);
+  explicit BindGuard(Bindable const &a_bindable);
+  ~BindGuard();
 
   BindGuard(BindGuard &&) = delete;
   BindGuard &operator=(BindGuard &&) = delete;

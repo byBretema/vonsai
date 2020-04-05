@@ -2,6 +2,7 @@
 
 #include <Vonsai/Utils/Files.hpp>
 #include <Vonsai/Utils/Logger.hpp>
+
 #include <Vonsai/Wraps/_gl.hpp>
 
 #include <vector>
@@ -110,14 +111,8 @@ void Shader::buildPipeline(ShaderCode const &a_rawCode) {
   }
 }
 
-void Shader::bind() const {
-  GL_ASSERT(glUseProgram(m_programID));
-  m_bound = true;
-}
-void Shader::unbind() const {
-  GL_ASSERT(glUseProgram(0));
-  m_bound = false;
-}
+void Shader::bind() const { GL_ASSERT(glUseProgram(m_programID)); }
+void Shader::unbind() const { GL_ASSERT(glUseProgram(0)); }
 
 /// Returns the ID of the uniform associated to that string,
 /// if its cached, return from cache, else request it to OpenGL
@@ -137,8 +132,8 @@ int Shader::getUniformLocation(char const *a_name) const {
 }
 
 /// SET UNIFORMS
-void Shader::setUniformMat4(char const *a_name, glm::mat4 const &a_mat) const {
-  glProgramUniformMatrix4fv(m_programID, getUniformLocation(a_name), 1, GL_FALSE, glm::value_ptr(a_mat));
+void Shader::setUniformInt1(char const *a_name, int a_int) const {
+  glProgramUniform1i(m_programID, getUniformLocation(a_name), a_int);
 }
 void Shader::setUniformFloat1(char const *a_name, float a_float) const {
   glProgramUniform1f(m_programID, getUniformLocation(a_name), a_float);
@@ -149,8 +144,8 @@ void Shader::setUniformFloat3(char const *a_name, float a_float1, float a_float2
 void Shader::setUniformFloat3(char const *a_name, glm::vec3 const &a_floats) const {
   glProgramUniform3fv(m_programID, getUniformLocation(a_name), 1, glm::value_ptr(a_floats));
 }
-void Shader::setUniformInt1(char const *a_name, int a_int) const {
-  glProgramUniform1i(m_programID, getUniformLocation(a_name), a_int);
+void Shader::setUniformMat4(char const *a_name, glm::mat4 const &a_mat) const {
+  glProgramUniformMatrix4fv(m_programID, getUniformLocation(a_name), 1, GL_FALSE, glm::value_ptr(a_mat));
 }
 
 /// Connect a given UBO

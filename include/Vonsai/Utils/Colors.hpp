@@ -20,7 +20,9 @@ glm::vec3 const VIOLET  = {0.5f, 0.0f, 1.0f};
 glm::vec3 const TEAL    = {0.0f, 0.5f, 1.0f};
 
 glm::vec3 random();
-glm::vec3 rgbFromHex(std::string const &a_hex);
-glm::vec3 glslFromHex(std::string const &a_hex);
+glm::vec3 rgbFromHEX(std::string const &a_hex);
+glm::vec3 glslFromHEX(std::string const &a_hex);
+glm::vec3 glslFromRGB(int a_R, int a_G, int a_B);
+glm::vec3 glslFromRGB(glm::vec3 const &a_color);
 
 } // namespace Vonsai::Colors

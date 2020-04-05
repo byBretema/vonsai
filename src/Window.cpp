@@ -3,7 +3,7 @@
 #include <iostream>
 #include <mutex>
 
-// #include <Vonsai/Utils/Colors.hpp>
+#include <Vonsai/Utils/Colors.hpp>
 #include <Vonsai/Utils/Logger.hpp>
 
 
@@ -33,8 +33,13 @@ void Window::updateFPS() {
 }
 
 void Window::draw() {
-  glfwPollEvents(); // glfwWaitEvents();
-  if (!m_focused) return;
+
+  if (!m_focused) {
+    glfwWaitEvents();
+    return;
+  }
+  glfwPollEvents();
+
   activate();
   updateFPS();
   m_onRender();
@@ -49,19 +54,6 @@ void Window::setClearColor(glm::vec3 const &a_clearColor) {
 }
 
 Window::Window(int a_width, int a_height, std::string a_title, InputFn a_onInput) {
-  static std::once_flag initGflw; /* clang-format off */
-  std::call_once(initGflw, []() {
-    if (!glfwInit()) { vo_err("Couldn't initialize GLFW"); return; }
-    glfwWindowHint(GLFW_VISIBLE, GLFW_TRUE);
-    glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
-    glfwWindowHint(GLFW_FOCUS_ON_SHOW, GLFW_TRUE);
-    glfwWindowHint(GLFW_SCALE_TO_MONITOR, GLFW_TRUE);
-    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-  }); /* clang-format on */
-
   // Window creation
   auto ptr = glfwCreateWindow(a_width, a_height, a_title.c_str(), nullptr, nullptr);
 
@@ -90,7 +82,9 @@ Window::Window(int a_width, int a_height, std::string a_title, InputFn a_onInput
   m_valid       = true;
   m_title       = a_title;
   m_aspectRatio = static_cast<float>(a_width) / static_cast<float>(a_height);
-  glClearColor(m_clearColor.r, m_clearColor.g, m_clearColor.b, 1.f);
+
+  auto clearColor = Colors::glslFromRGB(30, 38, 58);
+  glClearColor(clearColor.r, clearColor.g, clearColor.b, 1);
 
   // Set callbacks
   m_onInput = a_onInput;
@@ -116,7 +110,7 @@ Window::Window(int a_width, int a_height, std::string a_title, InputFn a_onInput
     if (curr->mouseClick.l) {
       float displX = (posY - curr->mousePos.y);
       float displY = (posX - curr->mousePos.x);
-      curr->camera.pivot.rot += glm::vec3{displX, displY, 0.f};
+      curr->camera.pivot.rot += glm::vec3{displX, displY, 0.f} * 0.1f;
       // curr->_onMove(displX, displY); // TODO
     }
     curr->mousePos.x = posX;

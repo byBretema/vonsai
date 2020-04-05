@@ -8,8 +8,8 @@
 namespace Vonsai {
 
 void Texture::bind() const {
-  GL_ASSERT(glActiveTexture(GL_TEXTURE0 + ID));
-  GL_ASSERT(glBindTexture(GL_TEXTURE_2D, ID));
+  GL_ASSERT(glActiveTexture(GL_TEXTURE0 + m_ID));
+  GL_ASSERT(glBindTexture(GL_TEXTURE_2D, m_ID));
 }
 void Texture::unbind() const {
   GL_ASSERT(glBindTexture(GL_TEXTURE_2D, 0));
@@ -20,7 +20,7 @@ Texture::Texture(char const *path) {
   if (!Files::isValid(path, true)) { return; }
 
   // Parse image data
-  auto pixels = stbi_load(path, &width, &height, &bytes, 4);
+  auto pixels = stbi_load(path, &m_width, &m_height, &m_bytes, 4);
 
   if (!pixels) {
     vo_err("Failed loading texture: {}", path);
@@ -28,11 +28,11 @@ Texture::Texture(char const *path) {
   }
 
   // Create opengl resource
-  GL_ASSERT(glGenTextures(1, &ID));
+  GL_ASSERT(glGenTextures(1, &m_ID));
   BindGuard bg{*this};
 
   // Attach image data to the texture
-  GL_ASSERT(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB8, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixels));
+  GL_ASSERT(glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB8, m_width, m_height, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixels));
 
   // Free the pixels resource
   stbi_image_free(pixels);

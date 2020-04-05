@@ -1,4 +1,5 @@
 #pragma once
+
 #include "Camera.hpp"
 #include "Wraps/_glm.hpp"
 
@@ -30,7 +31,7 @@ private:
   bool        m_focused{false};
   float       m_aspectRatio{1.3f};
   std::string m_title{"unnamed window"};
-  glm::vec3   m_clearColor{.8f, .5f, .8f};
+  glm::vec3   m_clearColor{1.f,0.f,1.f};
 
   unsigned int m_frames{0u};
   double       m_timeStamp{glfwGetTime()};

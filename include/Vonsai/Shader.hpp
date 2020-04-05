@@ -7,6 +7,8 @@
 #include "Bindable.hpp"
 #include "Wraps/_glm.hpp"
 
+#include "Utils/Logger.hpp"
+
 namespace Vonsai {
 
 class ShaderPath {
@@ -69,7 +71,6 @@ private:
   char const * m_programName = "";
 
   mutable bool m_ok    = true;
-  mutable bool m_bound = false;
   mutable bool m_built = false;
 
   mutable std::unordered_map<char const *, int>  m_uniformCache;
@@ -81,17 +82,21 @@ private:
   void buildPipeline(ShaderCode const &a_rawCode);
 
 public:
-  inline bool isReady() const { return m_ok && m_built && m_bound; }
+  inline char const *getName() const { return m_programName; }
+
+  inline bool isReady() const { return m_ok && m_built; }
   int         getUniformLocation(char const *a_name) const;
 
   void bind() const override;
   void unbind() const override;
 
-  void setUniformMat4(char const *a_name, glm::mat4 const &a_mat) const;
+  void setUniformInt1(char const *a_name, int a_int) const;
   void setUniformFloat1(char const *a_name, float a_float) const;
   void setUniformFloat3(char const *a_name, float a_f1, float a_f2, float a_f3) const;
   void setUniformFloat3(char const *a_name, glm::vec3 const &a_floats) const;
-  void setUniformInt1(char const *a_name, int a_int) const;
+  void setUniformMat4(char const *a_name, glm::mat4 const &a_mat) const;
+
+
   void setUniformBlock(char const *a_name, int uboBindPoint) const;
 
   Shader(char const *a_name, ShaderPath const &a_paths);

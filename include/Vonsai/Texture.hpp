@@ -8,11 +8,11 @@ namespace Vonsai {
 
 class Texture : public Bindable {
 private:
-  unsigned int ID     = 0u;
-  std::string  path   = "";
-  int          bytes  = 0;
-  int          width  = 0;
-  int          height = 0;
+  unsigned int m_ID     = 0u;
+  std::string  m_path   = "";
+  int          m_bytes  = 0;
+  int          m_width  = 0;
+  int          m_height = 0;
 
 public:
   explicit Texture(const char *path);
@@ -21,7 +21,7 @@ public:
   Texture(Texture const &)       = delete;
   Texture &operator=(Texture const &) = delete;
 
-  unsigned int inline getID() const { return ID; }
+  unsigned int inline getID() const { return m_ID; }
 
   void bind() const override;
   void unbind() const override;
