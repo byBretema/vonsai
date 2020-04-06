@@ -1,6 +1,7 @@
 #include <Vonsai/App.hpp>
 
 #include <Vonsai/Wraps/_gl.hpp>
+
 #define GLFW_INCLUDE_NONE
 #include <GLFW/glfw3.h>
 
@@ -104,8 +105,6 @@ App::App() {
   // ====================================================================
   // === / INIT ===
 
-  m_window = std::make_unique<Window>(800, 600, "Vonsai :: Window 1");
-
   mesh.monkey = std::make_shared<Renderable>(parserObj("assets/models/monkey.obj"));
   mesh.cube   = std::make_shared<Renderable>(parserObj("assets/models/cube.obj"));
 
@@ -118,6 +117,10 @@ App::App() {
   flatSP.vertex   = "assets/shaders/flat/flat.vert";
   flatSP.fragment = "assets/shaders/flat/flat.frag";
   shader.flat     = std::make_shared<Shader>("light", flatSP);
+}
+
+Window App::newWindow(int a_width, int a_height, std::string const &a_name, Window::InputFn const &a_inputFn) {
+  return Window(a_width, a_height, a_name, a_inputFn);
 }
 
 } // namespace Vonsai

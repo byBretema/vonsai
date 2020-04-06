@@ -8,6 +8,7 @@
 
 int main() {
   Vonsai::App app;
+  auto        window = app.newWindow(800, 600, "VONSAI :: Window 1");
 
   Vonsai::Light              l1({0, 2, 5}, {1, 1, 1});
   Vonsai::Light              l2({0, 2, -5}, {1, 1, 1});
@@ -29,25 +30,25 @@ int main() {
 
   // ========================================================================================== //
 
-  app.m_window->camera.pivot.pos += glm::vec3{0, 0, 17.5f};
+  window.camera.pivot.pos += glm::vec3{0, 0, 17.5f};
 
   glm::vec3 midMonkeyPos{0.f};
 
-  app.m_window->setRenderFn([&]() {
-    app.m_window->camera.frame(app.m_window->getAspectRatio());
+  window.setRenderFn([&]() {
+    window.camera.frame(window.getAspectRatio());
 
-    globalData.setData("u_proj", app.m_window->camera.getProj());
-    globalData.setData("u_view", app.m_window->camera.getView());
+    globalData.setData("u_proj", window.camera.getProj());
+    globalData.setData("u_view", window.camera.getView());
 
     app.mesh.monkey->transform.pos = {-3, 0, 0};
-    app.mesh.monkey->draw(*app.shader.light, app.m_window->camera.getView(), &tex1);
+    app.mesh.monkey->draw(*app.shader.light, window.camera.getView(), &tex1);
     app.mesh.monkey->transform.pos = midMonkeyPos;
-    app.mesh.monkey->draw(*app.shader.light, app.m_window->camera.getView(), &tex2);
+    app.mesh.monkey->draw(*app.shader.light, window.camera.getView(), &tex2);
     app.mesh.monkey->transform.pos = {3, 0, 0};
-    app.mesh.monkey->draw(*app.shader.light, app.m_window->camera.getView(), &tex3);
+    app.mesh.monkey->draw(*app.shader.light, window.camera.getView(), &tex3);
   });
 
-  app.m_window->setInputFn([&midMonkeyPos](int a_mod, Vonsai::Window &a_window) {
+  window.setInputFn([&midMonkeyPos](int a_mod, Vonsai::Window &a_window) {
     if (a_window.getKey(GLFW_KEY_R)) { a_window.setClearColor(Vonsai::Colors::random()); }
     if (a_window.getKey(GLFW_KEY_I)) { midMonkeyPos.z += 0.1f; }
     if (a_window.getKey(GLFW_KEY_K)) { midMonkeyPos.z -= 0.1f; }
