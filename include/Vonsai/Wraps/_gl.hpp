@@ -3,20 +3,36 @@
 #include "../Utils/Logger.hpp"
 #include <glad/glad.h>
 
+
+namespace Vonsai::GL {
+
+inline bool loadExtensions(void *a_proc) { return gladLoadGLLoader((GLADloadproc)a_proc); }
+
+inline void defaultSetup() {
+  glFrontFace(GL_CCW);
+  glDepthFunc(GL_LEQUAL);
+  glEnable(GL_CULL_FACE);
+  glEnable(GL_DEPTH_TEST);
+  glClearColor(0.15f, 0.15f, 0.25f, 1.f);
+}
+
+} // namespace Vonsai::GL
+
+
 // Verify OpenGL action
 #define GL_ASSERT(funcToCheck) \
-  glErrClear();                \
+  ___glErrClear();             \
   funcToCheck;                 \
-  glAssert(__FILE__, __LINE__);
+  ___glAssert(__FILE__, __LINE__);
 
 // Avoid fake errors
-static inline void glErrClear() {
+static inline void ___glErrClear() {
   while (glGetError() != GL_NO_ERROR)
     ;
 }
 
 // Parse real errors after a gl func is executed
-static inline void glAssert(char const *file, int line) {
+static inline void ___glAssert(char const *file, int line) {
   if (auto glError = glGetError()) {
     char const *errStr;
     switch (glError) {

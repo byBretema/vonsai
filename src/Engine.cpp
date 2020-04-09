@@ -1,9 +1,6 @@
-#include <Vonsai/App.hpp>
+#include <Vonsai/Engine.hpp>
 
 #include <Vonsai/Wraps/_gl.hpp>
-
-#define GLFW_INCLUDE_NONE
-#include <GLFW/glfw3.h>
 
 #include <Vonsai/Utils/Files.hpp>
 #include <Vonsai/Utils/Strings.hpp>
@@ -83,44 +80,33 @@ RenderableData parserObj(std::string const &filePath) {
   return out;
 }
 
-App::App() {
+Engine::Engine() {
 
-  // === INIT ===
-  // ====================================================================
+  // mesh.monkey = std::make_shared<Renderable>(parserObj("assets/models/monkey.obj"));
+  // mesh.cube   = std::make_shared<Renderable>(parserObj("assets/models/cube.obj"));
 
-  if (!glfwInit()) {
-    vo_err("Couldn't initialize GLFW");
-    return;
-  }
+  // Vonsai::ShaderPath lightSP;
+  // lightSP.vertex   = "assets/shaders/light/light.vert";
+  // lightSP.fragment = "assets/shaders/light/light.frag";
+  // shader.light     = std::make_shared<Shader>("light", lightSP);
 
-  glfwWindowHint(GLFW_VISIBLE, GLFW_TRUE);
-  glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
-  glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-  glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1);
-  glfwWindowHint(GLFW_FOCUS_ON_SHOW, GLFW_TRUE);
-  glfwWindowHint(GLFW_SCALE_TO_MONITOR, GLFW_TRUE);
-  glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-  glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-
-  // ====================================================================
-  // === / INIT ===
-
-  mesh.monkey = std::make_shared<Renderable>(parserObj("assets/models/monkey.obj"));
-  mesh.cube   = std::make_shared<Renderable>(parserObj("assets/models/cube.obj"));
-
-  Vonsai::ShaderPath lightSP;
-  lightSP.vertex   = "assets/shaders/light/light.vert";
-  lightSP.fragment = "assets/shaders/light/light.frag";
-  shader.light     = std::make_shared<Shader>("light", lightSP);
-
-  Vonsai::ShaderPath flatSP;
-  flatSP.vertex   = "assets/shaders/flat/flat.vert";
-  flatSP.fragment = "assets/shaders/flat/flat.frag";
-  shader.flat     = std::make_shared<Shader>("light", flatSP);
+  // Vonsai::ShaderPath flatSP;
+  // flatSP.vertex   = "assets/shaders/flat/flat.vert";
+  // flatSP.fragment = "assets/shaders/flat/flat.frag";
+  // shader.flat     = std::make_shared<Shader>("light", flatSP);
 }
 
-Window App::newWindow(int a_width, int a_height, std::string const &a_name, Window::InputFn const &a_inputFn) {
-  return Window(a_width, a_height, a_name, a_inputFn);
+void Engine::addWindow(std::string const &a_name, int a_width, int a_height) {
+  m_ioVec.emplace_back();
+  m_ioTable.emplace(a_name, m_ioVec.size() - 1);
 }
+void Engine::addScene(std::string const &a_windowName, std::string const &a_sceneName, std::string const &a_hexColor) {
+  // TODO !!
+  return;
+}
+
+// IO App::newWindow(int a_width, int a_height, std::string const &a_name) {
+//   return Window(a_width, a_height, a_name, a_inputFn);
+// }
 
 } // namespace Vonsai

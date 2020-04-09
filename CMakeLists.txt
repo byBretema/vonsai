@@ -34,15 +34,15 @@ add_library(${lib_name} STATIC
     ./src/Utils/Random.cpp
     ./src/Utils/Strings.cpp
 
-    ./src/App.cpp
+    ./src/Engine.cpp
     ./src/Bindable.cpp
     ./src/Camera.cpp
+    ./src/IO.cpp
     ./src/Renderable.cpp
     ./src/Shader.cpp
     ./src/Texture.cpp
     ./src/Transform.cpp
     ./src/UBO.cpp
-    ./src/Window.cpp
 )
 target_link_libraries(${lib_name} PUBLIC glm PRIVATE fmt glfw glad)
 target_include_directories(${lib_name} PUBLIC "./src" "./include" "./vendor")
