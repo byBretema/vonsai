@@ -39,6 +39,7 @@ add_library(${lib_name} STATIC
     ./src/Camera.cpp
     ./src/IO.cpp
     ./src/Renderable.cpp
+    ./src/Scene.cpp
     ./src/Shader.cpp
     ./src/Texture.cpp
     ./src/Transform.cpp

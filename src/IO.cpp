@@ -19,21 +19,18 @@ namespace Vonsai {
 
 bool IO::update() {
   if (!m_focused) { glfwWaitEvents(); }
-  // glfwPollEvents();
   activate();
-  glfwWaitEvents();
+  glfwPollEvents();
+
+  m_activeScene->update();
+
+  glfwSwapBuffers(GLFW_PTR);
+  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
   return m_valid;
-
-  /* ActiveScene.update() */
-
-  // updateFPS();
-  // m_onRender();
-  // glfwSwapBuffers(m_ptr);
-  // glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
-void IO::close() { destroy(); }
 
+void IO::close() { destroy(); }
 bool IO::isValid() const { return m_valid; }
 bool IO::isFocused() const { return m_focused; }
 
@@ -94,9 +91,12 @@ void onCursorMove(double a_x, double a_y, IO &a_io) {
 
 // * IO
 IO::IO() {
-  static std::once_flag glfwInitFlag; /* clang-format off */
+  static std::once_flag glfwInitFlag;
   std::call_once(glfwInitFlag, []() {
-    if (!glfwInit()) { vo_err("Couldn't initialize GLFW"); return ; }
+    if (!glfwInit()) {
+      vo_err("Couldn't initialize GLFW");
+      return;
+    }
     glfwWindowHint(GLFW_VISIBLE, GLFW_TRUE);
     glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4 /* a_versionMajor */);
@@ -105,7 +105,7 @@ IO::IO() {
     glfwWindowHint(GLFW_SCALE_TO_MONITOR, GLFW_TRUE);
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-  }); /* clang-format on */
+  });
 
 
   // 1. WINDOW CREATION
@@ -169,12 +169,16 @@ IO::IO() {
     auto curr = static_cast<IO *>(glfwGetWindowUserPointer(ptr));
     onDestroy(*curr);
   });
+
+  // 6. CREATE A DEFAULT SCENE
+  m_activeScene = m_scenes.emplace_back(std::make_shared<Scene>());
 }
 
 } // namespace Vonsai
 
 
 
+// ! Esto es cosa del engine :D
 // void Window::updateFPS() {
 //   ++m_frames;
 //   double currTime = glfwGetTime();

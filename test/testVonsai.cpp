@@ -7,6 +7,8 @@
 // #include <Vonsai/Utils/Colors.hpp>
 
 #include <Vonsai/Engine.hpp>
+#include <Vonsai/Light.hpp>
+// #include <Vonsai/UBO.hpp>
 #include <list>
 
 
@@ -27,6 +29,44 @@ int main() {
   */
 
   Vonsai::Engine vo;
+
+  Vonsai::Light              l1({0, 2, 5}, {1, 1, 1});
+  Vonsai::Light              l2({0, 2, -5}, {1, 1, 1});
+  std::vector<Vonsai::Light> lv{l1, l2};
+
+  Vonsai::UBO lightsUBO;
+  lightsUBO.setData("u_numLights", glm::vec4{static_cast<float>(lv.size())});
+  lightsUBO.setData("u_lights", lv);
+  vo.shader.light->setUniformBlock("lightsUBO", lightsUBO.getBindPoint());
+
+  Vonsai::UBO globalData;
+  vo.shader.light->setUniformBlock("globalData", globalData.getBindPoint());
+
+  // ========================================================================================== //
+
+  Vonsai::Texture tex1("assets/textures/dac.png");
+  Vonsai::Texture tex2("assets/textures/Vonsai.png");
+  Vonsai::Texture tex3("assets/textures/chess.jpg");
+
+  // ========================================================================================== //
+
+  glm::mat4 mat{1.f};
+
+  globalData.setData("u_proj", mat /* window.camera.getProj() */);
+  globalData.setData("u_view", mat /* window.camera.getView() */);
+
+  vo.m_ios.front()->m_activeScene->onRender = [&]() {
+    vo.mesh.monkey->transform.pos = {-3, 0, 0};
+    vo.mesh.monkey->draw(*vo.shader.light, mat /* window.camera.getView() */, &tex1);
+    vo.mesh.monkey->transform.pos = {0, 0, 0};
+    vo.mesh.monkey->draw(*vo.shader.light, mat /* window.camera.getView() */, &tex2);
+    vo.mesh.monkey->transform.pos = {3, 0, 0};
+    vo.mesh.monkey->draw(*vo.shader.light, mat /* window.camera.getView() */, &tex3);
+  };
+
+  vo.run();
+
+  /*
   vo.addWindow("1", 800, 600);
 
   // Switch between scenes with TAB (by default) -- Responsibility of the engine
@@ -41,6 +81,7 @@ int main() {
     // system_b
   });
 
+ */
   return 0;
 
 

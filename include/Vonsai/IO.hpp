@@ -1,7 +1,11 @@
 #pragma once
 
+#include <array>
+#include <list>
 #include <string>
 #include <unordered_map>
+
+#include "Scene.hpp"
 
 namespace Vonsai {
 
@@ -149,10 +153,11 @@ private:
   static constexpr float       HEIGHT        = 600.f;
   static constexpr const char *TITLE         = "VONSAI";
 
-  void *      m_window{nullptr};
-  std::string m_title{TITLE};
-  float       m_width{WIDTH};
-  float       m_height{HEIGHT};
+  void *               m_window{nullptr};
+  std::string          m_title{TITLE};
+  float                m_width{WIDTH};
+  float                m_height{HEIGHT};
+  std::array<float, 3> m_color{0.75f, 0.25f, 0.75f};
 
   bool m_valid{false};
   bool m_focused{false};
@@ -216,6 +221,10 @@ private:
   // * IO
 public:
   explicit IO();
+
+  std::shared_ptr<Scene> m_activeScene; // TODO: PRIVATE
+private:
+  std::list<std::shared_ptr<Scene>> m_scenes;
 };
 
 } // namespace Vonsai

@@ -13,7 +13,7 @@ inline void defaultSetup() {
   glDepthFunc(GL_LEQUAL);
   glEnable(GL_CULL_FACE);
   glEnable(GL_DEPTH_TEST);
-  glClearColor(0.15f, 0.15f, 0.25f, 1.f);
+  glClearColor(0.75f, 0.25f, 0.75f, 1.f);
 }
 
 } // namespace Vonsai::GL
