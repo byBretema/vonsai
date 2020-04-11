@@ -158,7 +158,7 @@ private:
   std::string          m_title{TITLE};
   float                m_width{WIDTH};
   float                m_height{HEIGHT};
-  std::array<float, 3> m_color{0.75f, 0.25f, 0.75f};
+  std::array<float, 3> m_color{0.15f, 0.15f, 0.25f};
 
   bool m_valid{false};
   bool m_focused{false};

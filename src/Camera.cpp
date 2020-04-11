@@ -13,8 +13,6 @@ void Camera::setFOV(float a_variation) {
 void Camera::frame(float a_aspectRatio, glm::vec3 const &a_target) {
   if (a_target != INF3) { pivot.setPos(a_target); }
 
-  vo_print("camera rot = {}\n", glm::to_string(pivot.getRot()));
-
   if (pivot.getRotZ() != 0.f) { pivot.setRotZ(0.f); }                                 // ! Avoid any ROLL
   if (pivot.getRotX() >= 90.f and pivot.getRotX() < 180.f) { pivot.setRotX(89.9f); }  // * Avoid camera flip at 90º
   if (pivot.getRotX() >= 180.f and pivot.getRotX() < 270.f) { pivot.setRotX(270.f); } // * Avoid camera flip at 270º
