@@ -1,8 +1,9 @@
-# VONSAI Renderer
 
-> A toy engine on top of **OpenGL4** using *C++17*.
+<p align="center"> <img alt="Vonsai logo" src="./doc/images/Vonsai.png" height="150" width="150"> </p>
+<h1 align="center">VONSAI Renderer</h1>
 
-<p align="center"> <img alt="Vonsai logo" src="./doc/images/Vonsai.png" height="250" width="250"> </p>
+!["Three monkeys screenshot"](./doc/images/screenshot.png)
+
 
 ## Done
 - [X] Allow multi-window with independent contexts
@@ -19,4 +20,3 @@
 - [ ] Add ASSIMP to support many data filetypes; *specially FBX, DAE, DXF, BVH and glTF*.
 - [ ] _**E**ntitiy_ _**C**omponent_ _**S**ystem_; a.k.a. *Data oriented design*.
 
-!["Three monkeys screenshot"](./doc/images/screenshot.png)
