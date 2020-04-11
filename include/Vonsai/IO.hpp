@@ -144,8 +144,9 @@ public:
   bool update();
   void close();
 
-  bool isValid() const;
-  bool isFocused() const;
+  bool  isValid() const;
+  bool  isFocused() const;
+  float aspectRatio() const;
 
 private:
   static inline unsigned int   windowCounter = 0;
@@ -174,8 +175,13 @@ private:
   // * KEYBOARD
 public:
   bool key(int a_keyCode) const;
+  bool anyShift() const;
+  bool anyAlt() const;
+  bool anyCtrl() const;
+  bool anySuper() const;
 
 private:
+  int                           m_mod;
   std::unordered_map<int, bool> m_keys;
   friend void                   onKeyPress(int a_key, IO &a_io);
   friend void                   onKeyRelease(int a_key, IO &a_io);
@@ -195,15 +201,15 @@ public:
 
 private:
   struct {
-    int H{0}; // -1 / 0 / 1
-    int V{0}; // -1 / 0 / 1
+    float H{0.f}; // -1 / 0 / 1
+    float V{0.f}; // -1 / 0 / 1
   } m_axis;
   double m_cursorX{0.0};
   double m_cursorY{0.0};
 
   struct {
-    int H{0}; // -1 / 0 / 1
-    int V{0}; // -1 / 0 / 1
+    float H{0.f}; // -1 / 0 / 1
+    float V{0.f}; // -1 / 0 / 1
   } m_scroll;
 
   struct {

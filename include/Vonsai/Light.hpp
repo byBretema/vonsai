@@ -1,9 +1,6 @@
 #pragma once
 
-#include "Shader.hpp"
-#include "UBO.hpp"
 #include "Wraps/_glm.hpp"
-
 #include <vector>
 
 namespace Vonsai {

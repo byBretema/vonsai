@@ -6,9 +6,11 @@
 // #include <Vonsai/Texture.hpp>
 // #include <Vonsai/Utils/Colors.hpp>
 
+#include <Vonsai/Camera.hpp>
 #include <Vonsai/Engine.hpp>
 #include <Vonsai/Light.hpp>
-// #include <Vonsai/UBO.hpp>
+#include <Vonsai/UBO.hpp>
+
 #include <list>
 
 
@@ -50,18 +52,45 @@ int main() {
 
   // ========================================================================================== //
 
-  glm::mat4 mat{1.f};
+  Vonsai::Camera camera;
+  camera.setZoom(17.5f);
 
-  globalData.setData("u_proj", mat /* window.camera.getProj() */);
-  globalData.setData("u_view", mat /* window.camera.getView() */);
+  auto &io = vo.m_ios.front();
+  auto &sc = io->m_activeScene;
+  auto &kc = Vonsai::KeyCode;
 
-  vo.m_ios.front()->m_activeScene->onRender = [&]() {
-    vo.mesh.monkey->transform.pos = {-3, 0, 0};
-    vo.mesh.monkey->draw(*vo.shader.light, mat /* window.camera.getView() */, &tex1);
-    vo.mesh.monkey->transform.pos = {0, 0, 0};
-    vo.mesh.monkey->draw(*vo.shader.light, mat /* window.camera.getView() */, &tex2);
-    vo.mesh.monkey->transform.pos = {3, 0, 0};
-    vo.mesh.monkey->draw(*vo.shader.light, mat /* window.camera.getView() */, &tex3);
+  sc->onRender = [&]() {
+    // Camera update
+    camera.frame(io->aspectRatio());
+    globalData.setData("u_proj", camera.getProj());
+    globalData.setData("u_view", camera.getView());
+
+    // Camera movement
+    if (io->key(kc.E)) { camera.movement.U = true; } // Up
+    if (!io->key(kc.E)) { camera.movement.U = false; }
+    if (io->key(kc.Q)) { camera.movement.D = true; } // Down
+    if (!io->key(kc.Q)) { camera.movement.D = false; }
+    if (io->key(kc.W)) { camera.movement.F = true; } // Front
+    if (!io->key(kc.W)) { camera.movement.F = false; }
+    if (io->key(kc.S)) { camera.movement.B = true; } // Back
+    if (!io->key(kc.S)) { camera.movement.B = false; }
+    if (io->key(kc.D)) { camera.movement.R = true; } // Right
+    if (!io->key(kc.D)) { camera.movement.R = false; }
+    if (io->key(kc.A)) { camera.movement.L = true; } // Left
+    if (!io->key(kc.A)) { camera.movement.L = false; }
+    if (io->key(kc.Num0)) { camera.pivot.reset(); } // Reset
+
+    // Scroll for ZOOM
+    (io->key(kc.LeftShift)) ? camera.setZoom(io->scrollV()) : camera.setFOV(io->scrollV());
+    camera.pivot.modRot({io->axisV(), io->axisH(), 0.f}); // Left-Click and move for ROTATION
+
+    // Draw meshes
+    vo.mesh.monkey->transform.setPosX(-3.f);
+    vo.mesh.monkey->draw(*vo.shader.light, camera.getView(), &tex1);
+    vo.mesh.monkey->transform.setPosX(0.f);
+    vo.mesh.monkey->draw(*vo.shader.light, camera.getView(), &tex2);
+    vo.mesh.monkey->transform.setPosX(3.f);
+    vo.mesh.monkey->draw(*vo.shader.light, camera.getView(), &tex3);
   };
 
   vo.run();

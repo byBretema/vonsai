@@ -4,20 +4,26 @@
 #include <mutex>
 
 #include <Vonsai/Wraps/_gl.hpp>
-#define GLFW_INCLUDE_NONE
-#include <GLFW/glfw3.h>
+#include <Vonsai/Wraps/_glfw.hpp>
+
 
 #include <Vonsai/Utils/Colors.hpp>
 #include <Vonsai/Utils/Logger.hpp>
 
 
 namespace Vonsai {
+static IO *IO_PTR{nullptr};
 
 #define GLFW_PTR static_cast<GLFWwindow *>(m_window)
 
 // * WINDOW
 
 bool IO::update() {
+  m_scroll.V = 0.f; // TODO : Move to separated function
+  m_scroll.H = 0.f;
+  m_axis.V   = 0.f;
+  m_axis.H   = 0.f;
+
   if (!m_focused) { glfwWaitEvents(); }
   activate();
   glfwPollEvents();
@@ -30,9 +36,10 @@ bool IO::update() {
   return m_valid;
 }
 
-void IO::close() { destroy(); }
-bool IO::isValid() const { return m_valid; }
-bool IO::isFocused() const { return m_focused; }
+void  IO::close() { destroy(); }
+bool  IO::isValid() const { return m_valid; }
+bool  IO::isFocused() const { return m_focused; }
+float IO::aspectRatio() const { return m_width / m_height; }
 
 void IO::destroy() {
   m_valid = false;
@@ -50,10 +57,17 @@ void onWindowResize(float a_width, float a_height, IO &a_io) {
 
 
 // * KEYBOARD
+
 bool IO::key(int a_keyCode) const {
   if (m_keys.count(a_keyCode) > 0) { return m_keys.at(a_keyCode); };
   return false;
 }
+
+bool IO::anyShift() const { return key(KeyCode.LeftShift) or key(KeyCode.RightShift); }
+bool IO::anyAlt() const { return key(KeyCode.LeftAlt) or key(KeyCode.RightAlt); }
+bool IO::anyCtrl() const { return key(KeyCode.LeftCtrl) or key(KeyCode.RightCtrl); }
+bool IO::anySuper() const { return key(KeyCode.LeftSuper) or key(KeyCode.RightSuper); }
+
 void onKeyPress(int a_key, IO &a_io) { a_io.m_keys[a_key] = true; }
 void onKeyRelease(int a_key, IO &a_io) { a_io.m_keys[a_key] = false; }
 
@@ -67,23 +81,20 @@ bool IO::clickM() const { return m_click.M; }
 int IO::axisV() const { return m_axis.V; }
 int IO::axisH() const { return m_axis.H; }
 
-int IO::scrollV() const { return m_scroll.V; }
-int IO::scrollH() const { return m_scroll.H; }
+int IO::scrollV() const { return (anyShift()) ? m_scroll.H : m_scroll.V; }
+int IO::scrollH() const { return (anyShift()) ? m_scroll.V : m_scroll.H; }
 
 void onClickL(bool a_state, IO &a_io) { a_io.m_click.L = a_state; }
 void onClickR(bool a_state, IO &a_io) { a_io.m_click.R = a_state; }
 void onClickM(bool a_state, IO &a_io) { a_io.m_click.M = a_state; }
 void onScroll(float a_displX, float a_displY, IO &a_io) {
-  a_io.m_scroll.V = (a_displY < 0.f) ? -1 : (a_displY > 0.f) ? 1 : 0;
-  a_io.m_scroll.H = (a_displX < 0.f) ? -1 : (a_displX > 0.f) ? 1 : 0;
+  a_io.m_scroll.H = a_displX;
+  a_io.m_scroll.V = a_displY;
 }
 void onCursorMove(double a_x, double a_y, IO &a_io) {
-  if (!a_io.clickL()) {
-    auto displX   = a_x - a_io.m_cursorX;
-    auto displY   = a_y - a_io.m_cursorY;
-    a_io.m_axis.V = (displY < 0.f) ? -1 : (displY > 0.f) ? 1 : 0;
-    a_io.m_axis.H = (displX < 0.f) ? -1 : (displX > 0.f) ? 1 : 0;
-    // vo_print("cursor pos: {} / {}", a_io.m_cursorPrevX, a_io.m_cursorPrevY);
+  if (a_io.clickL()) {
+    a_io.m_axis.H = a_x - a_io.m_cursorX;
+    a_io.m_axis.V = a_y - a_io.m_cursorY;
   }
   a_io.m_cursorX = a_x;
   a_io.m_cursorY = a_y;
@@ -91,23 +102,6 @@ void onCursorMove(double a_x, double a_y, IO &a_io) {
 
 // * IO
 IO::IO() {
-  static std::once_flag glfwInitFlag;
-  std::call_once(glfwInitFlag, []() {
-    if (!glfwInit()) {
-      vo_err("Couldn't initialize GLFW");
-      return;
-    }
-    glfwWindowHint(GLFW_VISIBLE, GLFW_TRUE);
-    glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4 /* a_versionMajor */);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 1 /* a_versionMinor */);
-    glfwWindowHint(GLFW_FOCUS_ON_SHOW, GLFW_TRUE);
-    glfwWindowHint(GLFW_SCALE_TO_MONITOR, GLFW_TRUE);
-    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-  });
-
-
   // 1. WINDOW CREATION
   m_window = glfwCreateWindow(m_width, m_height, m_title.c_str(), nullptr, nullptr);
   if (!m_window) {
@@ -133,8 +127,11 @@ IO::IO() {
   // 4. EVERYTHING GO AS EXPECTED
   m_valid = true;
 
-  // 5. LINK OUR-WINDOW EVENTS TO GLFW-WINDOW
-  glfwSetWindowUserPointer(GLFW_PTR, this); // ! MUST
+  // 5. CREATE A DEFAULT SCENE
+  m_activeScene = m_scenes.emplace_back(std::make_shared<Scene>());
+
+  // 6. LINK OUR-WINDOW EVENTS TO GLFW-WINDOW
+  glfwSetWindowUserPointer(GLFW_PTR, this); // !!! Needed for callback definition
   glfwSetKeyCallback(GLFW_PTR, [](GLFWwindow *ptr, int key, int scancode, int action, int modifier) {
     auto curr = static_cast<IO *>(glfwGetWindowUserPointer(ptr));
     (action) ? onKeyPress(key, *curr) : onKeyRelease(key, *curr);
@@ -169,11 +166,7 @@ IO::IO() {
     auto curr = static_cast<IO *>(glfwGetWindowUserPointer(ptr));
     onDestroy(*curr);
   });
-
-  // 6. CREATE A DEFAULT SCENE
-  m_activeScene = m_scenes.emplace_back(std::make_shared<Scene>());
 }
-
 } // namespace Vonsai
 
 
@@ -195,37 +188,3 @@ IO::IO() {
 //   activate();
 //   m_clearColor = a_clearColor;
 //   glClearColor(m_clearColor.r, m_clearColor.g, m_clearColor.b, 1.f);
-// }
-
-
-/* FRIENDS */
-
-// void onKeyboardInput(int a_mod, Window &a_window) {
-//   if (a_window.getKey(GLFW_KEY_ESCAPE)) { a_window.requestClose(); } // Press ESC to close
-
-//   // Camera movement
-//   if (a_window.getKey(GLFW_KEY_E)) { a_window.camera.movement.U = true; }   // Up
-//   if (!a_window.getKey(GLFW_KEY_E)) { a_window.camera.movement.U = false; } // Up
-
-//   if (a_window.getKey(GLFW_KEY_Q)) { a_window.camera.movement.D = true; }   // Down
-//   if (!a_window.getKey(GLFW_KEY_Q)) { a_window.camera.movement.D = false; } // Down
-
-//   if (a_window.getKey(GLFW_KEY_W)) { a_window.camera.movement.F = true; }   // Front
-//   if (!a_window.getKey(GLFW_KEY_W)) { a_window.camera.movement.F = false; } // Front
-
-//   if (a_window.getKey(GLFW_KEY_S)) { a_window.camera.movement.B = true; }   // Back
-//   if (!a_window.getKey(GLFW_KEY_S)) { a_window.camera.movement.B = false; } // Back
-
-//   if (a_window.getKey(GLFW_KEY_D)) { a_window.camera.movement.R = true; }   // Right
-//   if (!a_window.getKey(GLFW_KEY_D)) { a_window.camera.movement.R = false; } // Right
-
-//   if (a_window.getKey(GLFW_KEY_A)) { a_window.camera.movement.L = true; }   // Left
-//   if (!a_window.getKey(GLFW_KEY_A)) { a_window.camera.movement.L = false; } // Left
-
-//   if (a_window.getKey(GLFW_KEY_0)) { a_window.camera.pivot.reset(); }
-
-//   // Random clear color
-//   // if (a_window.getKey(GLFW_KEY_R)) { a_window.setClearColor(Colors::random()); }
-
-//   a_window.m_onInput(a_mod, a_window);
-// }

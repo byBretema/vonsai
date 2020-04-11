@@ -15,13 +15,17 @@ private:
   glm::vec3 m_offset{1.f};
 
 public:
+  static constexpr float MIN_FOV = 0.1f;
+  static constexpr float MAX_FOV = 1.5f;
+
   Transform pivot;
 
   struct {
     bool F{false}, B{false}, R{false}, L{false}, U{false}, D{false};
   } movement;
 
-  void zoom(float a_variation);
+  void setZoom(float a_variation);
+  void setFOV(float a_variation);
   void frame(float a_aspectRatio, glm::vec3 const &a_target = INF3);
 
   inline glm::mat4 const &getView() const { return m_view; }
