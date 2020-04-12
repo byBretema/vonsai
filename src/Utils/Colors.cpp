@@ -32,10 +32,7 @@ glm::vec3 rgbFromHEX(std::string const &a_hex) {
   return FALLBACK_COLOR;
 }
 
-glm::vec3 glslFromHEX(std::string const &a_hex) {
-  glm::vec3 C = rgbFromHEX(a_hex);
-  return glslFromRGB(rgbFromHEX(a_hex));
-}
+glm::vec3 glslFromHEX(std::string const &a_hex) { return glslFromRGB(rgbFromHEX(a_hex)); }
 
 glm::vec3 glslFromRGB(glm::vec3 const &a_color) {
   auto &C = a_color;

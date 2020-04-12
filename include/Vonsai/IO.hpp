@@ -158,7 +158,7 @@ private:
   std::string          m_title{TITLE};
   float                m_width{WIDTH};
   float                m_height{HEIGHT};
-  std::array<float, 3> m_color{0.15f, 0.15f, 0.25f};
+  std::array<float, 3> m_color{0.13f, 0.13f, 0.175f};
 
   bool m_valid{false};
   bool m_focused{false};
@@ -181,7 +181,6 @@ public:
   bool anySuper() const;
 
 private:
-  int                           m_mod;
   std::unordered_map<int, bool> m_keys;
   friend void                   onKeyPress(int a_key, IO &a_io);
   friend void                   onKeyRelease(int a_key, IO &a_io);

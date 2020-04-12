@@ -45,7 +45,7 @@ void Shader::buildPipeline(ShaderCode const &a_rawCode) {
     m_ok        = false;
   };
 
-  for (auto i = 0; i < SHADER_TYPES.size(); ++i) {
+  for (auto i = 0u; i < SHADER_TYPES.size(); ++i) {
 
     if (a_rawCode[i].empty()) {
       if (SHADER_TYPES[i] == GL_VERTEX_SHADER or SHADER_TYPES[i] == GL_FRAGMENT_SHADER) {
@@ -174,7 +174,7 @@ void Shader::setUniformBlock(char const *a_name, int a_uboBindPoint) const {
 Shader::Shader(char const *a_name, ShaderPath const &a_paths) : m_programName(a_name) {
   ShaderCode rawCode;
 
-  for (auto i = 0; i < SHADER_TYPES.size(); ++i) {
+  for (auto i = 0u; i < SHADER_TYPES.size(); ++i) {
     if (a_paths[i].empty() or !Files::isValid(a_paths[i])) {
       if (SHADER_TYPES[i] == GL_VERTEX_SHADER or SHADER_TYPES[i] == GL_FRAGMENT_SHADER) { m_ok = false; }
       continue;

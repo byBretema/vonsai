@@ -12,8 +12,6 @@
 
 
 namespace Vonsai {
-static IO *IO_PTR{nullptr};
-
 #define GLFW_PTR static_cast<GLFWwindow *>(m_window)
 
 // * WINDOW
@@ -122,7 +120,7 @@ IO::IO() {
   }
 
   // 3. LOAD DEFAULT OPENGL SETUP
-  GL::defaultSetup();
+  GL::defaultSetup(m_color[0], m_color[1], m_color[2]);
 
   // 4. EVERYTHING GO AS EXPECTED
   m_valid = true;
@@ -133,6 +131,9 @@ IO::IO() {
   // 6. LINK OUR-WINDOW EVENTS TO GLFW-WINDOW
   glfwSetWindowUserPointer(GLFW_PTR, this); // !!! Needed for callback definition
   glfwSetKeyCallback(GLFW_PTR, [](GLFWwindow *ptr, int key, int scancode, int action, int modifier) {
+    (void)scancode;
+    (void)modifier;
+
     auto curr = static_cast<IO *>(glfwGetWindowUserPointer(ptr));
     (action) ? onKeyPress(key, *curr) : onKeyRelease(key, *curr);
   });
@@ -149,6 +150,7 @@ IO::IO() {
     onCursorMove(posX, posY, *curr);
   });
   glfwSetMouseButtonCallback(GLFW_PTR, [](GLFWwindow *ptr, int button, int action, int modifier) {
+    (void)modifier;
     auto curr  = static_cast<IO *>(glfwGetWindowUserPointer(ptr));
     bool state = static_cast<bool>(action);
     switch (button) {

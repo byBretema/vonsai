@@ -38,7 +38,7 @@ private:
   using Clock     = std::chrono::high_resolution_clock;
   using TimePoint = std::chrono::time_point<Clock, std::chrono::nanoseconds>;
 
-  double    m_deltaTime{};
+  double    m_deltaTime{0.f};
   TimePoint m_initTimeDelta{Clock::now()};
   TimePoint m_initTimeFrames{Clock::now()};
 

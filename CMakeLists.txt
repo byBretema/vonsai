@@ -2,8 +2,14 @@ cmake_minimum_required(VERSION 3.0)
 set(lib_name Vonsai)
 project(${lib_name})
 
-# TODO ....
+# ------------------------------------------------------------------------- #
+# THIRD PARTY
+# ------------------------------------------------------------------------- #
 
+add_subdirectory(vendor/fmt)
+add_subdirectory(vendor/glm)
+add_subdirectory(vendor/glfw)
+add_subdirectory(vendor/glad_opengl_4.1)
 
 # ------------------------------------------------------------------------- #
 # GLOBAL SETTINGS
@@ -13,15 +19,9 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_EXTENSIONS OFF)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-
-# ------------------------------------------------------------------------- #
-# THIRD PARTY
-# ------------------------------------------------------------------------- #
-
-add_subdirectory(vendor/fmt)
-add_subdirectory(vendor/glm)
-add_subdirectory(vendor/glfw)
-add_subdirectory(vendor/glad_opengl_4.1)
+set(CMAKE_CXX_FLAGS "-Wall -Wpedantic -Wextra -fexceptions ")
+set(CMAKE_CXX_FLAGS_DEBUG "-O0 -g3 -ggdb")
+set(CMAKE_CXX_FLAGS_RELEASE "-O3")
 
 
 # ------------------------------------------------------------------------- #
