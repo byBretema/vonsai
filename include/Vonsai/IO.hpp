@@ -150,13 +150,13 @@ public:
   bool  isFocused() const;
   float aspectRatio() const;
 
+  void *m_window{nullptr}; //TODO: make it private
 private:
   static inline unsigned int   windowCounter = 0;
   static constexpr float       WIDTH         = 800.f;
   static constexpr float       HEIGHT        = 600.f;
   static constexpr const char *TITLE         = "VONSAI";
 
-  void *               m_window{nullptr};
   std::string          m_title{TITLE};
   float                m_width{WIDTH};
   float                m_height{HEIGHT};

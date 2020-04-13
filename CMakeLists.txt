@@ -29,6 +29,13 @@ set(CMAKE_CXX_FLAGS_RELEASE "-O3")
 # ------------------------------------------------------------------------- #
 
 add_library(${lib_name} STATIC
+    ./vendor/imgui/imgui.cpp
+    ./vendor/imgui/imgui_demo.cpp
+    ./vendor/imgui/imgui_draw.cpp
+    ./vendor/imgui/imgui_widgets.cpp
+    ./vendor/imgui/imgui_impl_glfw.cpp
+    ./vendor/imgui/imgui_impl_opengl3.cpp
+
     ./src/Utils/Colors.cpp
     ./src/Utils/Files.cpp
     ./src/Utils/Random.cpp

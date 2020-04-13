@@ -11,7 +11,12 @@
 #include <Vonsai/Light.hpp>
 #include <Vonsai/UBO.hpp>
 
+#include <imgui/imgui.h>
+#include <imgui/imgui_impl_glfw.h>
+#include <imgui/imgui_impl_opengl3.h>
+
 #include <list>
+
 
 
 int main() {
@@ -31,6 +36,17 @@ int main() {
   */
 
   Vonsai::Engine vo;
+  auto &         io = vo.m_ios.front();
+  auto &         sc = io->m_activeScene;
+  auto &         kc = Vonsai::KeyCode;
+
+  /* --- IMGUI --- */
+  ImGui::CreateContext();
+  ImGui::StyleColorsDark();
+  ImGui_ImplGlfw_InitForOpenGL(static_cast<GLFWwindow *>(io->m_window), true);
+  ImGui_ImplOpenGL3_Init("#version 410");
+  /* -/- IMGUI --- */
+
 
   Vonsai::Light              l1({0, 2, 5}, {1, 1, 1});
   Vonsai::Light              l2({0, 2, -5}, {1, 1, 1});
@@ -54,10 +70,6 @@ int main() {
 
   Vonsai::Camera camera;
   camera.setZoom(17.5f);
-
-  auto &io = vo.m_ios.front();
-  auto &sc = io->m_activeScene;
-  auto &kc = Vonsai::KeyCode;
 
   sc->onRender = [&]() {
     // Camera update
@@ -91,77 +103,23 @@ int main() {
     vo.mesh.monkey->draw(*vo.shader.light, camera.getView(), &tex2);
     vo.mesh.monkey->transform.setPosX(3.f);
     vo.mesh.monkey->draw(*vo.shader.light, camera.getView(), &tex3);
+
+    ImGui_ImplOpenGL3_NewFrame();
+    ImGui_ImplGlfw_NewFrame();
+    ImGui::NewFrame();
+
+    ImGui::Begin("Hello, world!");
+    ImGui::Text("This is some useful text.");
+    ImGui::End();
+
+    ImGui::Render();
+    ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
   };
 
   vo.run();
 
-  /*
-  vo.addWindow("1", 800, 600);
-
-  // Switch between scenes with TAB (by default) -- Responsibility of the engine
-  vo.addScene("1", "Demo A", "#223");
-  vo.addScene("1", "Demo B", "#232");
-
-  vo.run([]() {
-    // * Previous goes the iter from window list to get scenes and
-    // * TAB key injection to allow switch between scenes
-    // ! The code below gonna run: on-each ACTIVE Scene, of all windows.
-    // system_a
-    // system_b
-  });
-
- */
+  ImGui_ImplOpenGL3_Shutdown();
+  ImGui_ImplGlfw_Shutdown();
+  ImGui::DestroyContext();
   return 0;
-
-
-  // Vonsai::App app;
-  // auto        window = app.newWindow(800, 600, "VONSAI :: Window 1");
-
-  // Vonsai::Light              l1({0, 2, 5}, {1, 1, 1});
-  // Vonsai::Light              l2({0, 2, -5}, {1, 1, 1});
-  // std::vector<Vonsai::Light> lv{l1, l2};
-
-  // Vonsai::UBO lightsUBO;
-  // lightsUBO.setData("u_numLights", glm::vec4{static_cast<float>(lv.size())});
-  // lightsUBO.setData("u_lights", lv);
-  // app.shader.light->setUniformBlock("lightsUBO", lightsUBO.getBindPoint());
-
-  // Vonsai::UBO globalData;
-  // app.shader.light->setUniformBlock("globalData", globalData.getBindPoint());
-
-  // // ========================================================================================== //
-
-  // Vonsai::Texture tex1("assets/textures/dac.png");
-  // Vonsai::Texture tex2("assets/textures/Vonsai.png");
-  // Vonsai::Texture tex3("assets/textures/chess.jpg");
-
-  // // ========================================================================================== //
-
-  // window.camera.pivot.pos += glm::vec3{0, 0, 17.5f};
-
-  // glm::vec3 midMonkeyPos{0.f};
-
-  // window.setRenderFn([&]() {
-  //   window.camera.frame(window.getAspectRatio());
-
-  //   globalData.setData("u_proj", window.camera.getProj());
-  //   globalData.setData("u_view", window.camera.getView());
-
-  //   app.mesh.monkey->transform.pos = {-3, 0, 0};
-  //   app.mesh.monkey->draw(*app.shader.light, window.camera.getView(), &tex1);
-  //   app.mesh.monkey->transform.pos = midMonkeyPos;
-  //   app.mesh.monkey->draw(*app.shader.light, window.camera.getView(), &tex2);
-  //   app.mesh.monkey->transform.pos = {3, 0, 0};
-  //   app.mesh.monkey->draw(*app.shader.light, window.camera.getView(), &tex3);
-  // });
-
-  // window.setInputFn([&midMonkeyPos](int a_mod, Vonsai::Window &a_window) {
-  //   if (a_window.getKey(GLFW_KEY_R)) { a_window.setClearColor(Vonsai::Colors::random()); }
-  //   if (a_window.getKey(GLFW_KEY_I)) { midMonkeyPos.z += 0.1f; }
-  //   if (a_window.getKey(GLFW_KEY_K)) { midMonkeyPos.z -= 0.1f; }
-  //   if (a_window.getKey(GLFW_KEY_L)) { midMonkeyPos.x += 0.1f; }
-  //   if (a_window.getKey(GLFW_KEY_J)) { midMonkeyPos.x -= 0.1f; }
-  // });
-
-  // Vonsai::Window::run();
 }
