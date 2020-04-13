@@ -130,13 +130,11 @@ IO::IO() {
 
   // 6. LINK OUR-WINDOW EVENTS TO GLFW-WINDOW
   glfwSetWindowUserPointer(GLFW_PTR, this); // !!! Needed for callback definition
-  glfwSetKeyCallback(GLFW_PTR, [](GLFWwindow *ptr, int key, int scancode, int action, int modifier) {
-    (void)scancode;
-    (void)modifier;
-
-    auto curr = static_cast<IO *>(glfwGetWindowUserPointer(ptr));
-    (action) ? onKeyPress(key, *curr) : onKeyRelease(key, *curr);
-  });
+  glfwSetKeyCallback(
+      GLFW_PTR, [](GLFWwindow *ptr, int key, [[maybe_unused]] int scancode, int action, [[maybe_unused]] int modifier) {
+        auto curr = static_cast<IO *>(glfwGetWindowUserPointer(ptr));
+        (action) ? onKeyPress(key, *curr) : onKeyRelease(key, *curr);
+      });
   glfwSetWindowSizeCallback(GLFW_PTR, [](GLFWwindow *ptr, int width, int height) {
     auto curr = static_cast<IO *>(glfwGetWindowUserPointer(ptr));
     onWindowResize(static_cast<float>(width), static_cast<float>(height), *curr);
@@ -149,8 +147,7 @@ IO::IO() {
     auto curr = static_cast<IO *>(glfwGetWindowUserPointer(ptr));
     onCursorMove(posX, posY, *curr);
   });
-  glfwSetMouseButtonCallback(GLFW_PTR, [](GLFWwindow *ptr, int button, int action, int modifier) {
-    (void)modifier;
+  glfwSetMouseButtonCallback(GLFW_PTR, [](GLFWwindow *ptr, int button, int action, [[maybe_unused]] int modifier) {
     auto curr  = static_cast<IO *>(glfwGetWindowUserPointer(ptr));
     bool state = static_cast<bool>(action);
     switch (button) {

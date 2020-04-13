@@ -139,7 +139,9 @@ struct KeyCodeT {
 } constexpr KeyCode;
 
 class IO {
+
   // * WINDOW
+
 public:
   bool update();
   void close();
@@ -173,6 +175,7 @@ private:
 
 
   // * KEYBOARD
+
 public:
   bool key(int a_keyCode) const;
   bool anyShift() const;
@@ -187,6 +190,7 @@ private:
 
 
   // * MOUSE
+
 public:
   bool clickL() const;
   bool clickR() const;
@@ -224,9 +228,9 @@ private:
   friend void onCursorMove(double a_x, double a_y, IO &a_io);
 
   // * IO
+
 public:
   explicit IO();
-
   std::shared_ptr<Scene> m_activeScene; // TODO: PRIVATE
 private:
   std::list<std::shared_ptr<Scene>> m_scenes;
