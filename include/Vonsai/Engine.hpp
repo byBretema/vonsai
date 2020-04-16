@@ -14,13 +14,13 @@ namespace Vonsai {
 class Engine {
 public:
   struct {
-    std::shared_ptr<Shader> light;
-    std::shared_ptr<Shader> flat;
+    std::unique_ptr<Shader> light;
+    std::unique_ptr<Shader> flat;
   } shader;
 
   struct {
-    std::shared_ptr<Renderable> monkey;
-    std::shared_ptr<Renderable> cube;
+    std::unique_ptr<Renderable> monkey;
+    std::unique_ptr<Renderable> cube;
   } mesh;
 
   Engine();

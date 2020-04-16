@@ -11,18 +11,18 @@ RenderableData parserObj(std::string const &filePath); // * Quick OBJ loader
 Engine::Engine() {
   m_ios.emplace("default", std::make_shared<IO>()); // ! Should be the first action
 
-  // mesh.monkey = std::make_shared<Renderable>(parserObj("assets/models/monkey.obj"));
-  // mesh.cube   = std::make_shared<Renderable>(parserObj("assets/models/cube.obj"));
+  mesh.monkey = std::make_unique<Renderable>(parserObj("assets/models/monkey.obj"));
+  mesh.cube   = std::make_unique<Renderable>(parserObj("assets/models/cube.obj"));
 
-  // Vonsai::ShaderPath lightSP;
-  // lightSP.vertex   = "assets/shaders/light/light.vert";
-  // lightSP.fragment = "assets/shaders/light/light.frag";
-  // shader.light     = std::make_shared<Shader>("light", lightSP);
+  Vonsai::ShaderPath lightSP;
+  lightSP.vertex   = "assets/shaders/light/light.vert";
+  lightSP.fragment = "assets/shaders/light/light.frag";
+  shader.light     = std::make_unique<Shader>("light", lightSP);
 
-  // Vonsai::ShaderPath flatSP;
-  // flatSP.vertex   = "assets/shaders/flat/flat.vert";
-  // flatSP.fragment = "assets/shaders/flat/flat.frag";
-  // shader.flat     = std::make_shared<Shader>("light", flatSP);
+  Vonsai::ShaderPath flatSP;
+  flatSP.vertex   = "assets/shaders/flat/flat.vert";
+  flatSP.fragment = "assets/shaders/flat/flat.frag";
+  shader.flat     = std::make_unique<Shader>("flat", flatSP);
 }
 
 void Engine::run() const {
