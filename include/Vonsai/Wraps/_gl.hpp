@@ -6,7 +6,7 @@
 
 namespace Vonsai::GL {
 
-inline bool loadExtensions(void *a_proc) { return gladLoadGLLoader((GLADloadproc)a_proc); }
+inline bool loadExtensions(void *a_proc) { return gladLoadGLLoader(reinterpret_cast<GLADloadproc>(a_proc)); }
 
 inline void defaultSetup(float r, float g, float b) {
   glFrontFace(GL_CCW);

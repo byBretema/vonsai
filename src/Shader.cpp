@@ -149,7 +149,7 @@ void Shader::setUniformMat4(char const *a_name, glm::mat4 const &a_mat) const {
 }
 
 /// Connect a given UBO
-void Shader::setUniformBlock(char const *a_name, int a_uboBindPoint) const {
+void Shader::setUniformBlock(char const *a_name, unsigned int a_uboBindPoint) const {
   int ubShaderIdx = 0;
 
   if (m_uniformBlockCache.count(a_name) > 0) {

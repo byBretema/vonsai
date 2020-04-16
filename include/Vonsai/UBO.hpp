@@ -39,7 +39,7 @@ private:
   std::unordered_map<const char *, unsigned int> m_itemsOffset;
   unsigned int                                   m_totalSize{0u};
 
-  void internalSetData(char const *a_name, unsigned int a_dataSize, void *a_dataDir);
+  void internalSetData(char const *a_name, size_t a_dataSize, void *a_dataDir);
 
 public:
   UBO();

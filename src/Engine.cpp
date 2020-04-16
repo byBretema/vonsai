@@ -9,46 +9,49 @@ namespace Vonsai {
 RenderableData parserObj(std::string const &filePath); // * Quick OBJ loader
 
 Engine::Engine() {
-  m_ios.emplace_back(std::make_unique<IO>());
+  m_ios.emplace("default", std::make_shared<IO>()); // ! Should be the first action
 
-  mesh.monkey = std::make_unique<Renderable>(parserObj("assets/models/monkey.obj"));
-  mesh.cube   = std::make_unique<Renderable>(parserObj("assets/models/cube.obj"));
+  // mesh.monkey = std::make_shared<Renderable>(parserObj("assets/models/monkey.obj"));
+  // mesh.cube   = std::make_shared<Renderable>(parserObj("assets/models/cube.obj"));
 
-  Vonsai::ShaderPath lightSP;
-  lightSP.vertex   = "assets/shaders/light/light.vert";
-  lightSP.fragment = "assets/shaders/light/light.frag";
-  shader.light     = std::make_unique<Shader>("light", lightSP);
+  // Vonsai::ShaderPath lightSP;
+  // lightSP.vertex   = "assets/shaders/light/light.vert";
+  // lightSP.fragment = "assets/shaders/light/light.frag";
+  // shader.light     = std::make_shared<Shader>("light", lightSP);
 
-  Vonsai::ShaderPath flatSP;
-  flatSP.vertex   = "assets/shaders/flat/flat.vert";
-  flatSP.fragment = "assets/shaders/flat/flat.frag";
-  shader.flat     = std::make_unique<Shader>("light", flatSP);
+  // Vonsai::ShaderPath flatSP;
+  // flatSP.vertex   = "assets/shaders/flat/flat.vert";
+  // flatSP.fragment = "assets/shaders/flat/flat.frag";
+  // shader.flat     = std::make_shared<Shader>("light", flatSP);
 }
 
-void Engine::run() {
+void Engine::run() const {
+  std::vector<std::string> toClean;
+  toClean.reserve(8 /*MaxWindows*/);
+
   while (m_ios.size() > 0) {
-    for (auto &&io : m_ios) {
-      io->update();
-      if (io->key(Vonsai::KeyCode.Esc)) { io->close(); }
+    for (auto &&[winName, winPtr] : m_ios) {
+      if (!winPtr->isValid()) {
+        toClean.push_back(winName);
+        continue;
+      }
+
+      winPtr->update();
+      if (winPtr->key(Vonsai::KeyCode.Esc)) { winPtr->close(); }
     }
-    m_ios.remove_if([](auto &&io) { return !io->isValid(); });
+
+    std::for_each(begin(toClean), end(toClean), [&ios = m_ios](std::string const &key) { ios.erase(key); });
+    toClean.clear();
   }
 }
 
+std::shared_ptr<IO> Engine::getWindow(std::string const &a_name) const {
+  return (m_ios.count(a_name) > 0) ? m_ios.at(a_name) : nullptr;
+}
 
 
-// void Engine::addWindow(std::string const &a_name, int a_width, int a_height) {
-//   m_ioVec.emplace_back();
-//   m_ioTable.emplace(a_name, m_ioVec.size() - 1);
-// }
-// void Engine::addScene(std::string const &a_windowName, std::string const &a_sceneName, std::string const &a_hexColor) {
-//   // TODO !!
-//   return;
-// }
+// * //////////////////////////////////////////////////////////////////////////
 
-// IO App::newWindow(int a_width, int a_height, std::string const &a_name) {
-//   return Window(a_width, a_height, a_name, a_inputFn);
-// }
 
 RenderableData parserObj(std::string const &filePath) {
   RenderableData out;
@@ -122,6 +125,5 @@ RenderableData parserObj(std::string const &filePath) {
   }
   return out;
 }
-
 
 } // namespace Vonsai

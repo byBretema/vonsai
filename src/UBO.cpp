@@ -5,7 +5,7 @@ namespace Vonsai {
 void UBO::bind() const { GL_ASSERT(glBindBuffer(GL_UNIFORM_BUFFER, m_ID)); }
 void UBO::unbind() const { GL_ASSERT(glBindBuffer(GL_UNIFORM_BUFFER, 0)); }
 
-void UBO::internalSetData(char const *a_name, unsigned int a_dataSize, void *a_dataDir) {
+void UBO::internalSetData(char const *a_name, size_t a_dataSize, void *a_dataDir) {
   BindGuard uboBG{*this};
   if (m_itemsOffset.count(a_name) < 1) {
     m_itemsOffset.emplace(a_name, m_totalSize);

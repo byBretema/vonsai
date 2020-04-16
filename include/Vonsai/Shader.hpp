@@ -97,7 +97,7 @@ public:
   void setUniformMat4(char const *a_name, glm::mat4 const &a_mat) const;
 
 
-  void setUniformBlock(char const *a_name, int uboBindPoint) const;
+  void setUniformBlock(char const *a_name, unsigned int uboBindPoint) const;
 
   Shader(char const *a_name, ShaderPath const &a_paths);
   Shader(char const *a_name, ShaderCode const &a_rawCode);

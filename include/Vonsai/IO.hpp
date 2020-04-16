@@ -148,26 +148,30 @@ public:
 
   bool  isValid() const;
   bool  isFocused() const;
-  float aspectRatio() const;
+  float getAspectRatio() const;
 
-  void *m_window{nullptr}; //TODO: make it private
+  std::shared_ptr<Scene> getActiveScene() const;
+
 private:
   static inline unsigned int   windowCounter = 0;
   static constexpr float       WIDTH         = 800.f;
   static constexpr float       HEIGHT        = 600.f;
   static constexpr const char *TITLE         = "VONSAI";
 
+  bool  m_valid{false};
+  bool  m_focused{false};
+  void *m_window{nullptr};
+
   std::string          m_title{TITLE};
   float                m_width{WIDTH};
   float                m_height{HEIGHT};
   std::array<float, 3> m_color{0.13f, 0.13f, 0.175f};
 
-  bool m_valid{false};
-  bool m_focused{false};
+  std::list<std::shared_ptr<Scene>> m_scenes;
+  std::shared_ptr<Scene>            m_activeScene;
 
   void destroy();
   void activate();
-  bool shouldClose();
 
   friend void onDestroy(IO &a_io);
   friend void onWindowFocus(bool a_isFocused, IO &a_io);
@@ -231,9 +235,6 @@ private:
 
 public:
   explicit IO();
-  std::shared_ptr<Scene> m_activeScene; // TODO: PRIVATE
-private:
-  std::list<std::shared_ptr<Scene>> m_scenes;
 };
 
 } // namespace Vonsai

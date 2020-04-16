@@ -6,9 +6,12 @@
 #include <Vonsai/Wraps/_gl.hpp>
 #include <Vonsai/Wraps/_glfw.hpp>
 
-
 #include <Vonsai/Utils/Colors.hpp>
 #include <Vonsai/Utils/Logger.hpp>
+
+#include <imgui/imgui.h>
+#include <imgui/imgui_impl_glfw.h>
+#include <imgui/imgui_impl_opengl3.h>
 
 
 namespace Vonsai {
@@ -26,7 +29,14 @@ bool IO::update() {
   activate();
   glfwPollEvents();
 
+  ImGui_ImplOpenGL3_NewFrame();
+  ImGui_ImplGlfw_NewFrame();
+  ImGui::NewFrame();
+
   m_activeScene->update();
+
+  ImGui::Render();
+  ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
   glfwSwapBuffers(GLFW_PTR);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -37,16 +47,21 @@ bool IO::update() {
 void  IO::close() { destroy(); }
 bool  IO::isValid() const { return m_valid; }
 bool  IO::isFocused() const { return m_focused; }
-float IO::aspectRatio() const { return m_width / m_height; }
+float IO::getAspectRatio() const { return m_width / m_height; }
+
+std::shared_ptr<Scene> IO::getActiveScene() const { return m_activeScene; }
 
 void IO::destroy() {
   m_valid = false;
+  ImGui_ImplOpenGL3_Shutdown();
+  ImGui_ImplGlfw_Shutdown();
+  ImGui::DestroyContext();
   glfwDestroyWindow(GLFW_PTR);
 }
-void IO::activate() { glfwMakeContextCurrent(GLFW_PTR); }
-bool IO::shouldClose() { return glfwWindowShouldClose(GLFW_PTR); }
 
-void onDestroy(IO &a_io) { a_io.destroy(); }
+void IO::activate() { glfwMakeContextCurrent(GLFW_PTR); }
+
+void onDestroy(IO &a_io) { a_io.m_valid = false; }
 void onWindowFocus(bool a_focused, IO &a_io) { a_io.m_focused = a_focused; }
 void onWindowResize(float a_width, float a_height, IO &a_io) {
   a_io.m_width  = a_width;
@@ -109,7 +124,6 @@ IO::IO() {
   m_title += (std::string{" :: Window "} + std::to_string(++windowCounter));
   glfwSetWindowTitle(GLFW_PTR, m_title.c_str());
 
-
   // 2. LOAD EXTENSIONS ON THAT WINDOW
   activate();
   if (!GL::loadExtensions(reinterpret_cast<void *>(glfwGetProcAddress))) {
@@ -165,6 +179,12 @@ IO::IO() {
     auto curr = static_cast<IO *>(glfwGetWindowUserPointer(ptr));
     onDestroy(*curr);
   });
+
+  // 7. ATTACH IMGUI // * Best placing is after callbacks
+  ImGui::CreateContext();
+  ImGui::StyleColorsDark();
+  ImGui_ImplGlfw_InitForOpenGL(GLFW_PTR, true); // ? Need to change on 'window activate'
+  ImGui_ImplOpenGL3_Init("#version 410");       // TODO : BASED ON SETTINGS
 }
 } // namespace Vonsai
 

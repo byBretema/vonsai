@@ -3,6 +3,8 @@
 
 namespace Vonsai {
 
+Bindable::~Bindable() {}
+
 void BindGuard::inject(Bindable const *a_bindable) {
   if (m_ptr) {
     vo_err("A bound object could not be modified.");
