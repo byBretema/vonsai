@@ -8,7 +8,7 @@ out vec3 v_pos;
 out vec3 v_normal;
 out vec2 v_texCoord;
 
-layout(std140) uniform globalData {
+layout(std140) uniform camera {
   mat4 u_proj;
   mat4 u_view;
 };

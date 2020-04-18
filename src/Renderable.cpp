@@ -38,7 +38,6 @@ void Renderable::unbind() const {
 }
 
 void Renderable::draw(Shader const &a_shader, glm::mat4 const &a_view, Texture const *a_texture) const {
-  // if (!a_shader.isReady()) { return; }
   static std::once_flag alertOnceShader, alertOnceInvalid, alertOnceDraw;
   if (!a_shader.isReady()) {
     std::call_once(alertOnceShader, [&] { vo_err("Corrupted shader: {}", a_shader.getName()); });

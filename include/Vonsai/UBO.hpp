@@ -5,7 +5,6 @@
 #include "Wraps/_gl.hpp"
 #include "Wraps/_glm.hpp"
 
-#include <type_traits>
 #include <unordered_map>
 
 

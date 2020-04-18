@@ -6,10 +6,7 @@ in vec2 v_texCoord;
 
 out vec4 f_color;
 
-layout(std140) uniform globalData {
-  mat4 u_proj;
-  mat4 u_view;
-};
+uniform sampler2D u_texture;
 
 struct Light {
   vec4 position;
@@ -17,15 +14,18 @@ struct Light {
   vec3 attenuation;
   float     intensity;
 };
-layout(std140) uniform lightsUBO {
+layout(std140) uniform lights {
   vec4 u_numLights;
   Light u_lights[100];
 };
+layout(std140) uniform camera {
+  mat4 u_proj;
+  mat4 u_view;
+};
 
-uniform sampler2D u_texture;
+///////////////////////////////////////////////////////////////////////////////
+// TODO : Get as uniforms
 
-
-  // TODO: Get as uniforms /////////////////////////////////////////////////////////////////////////
   const float ambientI = 0.05;
   const float Ka       = 1.0;
 
@@ -33,7 +33,8 @@ uniform sampler2D u_texture;
 
   const float Ks       = 1.0;
   const float glossy   = 50.0;
-  //////////////////////////////////////////////////////////////////////////////////////////////////
+
+///////////////////////////////////////////////////////////////////////////////
 
 vec3 shade(in Light a_light, in vec3 a_V, in vec3 a_normal, in vec3 a_meshColor){
 
@@ -54,6 +55,8 @@ vec3 shade(in Light a_light, in vec3 a_V, in vec3 a_normal, in vec3 a_meshColor)
 	// Contribution of light to the object
 	return a_meshColor * a_light.color.rgb * a_light.intensity * attenuation * (diffuse + specular);
 }
+
+///////////////////////////////////////////////////////////////////////////////
 
 void main() {
 

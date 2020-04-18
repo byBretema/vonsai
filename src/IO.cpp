@@ -13,9 +13,9 @@
 #include <imgui/imgui_impl_glfw.h>
 #include <imgui/imgui_impl_opengl3.h>
 
-
 namespace Vonsai {
 #define GLFW_PTR static_cast<GLFWwindow *>(m_window)
+#define IMGUI_PTR static_cast<ImGuiContext *>(m_gui)
 
 // * WINDOW
 
@@ -29,14 +29,24 @@ bool IO::update() {
   activate();
   glfwPollEvents();
 
-  ImGui_ImplOpenGL3_NewFrame();
-  ImGui_ImplGlfw_NewFrame();
-  ImGui::NewFrame();
+  if (key(Vonsai::KeyCode::Esc)) {
+    m_valid = false;
+    return false;
+  }
 
-  m_activeScene->update();
+  uint16_t const FPS = m_activeScene->internalOnUpdate();
+  glfwSetWindowTitle(GLFW_PTR, vo_fmt("{} :: {} fps", m_title, FPS).c_str());
 
-  ImGui::Render();
-  ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+  if (ImGui::GetCurrentContext() == IMGUI_PTR) {
+    ImGui_ImplOpenGL3_NewFrame();
+    ImGui_ImplGlfw_NewFrame();
+    ImGui::NewFrame();
+
+    m_activeScene->internalOnGui();
+
+    ImGui::Render();
+    ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+  }
 
   glfwSwapBuffers(GLFW_PTR);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -53,13 +63,14 @@ std::shared_ptr<Scene> IO::getActiveScene() const { return m_activeScene; }
 
 void IO::destroy() {
   m_valid = false;
-  ImGui_ImplOpenGL3_Shutdown();
-  ImGui_ImplGlfw_Shutdown();
-  ImGui::DestroyContext();
   glfwDestroyWindow(GLFW_PTR);
 }
 
-void IO::activate() { glfwMakeContextCurrent(GLFW_PTR); }
+void IO::activate() {
+  glfwMakeContextCurrent(GLFW_PTR);
+  ImGui_ImplGlfw_ChangeMainWindow(GLFW_PTR);
+  ImGui::SetCurrentContext(IMGUI_PTR);
+}
 
 void onDestroy(IO &a_io) { a_io.m_valid = false; }
 void onWindowFocus(bool a_focused, IO &a_io) { a_io.m_focused = a_focused; }
@@ -76,10 +87,10 @@ bool IO::key(int a_keyCode) const {
   return false;
 }
 
-bool IO::anyShift() const { return key(KeyCode.LeftShift) or key(KeyCode.RightShift); }
-bool IO::anyAlt() const { return key(KeyCode.LeftAlt) or key(KeyCode.RightAlt); }
-bool IO::anyCtrl() const { return key(KeyCode.LeftCtrl) or key(KeyCode.RightCtrl); }
-bool IO::anySuper() const { return key(KeyCode.LeftSuper) or key(KeyCode.RightSuper); }
+bool IO::anyShift() const { return key(KeyCode::LeftShift) or key(KeyCode::RightShift); }
+bool IO::anyAlt() const { return key(KeyCode::LeftAlt) or key(KeyCode::RightAlt); }
+bool IO::anyCtrl() const { return key(KeyCode::LeftCtrl) or key(KeyCode::RightCtrl); }
+bool IO::anySuper() const { return key(KeyCode::LeftSuper) or key(KeyCode::RightSuper); }
 
 void onKeyPress(int a_key, IO &a_io) { a_io.m_keys[a_key] = true; }
 void onKeyRelease(int a_key, IO &a_io) { a_io.m_keys[a_key] = false; }
@@ -114,9 +125,9 @@ void onCursorMove(double a_x, double a_y, IO &a_io) {
 }
 
 // * IO
-IO::IO() {
+IO::IO(uint16_t a_width, uint16_t a_height) {
   // 1. WINDOW CREATION
-  m_window = glfwCreateWindow(m_width, m_height, m_title.c_str(), nullptr, nullptr);
+  m_window = glfwCreateWindow(a_width, a_height, m_title.c_str(), nullptr, nullptr);
   if (!m_window) {
     vo_err("Couldn't create window {}", m_title);
     return;
@@ -125,7 +136,7 @@ IO::IO() {
   glfwSetWindowTitle(GLFW_PTR, m_title.c_str());
 
   // 2. LOAD EXTENSIONS ON THAT WINDOW
-  activate();
+  glfwMakeContextCurrent(GLFW_PTR);
   if (!GL::loadExtensions(reinterpret_cast<void *>(glfwGetProcAddress))) {
     vo_err("Couldn't load OpenGL extensions");
     glfwDestroyWindow(GLFW_PTR);
@@ -137,7 +148,10 @@ IO::IO() {
   GL::defaultSetup(m_color[0], m_color[1], m_color[2]);
 
   // 4. EVERYTHING GO AS EXPECTED
-  m_valid = true;
+  m_valid  = true;
+  m_width  = a_width;
+  m_height = a_height;
+  glfwSwapInterval(0); // Disable V-Sync
 
   // 5. CREATE A DEFAULT SCENE
   m_activeScene = m_scenes.emplace_back(std::make_shared<Scene>());
@@ -181,11 +195,20 @@ IO::IO() {
   });
 
   // 7. ATTACH IMGUI // * Best placing is after callbacks
-  ImGui::CreateContext();
+  static auto s_imFontAtlas = std::make_shared<ImFontAtlas>();
+  m_gui                     = ImGui::CreateContext(s_imFontAtlas.get());
   ImGui::StyleColorsDark();
-  ImGui_ImplGlfw_InitForOpenGL(GLFW_PTR, true); // ? Need to change on 'window activate'
   ImGui_ImplOpenGL3_Init("#version 410");       // TODO : BASED ON SETTINGS
+  ImGui_ImplGlfw_InitForOpenGL(GLFW_PTR, true); // ? Need to change on 'window activate'
 }
+
+void IO::shutdown() {
+  ImGui_ImplOpenGL3_Shutdown();
+  ImGui_ImplGlfw_Shutdown();
+  ImGui::DestroyContext();
+  glfwTerminate();
+}
+
 } // namespace Vonsai
 
 

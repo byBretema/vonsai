@@ -16,6 +16,8 @@ inline void defaultSetup(float r, float g, float b) {
   glClearColor(r, g, b, 1.f);
 }
 
+inline void clearColor(float r, float g, float b) { glClearColor(r, g, b, 1.f); }
+
 } // namespace Vonsai::GL
 
 

@@ -7,15 +7,18 @@ layout(location = 3) in float idx;
 out vec2 v_texCoord;
 flat out uint v_idx;
 
-layout(std140) uniform globalData {
-  mat4 view;
-  mat4 proj;
+uniform mat4 u_model[3];
+
+layout(std140) uniform camera {
+  mat4 u_view;
+  mat4 u_proj;
 };
-uniform mat4 model[3];
+
+///////////////////////////////////////////////////////////////////////////////
 
 void main() {
 	v_texCoord = texCoord;
 	v_idx = uint(idx);
 
-	gl_Position = proj * view * model[v_idx] * vec4(pos, 1);
+	gl_Position = u_proj * u_view * u_model[v_idx] * vec4(pos, 1);
 }

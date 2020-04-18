@@ -1,7 +1,4 @@
 #include <Vonsai/Engine.hpp>
-
-#include <Vonsai/Wraps/_gl.hpp>
-
 #include <Vonsai/Utils/Files.hpp>
 #include <Vonsai/Utils/Strings.hpp>
 
@@ -9,10 +6,11 @@ namespace Vonsai {
 RenderableData parserObj(std::string const &filePath); // * Quick OBJ loader
 
 Engine::Engine() {
-  m_ios.emplace("default", std::make_shared<IO>()); // ! Should be the first action
+  m_ios.emplace("default", std::shared_ptr<IO>(new IO(800, 600)));
 
   mesh.monkey = std::make_unique<Renderable>(parserObj("assets/models/monkey.obj"));
   mesh.cube   = std::make_unique<Renderable>(parserObj("assets/models/cube.obj"));
+  mesh.plane  = std::make_unique<Renderable>(parserObj("assets/models/plane.obj"));
 
   Vonsai::ShaderPath lightSP;
   lightSP.vertex   = "assets/shaders/light/light.vert";
@@ -26,28 +24,35 @@ Engine::Engine() {
 }
 
 void Engine::run() const {
-  std::vector<std::string> toClean;
-  toClean.reserve(8 /*MaxWindows*/);
-
+  std::vector<std::string> invalidWindows;
+  invalidWindows.reserve(MAX_ALLOWED_WINDOWS);
   while (m_ios.size() > 0) {
-    for (auto &&[winName, winPtr] : m_ios) {
-      if (!winPtr->isValid()) {
-        toClean.push_back(winName);
-        continue;
-      }
 
-      winPtr->update();
-      if (winPtr->key(Vonsai::KeyCode.Esc)) { winPtr->close(); }
+    for (auto &&[winName, winPtr] : m_ios) {
+      if (!winPtr->update()) { invalidWindows.push_back(winName); }
     }
 
-    std::for_each(begin(toClean), end(toClean), [&ios = m_ios](std::string const &key) { ios.erase(key); });
-    toClean.clear();
+    for (auto &&winName : invalidWindows) {
+      m_ios.at(winName)->close();
+      m_ios.erase(winName);
+    }
+    invalidWindows.clear();
   }
+  // IO::shutdown(); // ! needed for clean-up
 }
 
 std::shared_ptr<IO> Engine::getWindow(std::string const &a_name) const {
   return (m_ios.count(a_name) > 0) ? m_ios.at(a_name) : nullptr;
 }
+
+std::shared_ptr<IO> Engine::addWindow(std::string const &a_name, uint16_t a_width, uint16_t a_height) {
+  if (m_ios.size() == MAX_ALLOWED_WINDOWS) {
+    vo_warn("You reach the max of windows allowed == {}", MAX_ALLOWED_WINDOWS);
+    return nullptr;
+  }
+  return (m_ios.try_emplace(a_name, std::shared_ptr<IO>(new IO(a_width, a_height))).first)->second;
+}
+
 
 
 // * //////////////////////////////////////////////////////////////////////////

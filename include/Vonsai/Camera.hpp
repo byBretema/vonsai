@@ -4,6 +4,9 @@
 #include "Wraps/_glm.hpp"
 
 namespace Vonsai {
+class UBO; // ! Forward decl of UBO
+class IO;  // ! Forward decl of UBO
+
 
 class Camera {
 private:
@@ -12,7 +15,7 @@ private:
   glm::mat4 m_viewproj{1.f};
 
   float     m_fovY{0.4f};
-  glm::vec3 m_offset{1.f};
+  glm::vec3 m_offset{0.f, 0.f, 1.f};
 
 public:
   static constexpr float MIN_FOV = 0.1f;
@@ -26,7 +29,9 @@ public:
 
   void setZoom(float a_variation);
   void setFOV(float a_variation);
-  void frame(float a_aspectRatio, glm::vec3 const &a_target = INF3);
+  void frame(float a_aspectRatio, float speed = 0.5f, bool orbital = true, glm::vec3 const &a_target = INF3);
+
+  void defaultBehaviour(UBO &ubo, std::shared_ptr<IO> const &io);
 
   inline glm::mat4 const &getView() const { return m_view; }
   inline glm::mat4 const &getProj() const { return m_proj; }

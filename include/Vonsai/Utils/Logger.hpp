@@ -5,7 +5,7 @@
 
 static inline std::mutex coutMutex;
 
-#define vo_fmt(...) fmt::format(__VA_ARGS__);
+#define vo_fmt(...) fmt::format(__VA_ARGS__)
 
 #define vo_print(...)                    \
   {                                      \

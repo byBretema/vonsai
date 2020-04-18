@@ -40,6 +40,7 @@ add_library(${lib_name} STATIC
     ./src/Utils/Files.cpp
     ./src/Utils/Random.cpp
     ./src/Utils/Strings.cpp
+    ./src/Utils/Timer.cpp
 
     ./src/Engine.cpp
     ./src/Bindable.cpp

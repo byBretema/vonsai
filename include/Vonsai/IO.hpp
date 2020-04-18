@@ -9,134 +9,134 @@
 
 namespace Vonsai {
 
-struct KeyCodeT {
+struct KeyCode {
   // The unknown key
-  int const Unknown{-1};
+  static int const Unknown{-1};
 
   // Printable keys
-  int const Space{32};
-  int const Apostrophe{39}; // " ' "
-  int const Comma{44};      // " , "
-  int const Minus{45};      // " - "
-  int const Period{46};     // " . "
-  int const Slash{47};      // " / "
-  int const Num0{48};
-  int const Num1{49};
-  int const Num2{50};
-  int const Num3{51};
-  int const Num4{52};
-  int const Num5{53};
-  int const Num6{54};
-  int const Num7{55};
-  int const Num8{56};
-  int const Num9{57};
-  int const Semicolon{59}; // " ; "
-  int const Equal{61};     // " = "
-  int const A{65};
-  int const B{66};
-  int const C{67};
-  int const D{68};
-  int const E{69};
-  int const F{70};
-  int const G{71};
-  int const H{72};
-  int const I{73};
-  int const J{74};
-  int const K{75};
-  int const L{76};
-  int const M{77};
-  int const N{78};
-  int const O{79};
-  int const P{80};
-  int const Q{81};
-  int const R{82};
-  int const S{83};
-  int const T{84};
-  int const U{85};
-  int const V{86};
-  int const W{87};
-  int const X{88};
-  int const Y{89};
-  int const Z{90};
-  int const LeftBracket{91};  // " [ "
-  int const Backslash{92};    // " \ "
-  int const RightBracket{93}; // " ] "
-  int const GraveAccent{96};  // " ` "
+  static int const Space{32};
+  static int const Apostrophe{39}; // " ' "
+  static int const Comma{44};      // " , "
+  static int const Minus{45};      // " - "
+  static int const Period{46};     // " . "
+  static int const Slash{47};      // " / "
+  static int const Num0{48};
+  static int const Num1{49};
+  static int const Num2{50};
+  static int const Num3{51};
+  static int const Num4{52};
+  static int const Num5{53};
+  static int const Num6{54};
+  static int const Num7{55};
+  static int const Num8{56};
+  static int const Num9{57};
+  static int const Semicolon{59}; // " ; "
+  static int const Equal{61};     // " = "
+  static int const A{65};
+  static int const B{66};
+  static int const C{67};
+  static int const D{68};
+  static int const E{69};
+  static int const F{70};
+  static int const G{71};
+  static int const H{72};
+  static int const I{73};
+  static int const J{74};
+  static int const K{75};
+  static int const L{76};
+  static int const M{77};
+  static int const N{78};
+  static int const O{79};
+  static int const P{80};
+  static int const Q{81};
+  static int const R{82};
+  static int const S{83};
+  static int const T{84};
+  static int const U{85};
+  static int const V{86};
+  static int const W{87};
+  static int const X{88};
+  static int const Y{89};
+  static int const Z{90};
+  static int const LeftBracket{91};  // " [ "
+  static int const Backslash{92};    // " \ "
+  static int const RightBracket{93}; // " ] "
+  static int const GraveAccent{96};  // " ` "
 
   /* Function keys */
-  int const Esc{256};
-  int const Enter{257};
-  int const Tab{258};
-  int const Backspace{259};
-  int const Insert{260};
-  int const Delete{261};
-  int const Right{262};
-  int const Left{263};
-  int const Down{264};
-  int const Up{265};
-  int const PageUp{266};
-  int const PageDown{267};
-  int const Home{268};
-  int const End{269};
-  int const CapsLock{280};
-  int const ScrollLock{281};
-  int const NumLock{282};
-  int const PrintScreen{283};
-  int const Pause{284};
-  int const F1{290};
-  int const F2{291};
-  int const F3{292};
-  int const F4{293};
-  int const F5{294};
-  int const F6{295};
-  int const F7{296};
-  int const F8{297};
-  int const F9{298};
-  int const F10{299};
-  int const F11{300};
-  int const F12{301};
-  int const F13{302};
-  int const F14{303};
-  int const F15{304};
-  int const F16{305};
-  int const F17{306};
-  int const F18{307};
-  int const F19{308};
-  int const F20{309};
-  int const F21{310};
-  int const F22{311};
-  int const F23{312};
-  int const F24{313};
-  int const F25{314};
-  int const Kp0{320};
-  int const Kp1{321};
-  int const Kp2{322};
-  int const Kp3{323};
-  int const Kp4{324};
-  int const Kp5{325};
-  int const Kp6{326};
-  int const Kp7{327};
-  int const Kp8{328};
-  int const Kp9{329};
-  int const KpDecimal{330};
-  int const KpDivide{331};
-  int const KpMultiply{332};
-  int const KpSubtract{333};
-  int const KpAdd{334};
-  int const KpEnter{335};
-  int const KpEqual{336};
-  int const LeftShift{340};
-  int const LeftCtrl{341};
-  int const LeftAlt{342};
-  int const LeftSuper{343};
-  int const RightShift{344};
-  int const RightCtrl{345};
-  int const RightAlt{346};
-  int const RightSuper{347};
-  int const Menu{348};
+  static int const Esc{256};
+  static int const Enter{257};
+  static int const Tab{258};
+  static int const Backspace{259};
+  static int const Insert{260};
+  static int const Delete{261};
+  static int const Right{262};
+  static int const Left{263};
+  static int const Down{264};
+  static int const Up{265};
+  static int const PageUp{266};
+  static int const PageDown{267};
+  static int const Home{268};
+  static int const End{269};
+  static int const CapsLock{280};
+  static int const ScrollLock{281};
+  static int const NumLock{282};
+  static int const PrintScreen{283};
+  static int const Pause{284};
+  static int const F1{290};
+  static int const F2{291};
+  static int const F3{292};
+  static int const F4{293};
+  static int const F5{294};
+  static int const F6{295};
+  static int const F7{296};
+  static int const F8{297};
+  static int const F9{298};
+  static int const F10{299};
+  static int const F11{300};
+  static int const F12{301};
+  static int const F13{302};
+  static int const F14{303};
+  static int const F15{304};
+  static int const F16{305};
+  static int const F17{306};
+  static int const F18{307};
+  static int const F19{308};
+  static int const F20{309};
+  static int const F21{310};
+  static int const F22{311};
+  static int const F23{312};
+  static int const F24{313};
+  static int const F25{314};
+  static int const Kp0{320};
+  static int const Kp1{321};
+  static int const Kp2{322};
+  static int const Kp3{323};
+  static int const Kp4{324};
+  static int const Kp5{325};
+  static int const Kp6{326};
+  static int const Kp7{327};
+  static int const Kp8{328};
+  static int const Kp9{329};
+  static int const KpDecimal{330};
+  static int const KpDivide{331};
+  static int const KpMultiply{332};
+  static int const KpSubtract{333};
+  static int const KpAdd{334};
+  static int const KpEnter{335};
+  static int const KpEqual{336};
+  static int const LeftShift{340};
+  static int const LeftCtrl{341};
+  static int const LeftAlt{342};
+  static int const LeftSuper{343};
+  static int const RightShift{344};
+  static int const RightCtrl{345};
+  static int const RightAlt{346};
+  static int const RightSuper{347};
+  static int const Menu{348};
 
-  int const Last{Menu};
-} constexpr KeyCode;
+  static int const Last{Menu};
+};
 
 class IO {
 
@@ -158,9 +158,11 @@ private:
   static constexpr float       HEIGHT        = 600.f;
   static constexpr const char *TITLE         = "VONSAI";
 
-  bool  m_valid{false};
-  bool  m_focused{false};
+  bool m_valid{false};
+  bool m_focused{false};
+
   void *m_window{nullptr};
+  void *m_gui{nullptr};
 
   std::string          m_title{TITLE};
   float                m_width{WIDTH};
@@ -233,8 +235,13 @@ private:
 
   // * IO
 
-public:
-  explicit IO();
+private:
+  // TODO : Improve friend mechanism
+  // * ( https://en.wikibooks.org/wiki/More_C++_Idioms/Friendship_and_the_Attorney-Client )
+  friend class Engine;
+
+  explicit IO(uint16_t a_width, uint16_t a_height); // Factory pattern from Engine class
+  static void shutdown();
 };
 
 } // namespace Vonsai
