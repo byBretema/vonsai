@@ -4,8 +4,8 @@
 #include "Wraps/_glm.hpp"
 
 namespace Vonsai {
-class UBO; // ! Forward decl of UBO
-class IO;  // ! Forward decl of UBO
+class UBO;   // ! Forward decl of UBO
+class Input; // ! Forward decl of Input
 
 
 class Camera {
@@ -31,7 +31,7 @@ public:
   void setFOV(float a_variation);
   void frame(float a_aspectRatio, float speed = 0.5f, bool orbital = true, glm::vec3 const &a_target = INF3);
 
-  void defaultBehaviour(UBO &ubo, std::shared_ptr<IO> const &io);
+  void defaultBehaviour(float deltaTime, float a_aspectRatio, UBO &a_ubo, Input const &a_io);
 
   inline glm::mat4 const &getView() const { return m_view; }
   inline glm::mat4 const &getProj() const { return m_proj; }

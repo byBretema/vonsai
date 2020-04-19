@@ -3,16 +3,18 @@
 #include <list>
 #include <memory>
 
-#include "IO.hpp"
+#include "IO/Input.hpp"
+#include "IO/Window.hpp"
+
 #include "Renderable.hpp"
 #include "Shader.hpp"
+
+#include "Scene.hpp"
 
 namespace Vonsai {
 
 class Engine {
 public:
-  static constexpr uint8_t MAX_ALLOWED_WINDOWS = 8;
-
   struct {
     std::unique_ptr<Shader> light;
     std::unique_ptr<Shader> flat;
@@ -25,15 +27,18 @@ public:
   } mesh;
 
   Engine();
-  void run() const;
+  void run();
 
-  std::shared_ptr<IO> getWindow(std::string const &a_name) const;
-  std::shared_ptr<IO> addWindow(std::string const &a_name, uint16_t a_width, uint16_t a_height);
+  std::tuple<Input const &, Window const &> getIO();
+
+  inline Scene &getActiveScene() { return m_scenes.at(m_activeSceneID); }
 
 private:
-  // std::vector<Shader *>                                        m_shaders;
-  // std::vector<Renderable *>                                    m_renderables;
-  mutable std::unordered_map<std::string, std::shared_ptr<IO>> m_ios;
+  Input  m_input{};
+  Window m_window{&m_input, 800, 600};
+
+  unsigned int       m_activeSceneID{0u};
+  std::vector<Scene> m_scenes; // TODO : reserve
 };
 
 } // namespace Vonsai

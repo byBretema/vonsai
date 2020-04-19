@@ -1,6 +1,6 @@
 #include <Vonsai/Camera.hpp>
 
-#include <Vonsai/IO.hpp>
+#include <Vonsai/IO/Input.hpp>
 #include <Vonsai/UBO.hpp>
 
 #include <Vonsai/Utils/Logger.hpp>
@@ -49,44 +49,36 @@ void Camera::frame(float a_aspectRatio, float a_speed, bool a_orbital, glm::vec3
   m_viewproj          = m_proj * m_view;
 }
 
-void Camera::defaultBehaviour(UBO &a_ubo, std::shared_ptr<IO> const &a_io) {
-  float DT = a_io->getActiveScene()->getDeltaTime() * 2.f;
+void Camera::defaultBehaviour(float deltaTime, float a_aspectRatio, UBO &a_ubo, Input const &a_io) {
+  float DT = deltaTime * 2.f;
 
   // Camera update
-  frame(a_io->getAspectRatio(), DT);
+  frame(a_aspectRatio, DT);
 
   // UBO update
   a_ubo.setData("u_proj", getProj());
   a_ubo.setData("u_view", getView());
 
   // Camera movement
-  if (a_io->key(KeyCode::Q)) { movement.U = true; } // Up
-  if (!a_io->key(KeyCode::Q)) { movement.U = false; }
-  if (a_io->key(KeyCode::E)) { movement.D = true; } // Down
-  if (!a_io->key(KeyCode::E)) { movement.D = false; }
-  if (a_io->key(KeyCode::W)) { movement.F = true; } // Front
-  if (!a_io->key(KeyCode::W)) { movement.F = false; }
-  if (a_io->key(KeyCode::S)) { movement.B = true; } // Back
-  if (!a_io->key(KeyCode::S)) { movement.B = false; }
-  if (a_io->key(KeyCode::D)) { movement.R = true; } // Right
-  if (!a_io->key(KeyCode::D)) { movement.R = false; }
-  if (a_io->key(KeyCode::A)) { movement.L = true; } // Left
-  if (!a_io->key(KeyCode::A)) { movement.L = false; }
-  if (a_io->key(KeyCode::Num0)) { pivot.reset(); } // Reset
+  if (a_io.key(KeyCode::Q)) { movement.U = true; } // Up
+  if (!a_io.key(KeyCode::Q)) { movement.U = false; }
+  if (a_io.key(KeyCode::E)) { movement.D = true; } // Down
+  if (!a_io.key(KeyCode::E)) { movement.D = false; }
+  if (a_io.key(KeyCode::W)) { movement.F = true; } // Front
+  if (!a_io.key(KeyCode::W)) { movement.F = false; }
+  if (a_io.key(KeyCode::S)) { movement.B = true; } // Back
+  if (!a_io.key(KeyCode::S)) { movement.B = false; }
+  if (a_io.key(KeyCode::D)) { movement.R = true; } // Right
+  if (!a_io.key(KeyCode::D)) { movement.R = false; }
+  if (a_io.key(KeyCode::A)) { movement.L = true; } // Left
+  if (!a_io.key(KeyCode::A)) { movement.L = false; }
+  if (a_io.key(KeyCode::Num0)) { pivot.reset(); } // Reset
 
   // Scroll for Fov / Shift + Scroll for Zoom
-  (a_io->key(KeyCode::LeftShift)) ? setZoom(a_io->scrollV()) : setFOV(a_io->scrollV());
+  (a_io.key(KeyCode::LeftShift)) ? setZoom(a_io.scrollV()) : setFOV(a_io.scrollV());
 
   // Cmd/Ctrl: to rotate camera
-  pivot.modRot(glm::vec3{a_io->axisV(), a_io->axisH(), 0.f} * 0.25f);
-
-  // #if __APPLE__
-  //   if (a_io->key(KeyCode::LeftSuper)) {
-  // #else
-  //   if (a_io->key(KeyCode::LeftCtrl)) {
-  // #endif
-  //     pivot.modRot(glm::vec3{a_io->axisV(), a_io->axisH(), 0.f} * 0.25f);
-  //   }
+  pivot.modRot(glm::vec3{a_io.axisV(), a_io.axisH(), 0.f} * 0.25f);
 }
 
 void Camera::info() {

@@ -8,12 +8,12 @@ namespace Vonsai::GL {
 
 inline bool loadExtensions(void *a_proc) { return gladLoadGLLoader(reinterpret_cast<GLADloadproc>(a_proc)); }
 
-inline void defaultSetup(float r, float g, float b) {
+inline void defaultSetup() {
   glFrontFace(GL_CCW);
   glDepthFunc(GL_LEQUAL);
   glEnable(GL_CULL_FACE);
   glEnable(GL_DEPTH_TEST);
-  glClearColor(r, g, b, 1.f);
+  glClearColor(0.6, 0.35, 0.2, 1.f);
 }
 
 inline void clearColor(float r, float g, float b) { glClearColor(r, g, b, 1.f); }

@@ -6,7 +6,7 @@ namespace Vonsai {
 RenderableData parserObj(std::string const &filePath); // * Quick OBJ loader
 
 Engine::Engine() {
-  m_ios.emplace("default", std::shared_ptr<IO>(new IO(800, 600)));
+  m_scenes.emplace_back();
 
   mesh.monkey = std::make_unique<Renderable>(parserObj("assets/models/monkey.obj"));
   mesh.cube   = std::make_unique<Renderable>(parserObj("assets/models/cube.obj"));
@@ -23,37 +23,19 @@ Engine::Engine() {
   shader.flat     = std::make_unique<Shader>("flat", flatSP);
 }
 
-void Engine::run() const {
-  std::vector<std::string> invalidWindows;
-  invalidWindows.reserve(MAX_ALLOWED_WINDOWS);
-  while (m_ios.size() > 0) {
-
-    for (auto &&[winName, winPtr] : m_ios) {
-      if (!winPtr->update()) { invalidWindows.push_back(winName); }
-    }
-
-    for (auto &&winName : invalidWindows) {
-      m_ios.at(winName)->close();
-      m_ios.erase(winName);
-    }
-    invalidWindows.clear();
+void Engine::run() {
+  while (m_window.update(                                         //
+      SceneAttorney::getOnUpdateFn(m_scenes.at(m_activeSceneID)), // TODO :
+      SceneAttorney::getOnGuiFn(m_scenes.at(m_activeSceneID))))   // TODO :
+  {
+    m_input.resetScrollAndAxis();
+    if (m_input.key(KeyCode::Esc)) { m_window.close(); }
   }
-  // IO::shutdown(); // ! needed for clean-up
+  // m_window.close();
+  m_window.shutdown(); // ! needed for clean-up
 }
 
-std::shared_ptr<IO> Engine::getWindow(std::string const &a_name) const {
-  return (m_ios.count(a_name) > 0) ? m_ios.at(a_name) : nullptr;
-}
-
-std::shared_ptr<IO> Engine::addWindow(std::string const &a_name, uint16_t a_width, uint16_t a_height) {
-  if (m_ios.size() == MAX_ALLOWED_WINDOWS) {
-    vo_warn("You reach the max of windows allowed == {}", MAX_ALLOWED_WINDOWS);
-    return nullptr;
-  }
-  return (m_ios.try_emplace(a_name, std::shared_ptr<IO>(new IO(a_width, a_height))).first)->second;
-}
-
-
+std::tuple<Input const &, Window const &> Engine::getIO() { return {m_input, m_window}; }
 
 // * //////////////////////////////////////////////////////////////////////////
 

@@ -9,33 +9,49 @@ namespace Vonsai {
 
 class Scene {
 public:
-  std::function<void(void)> onGui{[]() {}};
-  std::function<void(void)> onUpdate{[]() {}};
-
   explicit Scene() = default;
 
-  uint16_t getFPS();
-  float    getDeltaTime();
+  unsigned int getFPS();
+  float        getDeltaTime();
 
-  void setClearColor(float r, float g, float b);
+  void setOnGuiFn(std::function<void(void)> a_fn);
+  void setOnUpdateFn(std::function<void(void)> a_fn);
+
+  void setClearColor(float a_r, float a_g, float a_b);
 
 private:
+  std::function<void(void)>       m_onGui{nullptr}; // * User defined
+  std::function<void(void)> const m_internalOnGui{[&]() {
+    if (m_onGui) m_onGui();
+  }};
+
+  std::function<void(void)>               m_onUpdate{nullptr}; // * User defined
+  std::function<unsigned int(void)> const m_internalOnUpdate{[&]() {
+    updateFPS();
+    updateDeltaTime();
+    if (m_onUpdate) m_onUpdate();
+    return m_exposedFrameCounter;
+  }};
+
   float             m_deltaTime{0.f};
   Clock::time_point m_deltaTimeStamp{Clock::now()};
 
-  uint16_t          m_exposedFrameCounter{0u};
-  uint16_t          m_internalFrameCounter{0u};
+  unsigned int      m_exposedFrameCounter{0u};
+  unsigned int      m_internalFrameCounter{0u};
   Clock::time_point m_frameCounterTimeStamp{Clock::now()};
 
   void updateFPS();
   void updateDeltaTime();
 
-  // TODO : Improve friend mechanism
-  // * ( https://en.wikibooks.org/wiki/More_C++_Idioms/Friendship_and_the_Attorney-Client )
-  friend class IO;
+  // Friends of this class:
+  friend class SceneAttorney;
+};
 
-  void     internalOnGui();
-  uint16_t internalOnUpdate();
+class SceneAttorney {
+private:
+  friend class Engine;
+  static std::function<unsigned int(void)> const &getOnUpdateFn(Scene const &a_scene);
+  static std::function<void(void)> const &        getOnGuiFn(Scene const &a_scene);
 };
 
 } // namespace Vonsai

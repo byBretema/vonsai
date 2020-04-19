@@ -36,6 +36,9 @@ add_library(${lib_name} STATIC
     ./vendor/imgui/imgui_impl_glfw.cpp
     ./vendor/imgui/imgui_impl_opengl3.cpp
 
+    ./src/IO/Input.cpp
+    ./src/IO/Window.cpp
+
     ./src/Utils/Colors.cpp
     ./src/Utils/Files.cpp
     ./src/Utils/Random.cpp
@@ -45,7 +48,6 @@ add_library(${lib_name} STATIC
     ./src/Engine.cpp
     ./src/Bindable.cpp
     ./src/Camera.cpp
-    ./src/IO.cpp
     ./src/Renderable.cpp
     ./src/Scene.cpp
     ./src/Shader.cpp

@@ -8,6 +8,7 @@
 namespace Vonsai {
 
 void Texture::bind() const {
+  // vo_print("texture path: {}", m_path);
   GL_ASSERT(glActiveTexture(GL_TEXTURE0 + m_ID));
   GL_ASSERT(glBindTexture(GL_TEXTURE_2D, m_ID));
 }
@@ -17,6 +18,7 @@ void Texture::unbind() const {
 }
 
 Texture::Texture(char const *path) {
+  m_path = path;
   if (!Files::isValid(path, true)) { return; }
 
   // Parse image data
