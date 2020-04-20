@@ -8,31 +8,40 @@ RenderableData parserObj(std::string const &filePath); // * Quick OBJ loader
 Engine::Engine() {
   m_scenes.emplace_back();
 
-  mesh.monkey = std::make_unique<Renderable>(parserObj("assets/models/monkey.obj"));
-  mesh.cube   = std::make_unique<Renderable>(parserObj("assets/models/cube.obj"));
-  mesh.plane  = std::make_unique<Renderable>(parserObj("assets/models/plane.obj"));
+  mesh.monkey     = std::make_unique<Renderable>(parserObj("assets/models/monkey.obj"));
+  mesh.cube       = std::make_unique<Renderable>(parserObj("assets/models/cube.obj"));
+  mesh.plane      = std::make_unique<Renderable>(parserObj("assets/models/plane.obj"));
+  mesh.chandelier = std::make_unique<Renderable>(parserObj("assets/models/chandelier.obj"));
 
   Vonsai::ShaderPath lightSP;
   lightSP.vertex   = "assets/shaders/light/light.vert";
   lightSP.fragment = "assets/shaders/light/light.frag";
   shader.light     = std::make_unique<Shader>("light", lightSP);
 
-  Vonsai::ShaderPath flatSP;
-  flatSP.vertex   = "assets/shaders/flat/flat.vert";
-  flatSP.fragment = "assets/shaders/flat/flat.frag";
-  shader.flat     = std::make_unique<Shader>("flat", flatSP);
+  // Vonsai::ShaderPath flatSP;
+  // flatSP.vertex   = "assets/shaders/flat/flat.vert";
+  // flatSP.fragment = "assets/shaders/flat/flat.frag";
+  // shader.flat     = std::make_unique<Shader>("flat", flatSP);
 }
 
 void Engine::run() {
-  while (m_window.update(                                         //
-      SceneAttorney::getOnUpdateFn(m_scenes.at(m_activeSceneID)), // TODO :
-      SceneAttorney::getOnGuiFn(m_scenes.at(m_activeSceneID))))   // TODO :
-  {
-    m_input.resetScrollAndAxis();
-    if (m_input.key(KeyCode::Esc)) { m_window.close(); }
+  try {
+    while (m_window.update(                                         //
+        SceneAttorney::getOnUpdateFn(m_scenes.at(m_activeSceneID)), // TODO :
+        SceneAttorney::getOnGuiFn(m_scenes.at(m_activeSceneID))))   // TODO :
+    {
+      m_input.resetScrollAndAxis();
+      if (m_input.key(KeyCode::Esc)) { m_window.close(); }
+    }
+    // m_window.close();
+    m_window.shutdown(); // ! needed for clean-up
+  } catch (std::exception &e) {
+    vo_err("EXCEPTION CAUGHT: {}", e.what()); //
+  } catch (const char *msg) {
+    vo_err("EXCEPTION CAUGHT: {}", msg); //
+  } catch (...) {
+    throw; // Re-throw the exception so OS gives you a debug opportunity.
   }
-  // m_window.close();
-  m_window.shutdown(); // ! needed for clean-up
 }
 
 std::tuple<Input const &, Window const &> Engine::getIO() { return {m_input, m_window}; }

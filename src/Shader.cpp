@@ -117,9 +117,9 @@ void Shader::unbind() const { GL_ASSERT(glUseProgram(0)); }
 /// Returns the ID of the uniform associated to that string,
 /// if its cached, return from cache, else request it to OpenGL
 /// and store on cache.
-int Shader::getUniformLocation(char const *a_name) const {
+inline int Shader::getUniformLocation(std::string const &a_name) const {
   if (m_uniformCache.count(a_name) > 0) { return m_uniformCache.at(a_name); }
-  int uniformLocation = glGetUniformLocation(m_programID, a_name);
+  int uniformLocation = glGetUniformLocation(m_programID, a_name.c_str());
 
   if (uniformLocation > -1) {
     m_uniformCache.emplace(a_name, uniformLocation);
@@ -132,31 +132,31 @@ int Shader::getUniformLocation(char const *a_name) const {
 }
 
 /// SET UNIFORMS
-void Shader::setUniformInt1(char const *a_name, int a_int) const {
+void Shader::setUniformInt1(std::string const &a_name, int a_int) const {
   glProgramUniform1i(m_programID, getUniformLocation(a_name), a_int);
 }
-void Shader::setUniformFloat1(char const *a_name, float a_float) const {
+void Shader::setUniformFloat1(std::string const &a_name, float a_float) const {
   glProgramUniform1f(m_programID, getUniformLocation(a_name), a_float);
 }
-void Shader::setUniformFloat3(char const *a_name, float a_float1, float a_float2, float a_float3) const {
+void Shader::setUniformFloat3(std::string const &a_name, float a_float1, float a_float2, float a_float3) const {
   glProgramUniform3f(m_programID, getUniformLocation(a_name), a_float1, a_float2, a_float3);
 }
-void Shader::setUniformFloat3(char const *a_name, glm::vec3 const &a_floats) const {
+void Shader::setUniformFloat3(std::string const &a_name, glm::vec3 const &a_floats) const {
   glProgramUniform3fv(m_programID, getUniformLocation(a_name), 1, glm::value_ptr(a_floats));
 }
-void Shader::setUniformMat4(char const *a_name, glm::mat4 const &a_mat) const {
+void Shader::setUniformMat4(std::string const &a_name, glm::mat4 const &a_mat) const {
   glProgramUniformMatrix4fv(m_programID, getUniformLocation(a_name), 1, GL_FALSE, glm::value_ptr(a_mat));
 }
 
 /// Connect a given UBO
-void Shader::setUniformBlock(char const *a_name, unsigned int a_uboBindPoint) const {
+void Shader::setUniformBlock(std::string const &a_name, unsigned int a_uboBindPoint) const {
   int ubShaderIdx = 0;
 
   if (m_uniformBlockCache.count(a_name) > 0) {
     ubShaderIdx = m_uniformBlockCache.at(a_name);
 
   } else {
-    ubShaderIdx = glGetUniformBlockIndex(m_programID, a_name);
+    ubShaderIdx = glGetUniformBlockIndex(m_programID, a_name.c_str());
 
     if (ubShaderIdx > -1) {
       m_uniformBlockCache.emplace(a_name, ubShaderIdx);
@@ -171,7 +171,7 @@ void Shader::setUniformBlock(char const *a_name, unsigned int a_uboBindPoint) co
 }
 
 // CONSTRUCTOR <- Files
-Shader::Shader(char const *a_name, ShaderPath const &a_paths) : m_programName(a_name) {
+Shader::Shader(std::string const &a_name, ShaderPath const &a_paths) : m_programName(a_name) {
   ShaderCode rawCode;
 
   for (auto i = 0u; i < SHADER_TYPES.size(); ++i) {
@@ -185,7 +185,9 @@ Shader::Shader(char const *a_name, ShaderPath const &a_paths) : m_programName(a_
   buildPipeline(rawCode);
 }
 // CCONSTRUCTOR <- Code as string
-Shader::Shader(char const *a_name, ShaderCode const &a_rawCode) : m_programName(a_name) { buildPipeline(a_rawCode); }
+Shader::Shader(std::string const &a_name, ShaderCode const &a_rawCode) : m_programName(a_name) {
+  buildPipeline(a_rawCode);
+}
 
 
 } // namespace Vonsai

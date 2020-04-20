@@ -4,7 +4,28 @@
 #include <Vonsai/Wraps/_gl.hpp>
 #include <Vonsai/Wraps/_glm.hpp>
 
+#include <imgui/imgui.h>
+
 namespace Vonsai {
+
+Scene::Scene()
+    : m_internalOnGui([&]() {
+        static bool showAlert{true};
+        if (showAlert && (!m_onUpdate or !m_onGui)) {
+          int const flags = ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse;
+          ImGui::Begin(">>> WARNING <<<", &showAlert, flags);
+          if (!m_onUpdate) { ImGui::BulletText("SCENE IS EMPTY\t"); }
+          if (!m_onGui) { ImGui::BulletText("GUI IS EMPTY\t"); }
+          ImGui::End();
+        }
+        if (m_onGui) m_onGui();
+      }),
+      m_internalOnUpdate([&]() {
+        updateFPS();
+        updateDeltaTime();
+        (m_onUpdate) ? m_onUpdate() : setClearColor(1.f, 0.f, 1.f);
+        return m_exposedFrameCounter;
+      }) {}
 
 unsigned int Scene::getFPS() { return m_exposedFrameCounter; }
 float        Scene::getDeltaTime() { return m_deltaTime; }

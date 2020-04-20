@@ -8,7 +8,6 @@
 namespace Vonsai {
 
 void Texture::bind() const {
-  // vo_print("texture path: {}", m_path);
   GL_ASSERT(glActiveTexture(GL_TEXTURE0 + m_ID));
   GL_ASSERT(glBindTexture(GL_TEXTURE_2D, m_ID));
 }

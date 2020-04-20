@@ -17,13 +17,13 @@ class Engine {
 public:
   struct {
     std::unique_ptr<Shader> light;
-    std::unique_ptr<Shader> flat;
   } shader;
 
   struct {
     std::unique_ptr<Renderable> monkey;
     std::unique_ptr<Renderable> cube;
     std::unique_ptr<Renderable> plane;
+    std::unique_ptr<Renderable> chandelier;
   } mesh;
 
   Engine();

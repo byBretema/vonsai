@@ -68,39 +68,39 @@ public:
 class Shader : public Bindable {
 private:
   unsigned int m_programID   = 0u;
-  char const * m_programName = "";
+  std::string  m_programName = "";
 
   mutable bool m_ok    = true;
   mutable bool m_built = false;
 
-  mutable std::unordered_map<char const *, int>  m_uniformCache;
-  mutable std::unordered_map<char const *, bool> m_uniformAlertCache;
+  mutable std::unordered_map<std::string, int>  m_uniformCache;
+  mutable std::unordered_map<std::string, bool> m_uniformAlertCache;
 
-  mutable std::unordered_map<char const *, int>  m_uniformBlockCache;
-  mutable std::unordered_map<char const *, bool> m_uniformBlockAlertCache;
+  mutable std::unordered_map<std::string, int>  m_uniformBlockCache;
+  mutable std::unordered_map<std::string, bool> m_uniformBlockAlertCache;
 
   void buildPipeline(ShaderCode const &a_rawCode);
 
 public:
-  inline char const *getName() const { return m_programName; }
+  inline std::string const &getName() const { return m_programName; }
 
   inline bool isReady() const { return m_ok && m_built; }
-  int         getUniformLocation(char const *a_name) const;
+  int         getUniformLocation(std::string const &a_name) const;
 
   void bind() const override;
   void unbind() const override;
 
-  void setUniformInt1(char const *a_name, int a_int) const;
-  void setUniformFloat1(char const *a_name, float a_float) const;
-  void setUniformFloat3(char const *a_name, float a_f1, float a_f2, float a_f3) const;
-  void setUniformFloat3(char const *a_name, glm::vec3 const &a_floats) const;
-  void setUniformMat4(char const *a_name, glm::mat4 const &a_mat) const;
+  void setUniformInt1(std::string const &a_name, int a_int) const;
+  void setUniformFloat1(std::string const &a_name, float a_float) const;
+  void setUniformFloat3(std::string const &a_name, float a_f1, float a_f2, float a_f3) const;
+  void setUniformFloat3(std::string const &a_name, glm::vec3 const &a_floats) const;
+  void setUniformMat4(std::string const &a_name, glm::mat4 const &a_mat) const;
 
 
-  void setUniformBlock(char const *a_name, unsigned int uboBindPoint) const;
+  void setUniformBlock(std::string const &a_name, unsigned int uboBindPoint) const;
 
-  Shader(char const *a_name, ShaderPath const &a_paths);
-  Shader(char const *a_name, ShaderCode const &a_rawCode);
+  Shader(std::string const &a_name, ShaderPath const &a_paths);
+  Shader(std::string const &a_name, ShaderCode const &a_rawCode);
   Shader(Shader &&) = delete;
   Shader &operator=(Shader &&) = delete;
   Shader(Shader const &)       = delete;

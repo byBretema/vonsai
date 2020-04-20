@@ -2,7 +2,6 @@
 
 #include "Bindable.hpp"
 
-#include "Wraps/_gl.hpp"
 #include "Wraps/_glm.hpp"
 
 #include <unordered_map>
@@ -47,18 +46,23 @@ public:
   UBO(UBO const &)       = delete;
   UBO &operator=(UBO const &) = delete;
 
+  // TODO : Avoid code-bloat produced by templates...
+
   // Injet float
   void setData(char const *a_name, float a_data);
+
   // Injet a GLM Matrix
   template <int NR, int NC, typename T, glm::qualifier Q>
   void setData(char const *a_name, glm::mat<NR, NC, T, Q> a_data) {
     internalSetData(a_name, sizeof(a_data), (void *)&a_data[0]);
   }
+
   // Injet a GLM Vector
   template <int N, typename T, glm::qualifier Q>
   void setData(char const *a_name, glm::vec<N, T, Q> a_data) {
     internalSetData(a_name, sizeof(a_data), (void *)&a_data[0]);
   }
+
   // Injet a Vector of any type
   template <typename T>
   void setData(char const *a_name, std::vector<T> const &a_data) {

@@ -62,7 +62,7 @@ void main() {
 
   vec3 finalColor = vec3(ambientI * Ka);
 
-  for (int i = 0; i < 2; i++) {
+  for (int i = 0; i < u_numLights.w; i++) {
     finalColor += shade(u_lights[i], normalize(-v_pos), normalize(v_normal), texture(u_texture, v_texCoord).rgb );
   }
 

@@ -22,10 +22,8 @@ inline void clearColor(float r, float g, float b) { glClearColor(r, g, b, 1.f); 
 
 
 // Verify OpenGL action
-#define GL_ASSERT(funcToCheck) \
-  ___glErrClear();             \
-  funcToCheck;                 \
-  ___glAssert(__FILE__, __LINE__);
+
+#define GL_ASSERT(funcToCheck) funcToCheck;
 
 // Avoid fake errors
 static inline void ___glErrClear() {

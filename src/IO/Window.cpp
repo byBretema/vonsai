@@ -111,8 +111,7 @@ void Window::shutdown() {
 
 void Window::activate() {
   glfwMakeContextCurrent(GLFW_PTR);
-  // ImGui::SetCurrentContext(IMGUI_PTR);
-  // ImGui_ImplGlfw_ChangeMainWindow(GLFW_PTR);
+  ImGui::SetCurrentContext(IMGUI_PTR);
 }
 
 void Window::destroy() {

@@ -1,20 +1,28 @@
 // #define CATCH_CONFIG_MAIN
 // #include "catch.hpp"
 
+#include <array>
+
 #include <imgui/imgui.h>
 
+#include <Vonsai/Bindable.hpp>
 #include <Vonsai/Vonsai.hpp>
-using Light   = vo::Light;
-using Texture = vo::Texture;
-using UBO     = vo::UBO;
-using Camera  = vo::Camera;
-namespace KC  = vo::KeyCode;
+
+using Light  = vo::Light;
+using UBO    = vo::UBO;
+using Camera = vo::Camera;
+
+using Texture    = vo::Texture;
+using Shader     = vo::Shader;
+using Renderable = vo::Renderable;
+
+namespace KC = vo::KeyCode;
 
 
 int main() {
   Vonsai::Engine voe;
-  auto [input, window] = voe.getIO();
-  auto &sc             = voe.getActiveScene();
+  auto &&[input, window] = voe.getIO();
+  auto &&sc              = voe.getActiveScene();
 
   // ========================================================================================== //
 
@@ -39,22 +47,49 @@ int main() {
 
   // ========================================================================================== //
 
+
+
+  // sc.setClearColor(0.6, 0.3, 0.1);
+
+
+  auto draw = [&](Renderable &R, Shader const &S, Texture const &T, unsigned int size, bool active) {
+    if (!active) { return; }
+
+    Vonsai::BindGuard bgS{S};
+    Vonsai::BindGuard bgT{T};
+    S.setUniformInt1("u_texture", T.getID());
+
+    float pos = 0.f;
+    for (auto i = 0u; i < size; ++i) {
+      R.transform.setPosX(pos);
+      pos += 3.f;
+
+      auto const modelView = camera.getView() * R.transform.matrix();
+      S.setUniformMat4("u_modelView", modelView);
+      S.setUniformMat4("u_normalMat", glm::transpose(glm::inverse(modelView)));
+
+      R.draw();
+    }
+    S.setUniformInt1("u_texture", 0);
+  };
+
+
+  std::array<bool, 2> show{false, false};
   sc.setOnUpdateFn([&, &input = input, &window = window]() {
-    sc.setClearColor(0.6, 0.3, 0.1);
     camera.defaultBehaviour(sc.getDeltaTime(), window.getAspectRatio(), cameraUBO, input);
-
-    voe.mesh.monkey->transform.setPosX(-3.f);
-    voe.mesh.monkey->draw(*voe.shader.light, camera.getView(), &tex1);
-    voe.mesh.monkey->transform.setPosX(0.f);
-    voe.mesh.monkey->draw(*voe.shader.light, camera.getView(), &tex2);
-    voe.mesh.monkey->transform.setPosX(3.f);
-    voe.mesh.monkey->draw(*voe.shader.light, camera.getView(), &tex3);
-
-    voe.mesh.plane->transform.reset();
-    voe.mesh.plane->draw(*voe.shader.light, camera.getView());
+    draw(*voe.mesh.monkey, *voe.shader.light, tex1, 5'000u, show[0]);
+    draw(*voe.mesh.chandelier, *voe.shader.light, tex2, 275u, show[1]);
   });
 
-  sc.setOnGuiFn([]() { ImGui::Text("hell0!"); });
+  bool showToggle{true};
+  sc.setOnGuiFn([&]() {
+    if (showToggle) {
+      ImGui::Begin("* TOGGLES", &showToggle);
+      ImGui::Checkbox("Draw 1", &show[0]);
+      ImGui::Checkbox("Draw 2", &show[1]);
+      ImGui::End();
+    }
+  });
 
   voe.run();
   return 0;

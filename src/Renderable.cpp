@@ -37,35 +37,16 @@ void Renderable::unbind() const {
   GL_ASSERT(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0));
 }
 
-void Renderable::draw(Shader const &a_shader, glm::mat4 const &a_view, Texture const *a_texture) const {
+void Renderable::draw() const {
   static std::once_flag alertOnceShader, alertOnceInvalid, alertOnceDraw;
-  if (!a_shader.isReady()) {
-    std::call_once(alertOnceShader, [&] { vo_err("Corrupted shader: {}", a_shader.getName()); });
-    return;
-  }
   if (!m_valid) {
     std::call_once(alertOnceInvalid, [&] { vo_err("Something wrong in renderable {} creation", m_VAO); });
-    return;
-  }
-  if (m_indices.size() < 3) {
+  } else if (m_indices.size() < 3) {
     std::call_once(alertOnceDraw, [&] { vo_err("Not enough data to draw {} renderable", m_VAO); });
-    return;
+  } else {
+    BindGuard bgR{*this};
+    glDrawElements(GL_TRIANGLES, m_indices.size(), GL_UNSIGNED_INT, 0);
   }
-
-  BindGuard bgR{*this};
-  BindGuard bgS{a_shader};
-  BindGuard bgT;
-
-  if (a_texture) {
-    bgT.inject(*a_texture);
-    a_shader.setUniformInt1("u_texture", a_texture->getID());
-  }
-
-  auto const modelView = a_view * this->transform.matrix();
-  a_shader.setUniformMat4("u_modelView", modelView);
-  a_shader.setUniformMat4("u_normalMat", glm::transpose(glm::inverse(modelView)));
-
-  GL_ASSERT(glDrawElements(GL_TRIANGLES, m_indices.size(), GL_UNSIGNED_INT, 0));
 }
 
 void Renderable::setEBO(std::vector<unsigned int> const &a_data) {

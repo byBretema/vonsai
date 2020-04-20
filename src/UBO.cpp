@@ -1,5 +1,7 @@
 #include <Vonsai/UBO.hpp>
 
+#include <Vonsai/Wraps/_gl.hpp>
+
 namespace Vonsai {
 
 void UBO::bind() const { GL_ASSERT(glBindBuffer(GL_UNIFORM_BUFFER, m_ID)); }

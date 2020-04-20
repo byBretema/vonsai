@@ -1,15 +1,17 @@
 #pragma once
 
 #include <functional>
+#include <mutex>
 
 #include <chrono>
 using Clock = std::chrono::high_resolution_clock;
+
 
 namespace Vonsai {
 
 class Scene {
 public:
-  explicit Scene() = default;
+  explicit Scene();
 
   unsigned int getFPS();
   float        getDeltaTime();
@@ -21,17 +23,10 @@ public:
 
 private:
   std::function<void(void)>       m_onGui{nullptr}; // * User defined
-  std::function<void(void)> const m_internalOnGui{[&]() {
-    if (m_onGui) m_onGui();
-  }};
+  std::function<void(void)> const m_internalOnGui{[]() {}};
 
   std::function<void(void)>               m_onUpdate{nullptr}; // * User defined
-  std::function<unsigned int(void)> const m_internalOnUpdate{[&]() {
-    updateFPS();
-    updateDeltaTime();
-    if (m_onUpdate) m_onUpdate();
-    return m_exposedFrameCounter;
-  }};
+  std::function<unsigned int(void)> const m_internalOnUpdate{[]() { return 0u; }};
 
   float             m_deltaTime{0.f};
   Clock::time_point m_deltaTimeStamp{Clock::now()};
