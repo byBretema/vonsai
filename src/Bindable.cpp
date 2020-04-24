@@ -27,4 +27,5 @@ BindGuard::~BindGuard() {
     m_ptr = nullptr;
   }
 }
+
 } // namespace Vonsai

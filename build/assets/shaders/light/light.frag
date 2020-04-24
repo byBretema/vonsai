@@ -1,8 +1,8 @@
 #version 410 core
 
-in vec3 v_pos;
-in vec3 v_normal;
-in vec2 v_texCoord;
+in vec3 g_pos;
+in vec3 g_normal;
+in vec2 g_texCoord;
 
 out vec4 f_color;
 
@@ -38,7 +38,7 @@ layout(std140) uniform camera {
 
 vec3 shade(in Light a_light, in vec3 a_V, in vec3 a_normal, in vec3 a_meshColor){
 
-	vec3  lightVec = normalize((u_view * a_light.position).xyz - v_pos);
+	vec3  lightVec = normalize((u_view * a_light.position).xyz - g_pos);
 	vec3  halfVec = normalize(lightVec + a_V); // For blinn phong
 
   // Attenuation
@@ -63,7 +63,7 @@ void main() {
   vec3 finalColor = vec3(ambientI * Ka);
 
   for (int i = 0; i < u_numLights.w; i++) {
-    finalColor += shade(u_lights[i], normalize(-v_pos), normalize(v_normal), texture(u_texture, v_texCoord).rgb );
+    finalColor += shade(u_lights[i], normalize(-g_pos), normalize(g_normal), texture(u_texture, g_texCoord).rgb );
   }
 
   f_color = vec4(finalColor, 1);

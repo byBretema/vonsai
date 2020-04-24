@@ -12,8 +12,11 @@
 
 namespace Vonsai {
 
-#define GLFW_PTR static_cast<GLFWwindow *>(m_window)
-#define IMGUI_PTR static_cast<ImGuiContext *>(m_gui)
+// Member data of GLFW and IMGUI are stored as void* to avoid the #include of them in
+// the header file of window and expose it to the user, so below we define some
+// macros to easily cast them to its own type.
+#define GLFW_PTR static_cast<GLFWwindow *>(m_window) // <- intentional not semicolon
+#define IMGUI_PTR static_cast<ImGuiContext *>(m_gui) // <- intentional not semicolon
 
 Window::Window(Input *a_input, unsigned int a_width, unsigned int a_height) {
 
@@ -40,7 +43,7 @@ Window::Window(Input *a_input, unsigned int a_width, unsigned int a_height) {
   m_valid  = true;
   m_width  = a_width;
   m_height = a_height;
-  glfwSwapInterval(0); // Disable V-Sync
+  glfwSwapInterval(1); // V-Sync
 
   // Attach ImGui
   static std::once_flag initImGUI;
@@ -95,7 +98,7 @@ bool Window::update(std::function<unsigned int(void)> const &a_onUpdate, std::fu
   }
 
   glfwSwapBuffers(GLFW_PTR);
-  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // TODO : Move to GL wrapper
 
   return m_valid;
 }

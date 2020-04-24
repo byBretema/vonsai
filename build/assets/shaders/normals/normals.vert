@@ -2,22 +2,17 @@
 
 layout(location = 0) in vec3 pos;
 layout(location = 1) in vec3 normal;
-layout(location = 2) in vec2 texCoord;
 
-out vec3 v_pos;
 out vec3 v_normal;
-out vec2 v_texCoord;
 
 layout(std140) uniform camera {
   mat4 u_proj;
-  mat4 u_view;
 };
 uniform mat4 u_modelView;
 uniform mat4 u_normalMat;
 
-void main() {
-	v_texCoord = texCoord;
-	v_pos = (u_modelView * vec4(pos, 1)).xyz;
+void main()
+{
 	v_normal = normal;
 	// v_normal = normalize(u_normalMat * vec4(normalize(normal),0)).xyz;
 	gl_Position = u_modelView * vec4(pos, 1);

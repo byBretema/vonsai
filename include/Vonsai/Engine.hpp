@@ -17,6 +17,7 @@ class Engine {
 public:
   struct {
     std::unique_ptr<Shader> light;
+    std::unique_ptr<Shader> normals;
   } shader;
 
   struct {

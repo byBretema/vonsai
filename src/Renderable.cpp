@@ -7,50 +7,34 @@
 
 namespace Vonsai {
 
-void RenderableData::info() const {
-  vo_print("\nINDICES\n");
-  {
-    unsigned int count = 0u;
-    for (auto &&elem : indices) {
-      vo_print("{} ", elem);
-      if (++count >= 3) {
-        vo_print("\n");
-        count = 0;
-      }
-    }
-  }
-  vo_print("\nPOSITION\n");
-  for (auto &&elem : vertices) { vo_print("{},{},{}\n", elem.x, elem.y, elem.z); }
-  vo_print("\nNORMALS\n");
-  for (auto &&elem : normals) { vo_print("{},{},{}\n", elem.x, elem.y, elem.z); }
-  vo_print("\nTEX-COORD\n");
-  for (auto &&elem : texCoords) { vo_print("{},{}\n", elem.x, elem.y); }
-  vo_print("\n");
-}
+Renderable::Renderable(RenderablePOD const &a_data) {
+  if (a_data.indices.size() < 3 or a_data.vertices.size() < 3) { return; }
+  GL_ASSERT(glGenVertexArrays(1, &m_VAO));
+  setEBO(a_data.indices);
+  addVBO(a_data.vertices);  // 0
+  addVBO(a_data.normals);   // 1
+  addVBO(a_data.texCoords); // 2
 
-void Renderable::bind() const {
-  GL_ASSERT(glBindVertexArray(m_VAO));
-  GL_ASSERT(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_EBO));
-}
-void Renderable::unbind() const {
-  GL_ASSERT(glBindVertexArray(0));
-  GL_ASSERT(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0));
+  m_valid      = true;
+  m_indexCount = a_data.indices.size();
 }
 
 void Renderable::draw() const {
-  static std::once_flag alertOnceShader, alertOnceInvalid, alertOnceDraw;
+  static std::once_flag alertOnceInvalid, alertOnceDraw;
   if (!m_valid) {
     std::call_once(alertOnceInvalid, [&] { vo_err("Something wrong in renderable {} creation", m_VAO); });
-  } else if (m_indices.size() < 3) {
+  } else if (m_indexCount < 3) {
     std::call_once(alertOnceDraw, [&] { vo_err("Not enough data to draw {} renderable", m_VAO); });
   } else {
     BindGuard bgR{*this};
-    glDrawElements(GL_TRIANGLES, m_indices.size(), GL_UNSIGNED_INT, 0);
+    glDrawElements(GL_TRIANGLES, m_indexCount, GL_UNSIGNED_INT, 0);
   }
 }
 
+bool Renderable::isValid() const { return m_valid; }
+
 void Renderable::setEBO(std::vector<unsigned int> const &a_data) {
-  if (!m_indices.empty()) {
+  if (m_indexCount) {
     vo_err("Renderable EBO Data only can be setted one time");
     return;
   }
@@ -80,21 +64,13 @@ void Renderable::addVBO(std::vector<float> const &a_data, int a_dataSize) { d_ad
 void Renderable::addVBO(std::vector<glm::vec3> const &a_data) { d_addVBO(a_data, a_data[0].length(), GL_FLOAT); }
 void Renderable::addVBO(std::vector<glm::vec2> const &a_data) { d_addVBO(a_data, a_data[0].length(), GL_FLOAT); }
 
-Renderable::Renderable(RenderableData const &a_data) {
-  if (a_data.indices.size() < 3 or a_data.vertices.size() < 3) {
-    m_valid   = false;
-    m_indices = {-1u};
-    return;
-  }
-  GL_ASSERT(glGenVertexArrays(1, &m_VAO));
-  setEBO(a_data.indices);
-  addVBO(a_data.vertices);  // 0
-  addVBO(a_data.normals);   // 1
-  addVBO(a_data.texCoords); // 2
-  m_indices   = a_data.indices;
-  m_vertices  = a_data.vertices;
-  m_normals   = a_data.normals;
-  m_texCoords = a_data.texCoords;
+void Renderable::bind() const {
+  GL_ASSERT(glBindVertexArray(m_VAO));
+  GL_ASSERT(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, m_EBO));
+}
+void Renderable::unbind() const {
+  GL_ASSERT(glBindVertexArray(0));
+  GL_ASSERT(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0));
 }
 
 } // namespace Vonsai

@@ -137,7 +137,7 @@ namespace KeyCode {
 
 class Input {
 public:
-  explicit Input();
+  explicit Input() = default;
 
   bool clickL() const;
   bool clickR() const;

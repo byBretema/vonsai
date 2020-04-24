@@ -5,6 +5,8 @@
 
 namespace Vonsai {
 
+// TODO easy upload to shader
+
 /**
  * This is the base implementation for
  * POINT Light, other light-types should

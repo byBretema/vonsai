@@ -1,8 +1,5 @@
 #include <Vonsai/Transform.hpp>
-
 #include <Vonsai/Utils/Logger.hpp>
-
-#include <algorithm>
 
 namespace Vonsai {
 

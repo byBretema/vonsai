@@ -10,10 +10,27 @@ inline bool loadExtensions(void *a_proc) { return gladLoadGLLoader(reinterpret_c
 
 inline void defaultSetup() {
   glFrontFace(GL_CCW);
-  glDepthFunc(GL_LEQUAL);
   glEnable(GL_CULL_FACE);
+
   glEnable(GL_DEPTH_TEST);
-  glClearColor(0.6, 0.35, 0.2, 1.f);
+  // glDepthFunc(GL_LEQUAL);
+
+  // glEnable(GL_DEPTH_CLAMP);
+  // glDepthRange(0.0, 0.01);
+
+  glEnable(GL_MULTISAMPLE);
+
+  // glPointSize(10.f);
+  glLineWidth(5.f);
+  glEnable(GL_POLYGON_SMOOTH);
+  // glPolygonMode(GL_FRONT_AND_BACK, GL_POINT);
+  // glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+  // glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+
+  // glEnable(GL_BLEND);
+  // glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+  glClearColor(0.2, 0.1, 0.2, 1.f);
 }
 
 inline void clearColor(float r, float g, float b) { glClearColor(r, g, b, 1.f); }
@@ -22,8 +39,10 @@ inline void clearColor(float r, float g, float b) { glClearColor(r, g, b, 1.f); 
 
 
 // Verify OpenGL action
-
-#define GL_ASSERT(funcToCheck) funcToCheck;
+#define GL_ASSERT(funcToCheck) \
+  ___glErrClear();             \
+  funcToCheck;                 \
+  ___glAssert(__FILE__, __LINE__);
 
 // Avoid fake errors
 static inline void ___glErrClear() {

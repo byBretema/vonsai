@@ -10,9 +10,6 @@ public:
 };
 
 class BindGuard {
-private:
-  Bindable const *m_ptr = nullptr;
-
 public:
   void inject(Bindable const *a_bindable);
   void inject(Bindable const &a_bindable);
@@ -26,6 +23,9 @@ public:
   BindGuard &operator=(BindGuard &&) = delete;
   BindGuard(BindGuard const &)       = delete;
   BindGuard &operator=(BindGuard const &) = delete;
+
+private:
+  Bindable const *m_ptr = nullptr;
 };
 
 } // namespace Vonsai

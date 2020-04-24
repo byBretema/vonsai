@@ -9,14 +9,6 @@ class Input; // ! Forward decl of Input
 
 
 class Camera {
-private:
-  glm::mat4 m_view{1.f};
-  glm::mat4 m_proj{1.f};
-  glm::mat4 m_viewproj{1.f};
-
-  float     m_fovY{0.4f};
-  glm::vec3 m_offset{0.f, 0.f, 1.f};
-
 public:
   static constexpr float MIN_FOV = 0.1f;
   static constexpr float MAX_FOV = 1.5f;
@@ -33,11 +25,19 @@ public:
 
   void defaultBehaviour(float deltaTime, float a_aspectRatio, UBO &a_ubo, Input const &a_io);
 
-  inline glm::mat4 const &getView() const { return m_view; }
-  inline glm::mat4 const &getProj() const { return m_proj; }
-  inline glm::mat4 const &getViewProj() const { return m_viewproj; }
+  glm::mat4 const &getView() const;
+  glm::mat4 const &getProj() const;
+  glm::mat4 const &getViewProj() const;
 
   void info();
+
+private:
+  glm::mat4 m_view{1.f};
+  glm::mat4 m_proj{1.f};
+  glm::mat4 m_viewproj{1.f};
+
+  float     m_fovY{0.4f};
+  glm::vec3 m_offset{0.f, 0.f, 1.f};
 };
 
 } // namespace Vonsai

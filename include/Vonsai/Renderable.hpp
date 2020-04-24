@@ -8,46 +8,44 @@
 
 namespace Vonsai {
 
-struct RenderableData {
+struct RenderablePOD {
   std::vector<glm::vec3>    vertices{};
   std::vector<glm::vec3>    normals{};
   std::vector<glm::vec2>    texCoords{};
+  std::vector<glm::vec3>    tangents{};
+  std::vector<glm::vec3>    bitangents{};
   std::vector<unsigned int> indices{};
-
-  void info() const;
 };
 
 class Renderable : public Bindable {
-private:
-  bool m_valid = true;
-
-  mutable unsigned int m_location{0u};
-  unsigned int         m_VAO{0u};
-  unsigned int         m_EBO{0u};
-
-  std::vector<glm::vec3>    m_vertices{};
-  std::vector<glm::vec3>    m_normals{};
-  std::vector<glm::vec2>    m_texCoords{};
-  std::vector<unsigned int> m_indices{};
-
-  void bind() const override;
-  void unbind() const override;
-
 public:
   Transform transform;
 
+  explicit Renderable(RenderablePOD const &a_data);
+
   void draw() const;
+  bool isValid() const;
 
   void setEBO(const std::vector<unsigned int> &a_data);
   void addVBO(const std::vector<glm::vec3> &a_data);
   void addVBO(const std::vector<glm::vec2> &a_data);
   void addVBO(const std::vector<float> &a_data, int a_dataSize);
 
-  explicit Renderable(RenderableData const &a_data);
   Renderable(Renderable &&) = delete;
   Renderable &operator=(Renderable &&) = delete;
   Renderable(Renderable const &)       = delete;
   Renderable &operator=(Renderable const &) = delete;
+
+private:
+  bool m_valid{false};
+
+  mutable unsigned int m_location{0u};
+  unsigned int         m_VAO{0u};
+  unsigned int         m_EBO{0u};
+  unsigned int         m_indexCount{0u};
+
+  void bind() const override;
+  void unbind() const override;
 };
 
 } // namespace Vonsai

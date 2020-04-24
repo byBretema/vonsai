@@ -6,7 +6,8 @@
 #include <iostream>
 
 namespace Vonsai {
-Input::Input() { s_inputPtr = this; }
+
+// - PUBLIC -
 
 bool Input::clickL() const { return m_click.L; }
 bool Input::clickR() const { return m_click.R; }
@@ -25,6 +26,18 @@ void Input::resetScrollAndAxis() {
   m_axis.H   = 0.f;
 }
 
+bool Input::anyShift() const { return key(KeyCode::LeftShift) or key(KeyCode::RightShift); }
+bool Input::anyAlt() const { return key(KeyCode::LeftAlt) or key(KeyCode::RightAlt); }
+bool Input::anyCtrl() const { return key(KeyCode::LeftCtrl) or key(KeyCode::RightCtrl); }
+bool Input::anySuper() const { return key(KeyCode::LeftSuper) or key(KeyCode::RightSuper); }
+
+bool Input::key(int a_keyCode) const {
+  if (m_keys.count(a_keyCode) > 0) { return m_keys.at(a_keyCode); };
+  return false;
+}
+
+// - PRIVATE -
+
 void onClickL(bool a_state, Input &a_ref) { a_ref.m_click.L = a_state; }
 void onClickR(bool a_state, Input &a_ref) { a_ref.m_click.R = a_state; }
 void onClickM(bool a_state, Input &a_ref) { a_ref.m_click.M = a_state; }
@@ -40,16 +53,6 @@ void onCursorMove(double a_x, double a_y, Input &a_ref) {
   a_ref.m_x = a_x;
   a_ref.m_y = a_y;
 }
-
-bool Input::key(int a_keyCode) const {
-  if (m_keys.count(a_keyCode) > 0) { return m_keys.at(a_keyCode); };
-  return false;
-}
-
-bool Input::anyShift() const { return key(KeyCode::LeftShift) or key(KeyCode::RightShift); }
-bool Input::anyAlt() const { return key(KeyCode::LeftAlt) or key(KeyCode::RightAlt); }
-bool Input::anyCtrl() const { return key(KeyCode::LeftCtrl) or key(KeyCode::RightCtrl); }
-bool Input::anySuper() const { return key(KeyCode::LeftSuper) or key(KeyCode::RightSuper); }
 
 void onKeyPress(int a_key, Input &a_ref) { a_ref.m_keys[a_key] = true; }
 void onKeyRelease(int a_key, Input &a_ref) { a_ref.m_keys[a_key] = false; }

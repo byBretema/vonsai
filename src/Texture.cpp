@@ -7,15 +7,6 @@
 
 namespace Vonsai {
 
-void Texture::bind() const {
-  GL_ASSERT(glActiveTexture(GL_TEXTURE0 + m_ID));
-  GL_ASSERT(glBindTexture(GL_TEXTURE_2D, m_ID));
-}
-void Texture::unbind() const {
-  GL_ASSERT(glBindTexture(GL_TEXTURE_2D, 0));
-  GL_ASSERT(glActiveTexture(GL_TEXTURE0));
-}
-
 Texture::Texture(char const *path) {
   m_path = path;
   if (!Files::isValid(path, true)) { return; }
@@ -44,6 +35,18 @@ Texture::Texture(char const *path) {
   GL_ASSERT(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);)
   GL_ASSERT(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);)
   GL_ASSERT(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);)
+}
+
+unsigned int Texture::getID() const { return m_ID; }
+
+void Texture::bind() const {
+  GL_ASSERT(glActiveTexture(GL_TEXTURE0 + m_ID));
+  GL_ASSERT(glBindTexture(GL_TEXTURE_2D, m_ID));
+}
+
+void Texture::unbind() const {
+  GL_ASSERT(glBindTexture(GL_TEXTURE_2D, 0));
+  GL_ASSERT(glActiveTexture(GL_TEXTURE0));
 }
 
 } // namespace Vonsai
