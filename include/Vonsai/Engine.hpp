@@ -18,6 +18,7 @@ public:
   struct {
     std::unique_ptr<Shader> light;
     std::unique_ptr<Shader> normals;
+    std::unique_ptr<Shader> debug;
   } shader;
 
   struct {

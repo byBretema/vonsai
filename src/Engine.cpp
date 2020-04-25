@@ -26,10 +26,11 @@ Engine::Engine() {
   normalsSP.fragment = "assets/shaders/normals/normals.frag";
   shader.normals     = std::make_unique<Shader>("normals", normalsSP);
 
-  // Vonsai::ShaderPath flatSP;
-  // flatSP.vertex   = "assets/shaders/flat/flat.vert";
-  // flatSP.fragment = "assets/shaders/flat/flat.frag";
-  // shader.flat     = std::make_unique<Shader>("flat", flatSP);
+  Vonsai::ShaderPath debugSP;
+  debugSP.vertex   = "assets/shaders/debug/debug.vert";
+  debugSP.geometry = "assets/shaders/debug/debug.geom";
+  debugSP.fragment = "assets/shaders/debug/debug.frag";
+  shader.debug     = std::make_unique<Shader>("debug", debugSP);
 }
 
 void Engine::run() {

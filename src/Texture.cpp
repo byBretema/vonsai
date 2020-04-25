@@ -8,6 +8,8 @@
 namespace Vonsai {
 
 Texture::Texture(char const *path) {
+  stbi_set_flip_vertically_on_load(1); // TODO : Move to a static execution; it's enough to execute it once
+
   m_path = path;
   if (!Files::isValid(path, true)) { return; }
 

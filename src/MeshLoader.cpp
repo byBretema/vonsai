@@ -134,6 +134,7 @@ RenderablePOD getMeshFromFile(std::string const &filePath) {
       auto &&NV = mesh->mNumVertices;
       vo_debug("num vert of {} : {}", filePath, NV);
 
+
       if (mesh->HasPositions()) {
         r.vertices.reserve(NV);
         for (auto j = 0u; j < NV; ++j) {
@@ -144,6 +145,7 @@ RenderablePOD getMeshFromFile(std::string const &filePath) {
         vo_err("Mesh '{}' has no positions!", filePath);
         continue; // Stop the processig of current mesh
       }
+
 
       if (mesh->HasFaces()) {
         // Due to 'Renderable' design if this code is not hitted.
@@ -161,6 +163,7 @@ RenderablePOD getMeshFromFile(std::string const &filePath) {
         continue; // Stop the processig of current mesh
       }
 
+
       if (mesh->HasNormals()) {
         r.normals.reserve(NV);
         for (auto j = 0u; j < NV; ++j) {
@@ -170,6 +173,7 @@ RenderablePOD getMeshFromFile(std::string const &filePath) {
       } else {
         vo_warn("Mesh '{}' has no normals!", filePath);
       }
+
 
       if (mesh->HasTangentsAndBitangents()) {
         // Tangents
@@ -188,28 +192,33 @@ RenderablePOD getMeshFromFile(std::string const &filePath) {
         // vo_warn("Mesh '{}' has no tangents and bitangents!", filePath);
       }
 
-      auto const defaultTexChannel = 0u;
-      if (mesh->HasTextureCoords(defaultTexChannel)) {
-        if (mesh->mNumUVComponents[defaultTexChannel] == 2u) {
-          r.texCoords.reserve(NV);
-          for (auto j = 0u; j < NV; ++j) {
-            auto &&v = mesh->mTextureCoords[defaultTexChannel][j];
-            r.texCoords.push_back({v.x, v.y});
-          }
-        } else {
+
+      bool textureFound{false};
+      for (auto j = 0u; j < AI_MAX_NUMBER_OF_TEXTURECOORDS; ++j) {
+        if (!mesh->HasTextureCoords(j)) { continue; }
+
+        if (textureFound) {
+          vo_warn("Texture channels aren't and won't be supported.");
+          break; // Just check that use more than one channel
+        }
+
+        if (mesh->mNumUVComponents[j] != 2u) {
           vo_warn("Only 2D textures are supported");
+          continue; // Maybe other channel has an allowed 2D texture
+        }
+
+        textureFound = true;
+
+        // Process the 2D texture channel
+        r.texCoords.reserve(NV);
+        for (auto k = 0u; k < NV; ++k) {
+          auto &&v = mesh->mTextureCoords[j][k];
+          r.texCoords.push_back({v.x, v.y});
         }
       }
+    }
 
-      bool useTextureChannels = false;
-      for (auto j = 0u; j < AI_MAX_NUMBER_OF_TEXTURECOORDS; ++j) {
-        if (j == defaultTexChannel) { continue; }
-        useTextureChannels |= mesh->HasTextureCoords(j);
-      }
-      if (useTextureChannels) { vo_warn("Texture channels aren't and won't be supported.") }
-
-    } // End mesh-processing
-  }
+  } // End mesh-processing
 
   // if (scene->HasMaterials()) {
   //   auto &&N = scene->mNumMaterials;
@@ -225,10 +234,12 @@ RenderablePOD getMeshFromFile(std::string const &filePath) {
 
 
   // * THEN COMPOSE THE HIERARCHY OF MESHES
+
   // auto &&root = scene->mRootNode;
 
 
   // * RETURN THE POPULATED DATA
+
   // return out;
   return out[0];
 }

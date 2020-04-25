@@ -43,8 +43,8 @@ set(CMAKE_CXX_FLAGS_DEBUG "-O0 -g3 -ggdb -Wall -Wpedantic -Wextra -Wweak-vtables
 # PROJECT
 # ------------------------------------------------------------------------- #
 
-option(VONSAI_HIDE_MSGS "Hide logger messagges" OFF)
-option(VONSAI_HIDE_DEBUG_MSGS "Hide debug messagges" OFF)
+option(VONSAI_HIDE_MSGS       "Hide logger messagges" OFF)
+option(VONSAI_HIDE_DEBUG_MSGS "Hide debug messagges"  OFF)
 
 if(VONSAI_HIDE_MSGS)
     add_definitions(-DVONSAI_HIDE_MSGS)

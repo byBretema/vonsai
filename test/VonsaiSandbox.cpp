@@ -38,15 +38,19 @@ int main() {
   lightsUBO.setData("u_numLights", glm::vec4{static_cast<float>(lv.size())});
   lightsUBO.setData("u_lights", lv);
   voe.shader.light->linkUBO("lights", lightsUBO.getBindPoint());
+  voe.shader.debug->linkUBO("lights", lightsUBO.getBindPoint());
+  // voe.shader.normals->linkUBO("lights", lightsUBO.getBindPoint());
 
   UBO cameraUBO;
-  voe.shader.light->linkUBO("camera", cameraUBO.getBindPoint());
+  voe.shader.light->linkUBO("camera", cameraUBO.getBindPoint()); // TODO : make this transparent
+  voe.shader.debug->linkUBO("camera", cameraUBO.getBindPoint());
   voe.shader.normals->linkUBO("camera", cameraUBO.getBindPoint());
 
   std::vector<Texture> textures{};
   textures.emplace_back("assets/textures/dac.png");
   textures.emplace_back("assets/textures/Vonsai.png");
   textures.emplace_back("assets/textures/chess.jpg");
+  textures.emplace_back("/Users/cambalamas/Desktop/Kenney/animated-characters-2/Skins/cyborgFemaleA.png");
 
   Camera camera;
   // camera.pivot.modPosX(+3.f);
@@ -69,7 +73,7 @@ int main() {
 
     auto const modelView = camera.getView() * R.transform.matrix();
     S.setMat4("u_modelView", modelView);
-    // S.setMat4("u_normalMat", glm::transpose(glm::inverse(modelView)));
+    S.setMat4("u_normalMat", glm::transpose(glm::inverse(modelView)));
 
     R.draw();
     if (T) {
@@ -80,23 +84,31 @@ int main() {
 
 
   Renderable r1{Vonsai::getMeshFromOBJ("assets/models/monkey.obj")};
-  Renderable r2{Vonsai::getMeshFromFile("assets/models/monkey.obj")};
+  Renderable r2{
+      Vonsai::getMeshFromFile("/Users/cambalamas/Desktop/Kenney/animated-characters-2/Model/characterMedium.fbx")};
 
   std::array<bool, 2> show = {false}; // Set all to false
   show[0]                  = true;    // Show by default de simplest Scene
 
+  int   debugMode   = 0;
   int   shadingOpts = 0;
   float normalSize  = 0.05f;
 
   sc.setOnUpdateFn([&, &input = input, &window = window]() {
     camera.defaultBehaviour(sc.getDeltaTime(), window.getAspectRatio(), cameraUBO, input);
 
-    if (shadingOpts >= 0) {
-      drawOne(r1, *voe.shader.light, &textures[1], show[0]);
-      drawOne(r2, *voe.shader.light, &textures[1], show[1]);
+    if (shadingOpts == 0) {
+      voe.shader.debug->setFloat1("u_debug_mode", debugMode);
+      drawOne(r1, *voe.shader.debug, &textures[1], show[0]);
+      drawOne(r2, *voe.shader.debug, &textures[3], show[1]);
     }
 
-    if (shadingOpts == 1) {
+    if (shadingOpts >= 1) {
+      drawOne(r1, *voe.shader.light, &textures[1], show[0]);
+      drawOne(r2, *voe.shader.light, &textures[3], show[1]);
+    }
+
+    if (shadingOpts == 2) {
       voe.shader.normals->setFloat1("u_normalSize", normalSize);
       voe.shader.normals->setFloat3("u_normalColor", {1, 1, 0});
       drawOne(r1, *voe.shader.normals, nullptr, show[0]);
@@ -130,11 +142,17 @@ int main() {
 
       ImGui::TextColored(ImVec4(1.f, 1.f, 0.5f, 1.f), "SHADERS");
       ImGui::Separator();
+
       auto shadingOptsCounter = 0u;
+      ImGui::RadioButton("Debug", &shadingOpts, shadingOptsCounter++);
+      if (shadingOpts == 0) {
+        ImGui::TextColored({0.75, 1, 1, 1}, "What to Debug?");
+        ImGui::Combo("", &debugMode, "Plain draw\0UVs\0Normals\0", 3);
+      }
       ImGui::RadioButton("Shade", &shadingOpts, shadingOptsCounter++);
       ImGui::RadioButton("Shade and Normals", &shadingOpts, shadingOptsCounter++);
       static auto normalSizeInitValue = normalSize;
-      if (shadingOpts == 1) {
+      if (shadingOpts == 2) {
         ImGui::TextColored({0.75, 1, 1, 1}, "Normal size:");
         ImGui::SliderFloat("s", &normalSize, normalSizeInitValue, normalSizeInitValue + 0.75f);
       }
