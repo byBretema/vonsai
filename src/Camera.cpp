@@ -1,6 +1,7 @@
 #include <Vonsai/Camera.hpp>
 
 #include <Vonsai/IO/Input.hpp>
+#include <Vonsai/Renderable.hpp>
 #include <Vonsai/UBO.hpp>
 
 #include <Vonsai/Utils/Logger.hpp>
@@ -47,6 +48,12 @@ void Camera::frame(float a_aspectRatio, float a_speed, bool a_orbital, glm::vec3
   m_view              = glm::lookAt(eye, eye + F, worldUp);
   m_proj              = glm::perspective(m_fovY, a_aspectRatio, 0.0001f, 1000.f);
   m_viewproj          = m_proj * m_view;
+}
+
+std::tuple<glm::mat4, glm::mat4> Camera::genModelMatrices(Renderable const &a_r) const {
+  auto const modelView = getView() * a_r.transform.matrix();
+  auto const normalMat = glm::transpose(glm::inverse(modelView));
+  return {modelView, normalMat};
 }
 
 void Camera::defaultBehaviour(float deltaTime, float a_aspectRatio, UBO &a_ubo, Input const &a_io) {

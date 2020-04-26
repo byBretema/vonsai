@@ -13,88 +13,94 @@
 
 namespace Vonsai {
 
-RenderablePOD getMeshFromOBJ(std::string const &filePath) {
-  RenderablePOD out;
-  if (!Files::isValid(filePath, true)) { return out; }
-
-  std::once_flag resizeOnce;
-  struct {
-    bool texCoords;
-    bool normals;
-  } exists;
-
-  std::string            linestream;
-  std::vector<glm::vec2> uvsTemp;
-  std::vector<glm::vec3> normsTemp;
-  std::stringstream      filestream(Files::fromString(filePath));
-
-  // Parse begin ...
-  while (std::getline(filestream, linestream)) {
-    auto line  = Strings::split(linestream, " "); // 1
-    auto token = line.at(0);                      // 2
-
-    if ((token == "#") or (token == "s")) { continue; }
-    if (token == "v") {
-      assert(line.size() == 4);
-      out.vertices.push_back({std::stof(line.at(1)), std::stof(line.at(2)), std::stof(line.at(3))});
-    }
-    if (token == "vt") {
-      assert(line.size() == 3);
-      uvsTemp.push_back({std::stof(line.at(1)), std::stof(line.at(2))});
-    }
-    if (token == "vn") {
-      assert(line.size() == 4);
-      normsTemp.push_back({std::stof(line.at(1)), std::stof(line.at(2)), std::stof(line.at(3))});
-    }
-    if (token == "f") {
-      std::call_once(resizeOnce, [&]() {
-        exists.normals   = (normsTemp.size() > 0);
-        exists.texCoords = (uvsTemp.size() > 0);
-        if (exists.normals) { out.normals.resize(out.vertices.size()); }
-        if (exists.texCoords) { out.texCoords.resize(out.vertices.size()); }
-      });
-
-      // Process vertex, normals and UVs indices
-      for (auto i = 1u; i < line.size(); ++i) {
-        std::vector<std::string> face;
-        unsigned int             iV, iT, iN;
-
-        if (exists.texCoords and exists.normals) {
-          face = Strings::split(line.at(i), "/");
-          iT   = std::stoul(face.at(1)) - 1u;
-          iN   = std::stoul(face.at(2)) - 1u;
-        } else if (!exists.texCoords and exists.normals) {
-          face = Strings::split(line.at(i), "//");
-          iN   = std::stoul(face.at(1)) - 1u;
-        } else if (exists.texCoords and !exists.normals) {
-          face = Strings::split(line.at(i), "/");
-          iT   = std::stoul(face.at(1)) - 1u;
-        } else {
-          vo_err("Undefined Normals and UVs @ {}", filePath);
-        }
-        iV = std::stoul(face.at(0)) - 1u;
-
-        // Fit on vertex index the assigned norm and texcoord
-        if (exists.texCoords) out.texCoords[iV] = uvsTemp.at(iT);
-        if (exists.normals) out.normals[iV] = normsTemp.at(iN);
-
-        // Store vertex index
-        out.indices.push_back(iV);
-      }
-    }
+// Faces
+void aiCopyMeshAttrib(std::vector<unsigned int> &out, aiFace const *in, unsigned int numFaces) {
+  out.reserve(numFaces * 3u);
+  for (auto i = 0u; i < numFaces; ++i) {
+    auto &&face = in[i];
+    if (face.mNumIndices < 3u) { continue; } // Ignore lines and points
+    if (face.mNumIndices != 3) { vo_err("Corrupted mesh, faces bigger than 3 vertices are not supported"); }
+    for (auto j = 0u; j < face.mNumIndices; ++j) { out.emplace_back(face.mIndices[j]); }
   }
-  return out;
+}
+// Textures
+void aiCopyMeshAttrib(std::vector<glm::vec2> &out, aiVector3D const *in, unsigned int numVertices) {
+  out.reserve(numVertices);
+  for (auto i = 0u; i < numVertices; ++i) {
+    auto &&v = in[i];
+    out.emplace_back(v.x, v.y);
+    // out.emplace_back(v.x, v.y, v.z);
+  }
+}
+// Close to everyting-else
+void aiCopyMeshAttrib(std::vector<glm::vec3> &out, aiVector3D const *in, unsigned int numVertices) {
+  out.reserve(numVertices);
+  for (auto i = 0u; i < numVertices; ++i) {
+    auto &&v = in[i];
+    out.emplace_back(v.x, v.y, v.z);
+  }
 }
 
-// std::vector<RenderablePOD> getMeshFromFile(std::string const &filePath) {
-RenderablePOD getMeshFromFile(std::string const &filePath) {
+RenderablePOD meshProcessing(aiMesh const *mesh) {
+  RenderablePOD R;
+
+  if (mesh->HasBones()) { vo_warn("Bones are not supported yet!"); }
+
+  if (mesh->HasFaces()) {
+    aiCopyMeshAttrib(R.indices, mesh->mFaces, mesh->mNumFaces);
+  } else {
+    vo_err("Mesh has no faces!");
+    return R;
+  }
+
+  if (mesh->HasPositions()) {
+    aiCopyMeshAttrib(R.vertices, mesh->mVertices, mesh->mNumVertices);
+  } else {
+    vo_err("Mesh has no positions!");
+    return R;
+  }
+
+  if (mesh->HasNormals()) {
+    aiCopyMeshAttrib(R.normals, mesh->mNormals, mesh->mNumVertices);
+  } else {
+    vo_err("Mesh has no normals!");
+  }
+
+  if (mesh->HasTangentsAndBitangents()) {
+    aiCopyMeshAttrib(R.tangents, mesh->mTangents, mesh->mNumVertices);
+    aiCopyMeshAttrib(R.bitangents, mesh->mBitangents, mesh->mNumVertices);
+  } else {
+    vo_warn("Mesh has no tangents and bitangents!");
+  }
+
+  // Process the 2D texture channel
+  bool foundTexCoord{false};
+  for (auto j = 0u; j < AI_MAX_NUMBER_OF_TEXTURECOORDS; ++j) {
+    if (!mesh->HasTextureCoords(j)) { continue; }
+    if (foundTexCoord) {
+      vo_warn("Texture channels aren't and won't be supported.");
+      break; // Just check that use more than one channel
+    }
+    if (mesh->mNumUVComponents[j] != 2u) {
+      vo_warn("Only 2D textures are supported");
+      continue; // Maybe other channel has an allowed 2D texture
+    }
+    foundTexCoord = true;
+    aiCopyMeshAttrib(R.texCoords, mesh->mTextureCoords[j], mesh->mNumVertices);
+  }
+
+  return R;
+}
+
+
+std::vector<RenderablePOD> getMeshFromFile(std::string const &filePath) {
 
   // * CACHE FRIENDLY
 
   static std::unordered_map<std::string, std::vector<RenderablePOD>> cache;
   auto [KV, needsProcessing] = cache.try_emplace(filePath, std::vector<RenderablePOD>{});
   auto &&out                 = KV->second;
-  if (!needsProcessing) { return out[0]; }
+  if (!needsProcessing) { return out; }
 
 
   // * GET & VALIDATE THE SCENE
@@ -107,9 +113,7 @@ RenderablePOD getMeshFromFile(std::string const &filePath) {
 
   if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) {
     vo_err("[ASSIMP] : {}", importer.GetErrorString());
-    out.clear();
-    // return out;
-    return RenderablePOD{};
+    return std::vector<RenderablePOD>{RenderablePOD{}};
   }
   if (scene->HasAnimations()) {
     vo_warn("Animations are not supported yet!"); //
@@ -122,103 +126,10 @@ RenderablePOD getMeshFromFile(std::string const &filePath) {
   // * PROCESS SCENE DATA
 
   if (scene->HasMeshes()) {
-    auto &&N = scene->mNumMeshes;
-    out.reserve(N);
-
-    for (auto i = 0u; i < N; ++i) {
-
-      auto &&mesh = scene->mMeshes[i];
-      if (mesh->HasBones()) { vo_warn("Bones are not supported yet!"); }
-
-      auto &&r  = out.emplace_back();
-      auto &&NV = mesh->mNumVertices;
-      vo_debug("num vert of {} : {}", filePath, NV);
-
-
-      if (mesh->HasPositions()) {
-        r.vertices.reserve(NV);
-        for (auto j = 0u; j < NV; ++j) {
-          auto &&v = mesh->mVertices[j];
-          r.vertices.push_back({v.x, v.y, v.z});
-        }
-      } else {
-        vo_err("Mesh '{}' has no positions!", filePath);
-        continue; // Stop the processig of current mesh
-      }
-
-
-      if (mesh->HasFaces()) {
-        // Due to 'Renderable' design if this code is not hitted.
-        // Renderable(s) generated with this RenderablePOD
-        // won't be valids.
-        r.indices.reserve(mesh->mNumFaces * 3u);
-        for (auto j = 0u; j < mesh->mNumFaces; ++j) {
-          auto &&face = mesh->mFaces[j];
-          if (face.mNumIndices < 3u) { continue; } // Ignore lines and points
-          assert(face.mNumIndices == 3);           // We are applying aiProcess_Triangulate
-          for (auto k = 0u; k < face.mNumIndices; ++k) { r.indices.push_back(face.mIndices[k]); }
-        }
-      } else {
-        vo_err("Mesh '{}' has no faces!", filePath);
-        continue; // Stop the processig of current mesh
-      }
-
-
-      if (mesh->HasNormals()) {
-        r.normals.reserve(NV);
-        for (auto j = 0u; j < NV; ++j) {
-          auto &&v = mesh->mNormals[j];
-          r.normals.push_back({v.x, v.y, v.z});
-        }
-      } else {
-        vo_warn("Mesh '{}' has no normals!", filePath);
-      }
-
-
-      if (mesh->HasTangentsAndBitangents()) {
-        // Tangents
-        r.tangents.reserve(NV);
-        for (auto j = 0u; j < NV; ++j) {
-          auto &&v = mesh->mTangents[j];
-          r.tangents.push_back({v.x, v.y, v.z});
-        }
-        // BiTangents
-        r.bitangents.reserve(NV);
-        for (auto j = 0u; j < NV; ++j) {
-          auto &&v = mesh->mBitangents[j];
-          r.bitangents.push_back({v.x, v.y, v.z});
-        }
-      } else {
-        // vo_warn("Mesh '{}' has no tangents and bitangents!", filePath);
-      }
-
-
-      bool textureFound{false};
-      for (auto j = 0u; j < AI_MAX_NUMBER_OF_TEXTURECOORDS; ++j) {
-        if (!mesh->HasTextureCoords(j)) { continue; }
-
-        if (textureFound) {
-          vo_warn("Texture channels aren't and won't be supported.");
-          break; // Just check that use more than one channel
-        }
-
-        if (mesh->mNumUVComponents[j] != 2u) {
-          vo_warn("Only 2D textures are supported");
-          continue; // Maybe other channel has an allowed 2D texture
-        }
-
-        textureFound = true;
-
-        // Process the 2D texture channel
-        r.texCoords.reserve(NV);
-        for (auto k = 0u; k < NV; ++k) {
-          auto &&v = mesh->mTextureCoords[j][k];
-          r.texCoords.push_back({v.x, v.y});
-        }
-      }
-    }
-
-  } // End mesh-processing
+    out.reserve(scene->mNumMeshes);
+    vo_log("Processing file {}", filePath);
+    for (auto i = 0u; i < scene->mNumMeshes; ++i) { out.emplace_back(meshProcessing(scene->mMeshes[i])); }
+  }
 
   // if (scene->HasMaterials()) {
   //   auto &&N = scene->mNumMaterials;
@@ -240,8 +151,7 @@ RenderablePOD getMeshFromFile(std::string const &filePath) {
 
   // * RETURN THE POPULATED DATA
 
-  // return out;
-  return out[0];
+  return out;
 }
 
 } // namespace Vonsai

@@ -31,10 +31,10 @@ public:
   void addVBO(const std::vector<glm::vec2> &a_data);
   void addVBO(const std::vector<float> &a_data, int a_dataSize);
 
-  Renderable(Renderable &&) = delete;
-  Renderable &operator=(Renderable &&) = delete;
-  Renderable(Renderable const &)       = delete;
-  Renderable &operator=(Renderable const &) = delete;
+  // Renderable(Renderable &&) = delete;
+  // Renderable &operator=(Renderable &&) = delete;
+  // Renderable(Renderable const &)       = delete;
+  // Renderable &operator=(Renderable const &) = delete;
 
 private:
   bool m_valid{false};

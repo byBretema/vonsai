@@ -26,6 +26,7 @@ public:
     std::unique_ptr<Renderable> cube;
     std::unique_ptr<Renderable> plane;
     std::unique_ptr<Renderable> chandelier;
+    std::unique_ptr<Renderable> body;
   } mesh;
 
   Engine();

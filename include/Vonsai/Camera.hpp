@@ -4,8 +4,9 @@
 #include "Wraps/_glm.hpp"
 
 namespace Vonsai {
-class UBO;   // ! Forward decl of UBO
-class Input; // ! Forward decl of Input
+class UBO;        // ! Forward decl of UBO
+class Input;      // ! Forward decl of Input
+class Renderable; // ! Forward decl of Renderable
 
 
 class Camera {
@@ -22,6 +23,9 @@ public:
   void setZoom(float a_variation);
   void setFOV(float a_variation);
   void frame(float a_aspectRatio, float speed = 0.5f, bool orbital = true, glm::vec3 const &a_target = INF3);
+
+  // return a tuple {modelView, normalMat}
+  std::tuple<glm::mat4, glm::mat4> genModelMatrices(Renderable const &a_r) const;
 
   void defaultBehaviour(float deltaTime, float a_aspectRatio, UBO &a_ubo, Input const &a_io);
 

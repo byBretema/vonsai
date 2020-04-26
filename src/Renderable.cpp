@@ -9,11 +9,19 @@ namespace Vonsai {
 
 Renderable::Renderable(RenderablePOD const &a_data) {
   if (a_data.indices.size() < 3 or a_data.vertices.size() < 3) { return; }
+
   GL_ASSERT(glGenVertexArrays(1, &m_VAO));
+
   setEBO(a_data.indices);
-  addVBO(a_data.vertices);  // 0
-  addVBO(a_data.normals);   // 1
-  addVBO(a_data.texCoords); // 2
+  addVBO(a_data.vertices); // 0
+
+  std::vector<glm::vec3> dummy3(a_data.indices.size(), {0, 0, 0});
+  std::vector<glm::vec2> dummy2(a_data.indices.size(), {0, 0});
+  // Safe empty cases
+  (a_data.normals.size()) ? addVBO(a_data.normals) : addVBO(dummy3);       // 1
+  (a_data.texCoords.size()) ? addVBO(a_data.texCoords) : addVBO(dummy2);   // 2
+  (a_data.tangents.size()) ? addVBO(a_data.tangents) : addVBO(dummy3);     // 3
+  (a_data.bitangents.size()) ? addVBO(a_data.bitangents) : addVBO(dummy3); // 4
 
   m_valid      = true;
   m_indexCount = a_data.indices.size();

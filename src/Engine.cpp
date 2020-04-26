@@ -9,10 +9,15 @@ namespace Vonsai {
 Engine::Engine() {
   m_scenes.emplace_back();
 
-  mesh.monkey     = std::make_unique<Renderable>(getMeshFromFile("assets/models/monkey.obj"));
-  mesh.cube       = std::make_unique<Renderable>(getMeshFromFile("assets/models/cube.obj"));
-  mesh.plane      = std::make_unique<Renderable>(getMeshFromFile("assets/models/plane.obj"));
-  mesh.chandelier = std::make_unique<Renderable>(getMeshFromFile("assets/models/chandelier.obj"));
+  mesh.monkey     = std::make_unique<Renderable>(getMeshFromFile("assets/models/monkey.obj").at(0));
+  mesh.cube       = std::make_unique<Renderable>(getMeshFromFile("assets/models/cube.fbx").at(0));
+  mesh.plane      = std::make_unique<Renderable>(getMeshFromFile("assets/models/plane.obj").at(0));
+  mesh.chandelier = std::make_unique<Renderable>(getMeshFromFile("assets/models/chandelier.obj").at(0));
+
+  mesh.body = std::make_unique<Renderable>(getMeshFromFile("assets/models/kenney/character.fbx").at(0));
+  mesh.body->transform.modRotX(-90.f);
+  mesh.body->transform.modPosY(-1.75f);
+
 
   Vonsai::ShaderPath lightSP;
   lightSP.vertex   = "assets/shaders/light/light.vert";
@@ -34,6 +39,7 @@ Engine::Engine() {
 }
 
 void Engine::run() {
+  // TODO : improve this kind of loop maybe split the loops or sth
   try {
     while (m_window.update(                                         //
         SceneAttorney::getOnUpdateFn(m_scenes.at(m_activeSceneID)), // TODO :

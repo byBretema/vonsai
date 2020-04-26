@@ -62,8 +62,13 @@ void main() {
 
   vec3 finalColor = vec3(ambientI * Ka);
 
+  vec3 texcolor = texture(u_texture, g_texCoord).rgb;
+  if(texcolor.x == 0 && texcolor.y == 0 && texcolor.z == 0){
+    texcolor = vec3(1,0,1);
+  }
+
   for (int i = 0; i < u_numLights.w; i++) {
-    finalColor += shade(u_lights[i], normalize(-g_pos), normalize(g_normal), texture(u_texture, g_texCoord).rgb );
+    finalColor += shade(u_lights[i], normalize(-g_pos), normalize(g_normal), texcolor );
   }
 
   f_color = vec4(finalColor, 1);

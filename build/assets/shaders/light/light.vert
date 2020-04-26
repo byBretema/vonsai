@@ -18,7 +18,6 @@ uniform mat4 u_normalMat;
 void main() {
 	v_texCoord = texCoord;
 	v_pos = (u_modelView * vec4(pos, 1)).xyz;
-	v_normal = normal;
-	// v_normal = normalize(u_normalMat * vec4(normalize(normal),0)).xyz;
+	v_normal = normalize(u_normalMat * vec4(normal,0)).xyz;
 	gl_Position = u_modelView * vec4(pos, 1);
 }

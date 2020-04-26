@@ -5,7 +5,6 @@
 
 namespace Vonsai {
 
-RenderablePOD getMeshFromOBJ(std::string const &filePath);
-RenderablePOD getMeshFromFile(std::string const &filePath);
+std::vector<RenderablePOD> getMeshFromFile(std::string const &filePath);
 
 } // namespace Vonsai
