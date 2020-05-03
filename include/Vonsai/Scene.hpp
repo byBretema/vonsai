@@ -16,8 +16,12 @@ public:
   unsigned int getFPS();
   float        getDeltaTime();
 
+  std::function<void(void)> const &        getOnGuiFn();
+  std::function<unsigned int(void)> const &getOnUpdateFn();
+
   void setOnGuiFn(std::function<void(void)> a_fn);
   void setOnUpdateFn(std::function<void(void)> a_fn);
+
 
   void setClearColor(float a_r, float a_g, float a_b);
 
@@ -37,16 +41,6 @@ private:
 
   void updateFPS();
   void updateDeltaTime();
-
-  // Friends of this class:
-  friend class SceneAttorney;
-};
-
-class SceneAttorney {
-private:
-  friend class Engine;
-  static std::function<unsigned int(void)> const &getOnUpdateFn(Scene const &a_scene);
-  static std::function<void(void)> const &        getOnGuiFn(Scene const &a_scene);
 };
 
 } // namespace Vonsai

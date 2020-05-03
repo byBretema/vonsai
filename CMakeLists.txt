@@ -66,14 +66,13 @@ add_library(${lib_name} STATIC
 
     ./src/Utils/Colors.cpp
     ./src/Utils/Files.cpp
+    ./src/Utils/Mesh.cpp
     ./src/Utils/Random.cpp
     ./src/Utils/Strings.cpp
     ./src/Utils/Timer.cpp
 
     ./src/Bindable.cpp
     ./src/Camera.cpp
-    ./src/Engine.cpp
-    ./src/MeshLoader.cpp
     ./src/Renderable.cpp
     ./src/Scene.cpp
     ./src/Shader.cpp

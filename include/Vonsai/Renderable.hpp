@@ -9,12 +9,12 @@
 namespace Vonsai {
 
 struct RenderablePOD {
-  std::vector<glm::vec3>    vertices{};
+  std::vector<unsigned int> indices{};
+  std::vector<glm::vec3>    positions{};
   std::vector<glm::vec3>    normals{};
   std::vector<glm::vec2>    texCoords{};
   std::vector<glm::vec3>    tangents{};
   std::vector<glm::vec3>    bitangents{};
-  std::vector<unsigned int> indices{};
 };
 
 class Renderable : public Bindable {

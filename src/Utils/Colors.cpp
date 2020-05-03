@@ -5,7 +5,7 @@
 
 namespace Vonsai::Colors {
 
-inline glm::vec3 const FALLBACK_COLOR = glm::vec3{1.f, -0.123f, 1.f};
+glm::vec3 constexpr FALLBACK_COLOR{1.f, -0.123f, 1.f};
 
 glm::vec3 random() { return {Random::Float01(), Random::Float01(), Random::Float01()}; }
 

@@ -10,9 +10,12 @@ static inline std::mutex coutMutex;
 
 #ifndef VONSAI_HIDE_MSGS
 
-#define vo_print(...)      \
-  fmt::print(__VA_ARGS__); \
-  fmt::print("\n");
+#define vo_print(...)                    \
+  {                                      \
+    std::lock_guard lockCout(coutMutex); \
+    fmt::print(__VA_ARGS__);             \
+    fmt::print("\n");                    \
+  }
 
 #define vo_info(...)                                \
   {                                                 \

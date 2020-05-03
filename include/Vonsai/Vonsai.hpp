@@ -1,9 +1,11 @@
-#include "Engine.hpp"
-
-#include "Texture.hpp"
-
 #include "Camera.hpp"
+#include "IO/Input.hpp"
+#include "IO/Window.hpp"
 #include "Light.hpp"
+#include "Renderable.hpp"
+#include "Scene.hpp"
+#include "Shader.hpp"
+#include "Texture.hpp"
 #include "UBO.hpp"
 
 namespace vo = Vonsai;

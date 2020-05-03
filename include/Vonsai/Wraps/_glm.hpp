@@ -15,20 +15,19 @@
 
 namespace Vonsai {
 
-float constexpr INF = std::numeric_limits<float>::infinity();
+glm::vec3 constexpr MUTE_X = {0, 1, 1};
+glm::vec3 constexpr MUTE_Y = {1, 0, 1};
+glm::vec3 constexpr MUTE_Z = {1, 1, 0};
 
-glm::vec3 const muteX = {0, 1, 1};
-glm::vec3 const muteY = {1, 0, 1};
-glm::vec3 const muteZ = {1, 1, 0};
+glm::vec3 constexpr MUTE_YZ = {1, 0, 0};
+glm::vec3 constexpr MUTE_XZ = {0, 1, 0};
+glm::vec3 constexpr MUTE_XY = {0, 0, 1};
 
-glm::vec3 const muteYZ = {1, 0, 0};
-glm::vec3 const muteXZ = {0, 1, 0};
-glm::vec3 const muteXY = {0, 0, 1};
+glm::vec3 constexpr RIGHT = {1, 0, 0};
+glm::vec3 constexpr UP    = {0, 1, 0};
+glm::vec3 constexpr FRONT = {0, 0, 1};
 
-glm::vec3 const worldRight = {1, 0, 0};
-glm::vec3 const worldUp    = {0, 1, 0};
-glm::vec3 const worldFront = {0, 0, 1};
-
-glm::vec3 const INF3 = {INF, INF, INF};
+float constexpr INF      = std::numeric_limits<float>::infinity();
+glm::vec3 constexpr INF3 = {INF, INF, INF};
 
 } // namespace Vonsai

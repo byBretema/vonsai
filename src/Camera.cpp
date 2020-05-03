@@ -45,7 +45,7 @@ void Camera::frame(float a_aspectRatio, float a_speed, bool a_orbital, glm::vec3
   // Matrices
   //----------
   glm::vec3 const eye = pivot.getPos() + (m_offset.x * R) + (m_offset.y * U) - (m_offset.z * F);
-  m_view              = glm::lookAt(eye, eye + F, worldUp);
+  m_view              = glm::lookAt(eye, eye + F, UP);
   m_proj              = glm::perspective(m_fovY, a_aspectRatio, 0.0001f, 1000.f);
   m_viewproj          = m_proj * m_view;
 }

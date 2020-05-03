@@ -30,6 +30,9 @@ Scene::Scene()
 unsigned int Scene::getFPS() { return m_exposedFrameCounter; }
 float        Scene::getDeltaTime() { return m_deltaTime; }
 
+std::function<void(void)> const &        Scene::getOnGuiFn() { return m_internalOnGui; }
+std::function<unsigned int(void)> const &Scene::getOnUpdateFn() { return m_internalOnUpdate; }
+
 void Scene::setOnGuiFn(std::function<void(void)> a_fn) { m_onGui = a_fn; }
 void Scene::setOnUpdateFn(std::function<void(void)> a_fn) { m_onUpdate = a_fn; }
 
@@ -52,13 +55,5 @@ void Scene::updateDeltaTime() {
   m_deltaTime         = std::chrono::duration<float>(currTime - m_deltaTimeStamp).count();
   m_deltaTimeStamp    = currTime;
 }
-
-
-// ATTORNEY ( https://en.wikibooks.org/wiki/More_C++_Idioms/Friendship_and_the_Attorney-Client )
-
-std::function<unsigned int(void)> const &SceneAttorney::getOnUpdateFn(Scene const &a_scene) {
-  return a_scene.m_internalOnUpdate;
-}
-std::function<void(void)> const &SceneAttorney::getOnGuiFn(Scene const &a_scene) { return a_scene.m_internalOnGui; }
 
 } // namespace Vonsai
