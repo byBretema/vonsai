@@ -18,24 +18,18 @@
 
 // =========================================================================
 
-auto drawOne(vo::Renderable &R, vo::Shader const &S, vo::Texture *T, vo::Camera const &cam, bool active) {
+auto drawOne(vo::Renderable &R, vo::Shader const &S, vo::Texture const *T, vo::Camera const &cam, bool active) {
   if (!active) { return; }
   Vonsai::BindGuard bgS{S};
-  if (T) {
-    // Vonsai::BindGuard bgT{T}; // ! Fails if Texture*
-    T->bind();
-    S.setTexture("u_texture", T->getID());
-  }
+  Vonsai::BindGuard bgT{T};
+  if (T) { S.setTexture("u_texture", T->getID()); }
 
   auto &&[modelView, normalMat] = cam.genModelMatrices(R);
   S.setMat4("u_modelView", modelView);
   S.setMat4("u_normalMat", normalMat);
   R.draw();
 
-  if (T) {
-    T->unbind();
-    S.setTexture("u_texture", 0);
-  }
+  if (T) { S.setTexture("u_texture", 0); }
 };
 
 // =========================================================================
@@ -66,10 +60,7 @@ void initDefaults() {
   MESHES.body->transform.modRotX(-90.f);
   MESHES.body->transform.modPosY(-1.75f);
 
-  {
-    vo::Timer dragonTimer("Import dragon");
-    MESHES.dragon = std::make_unique<vo::Renderable>(Vonsai::Mesh::import("assets/models/dragon.obj").at(0));
-  }
+  MESHES.dragon = std::make_unique<vo::Renderable>(Vonsai::Mesh::import("assets/models/dragon.obj").at(0));
 
   Vonsai::ShaderPath lightSP;
   lightSP.vertex   = "assets/shaders/light/light.vert";
@@ -93,7 +84,10 @@ void initDefaults() {
 // =========================================================================
 
 void sandbox() {
-  vo::Scene  scene{};
+  vo::Scene*  scene;
+  vo::Scene  scene1{};
+  vo::Scene  scene2{};
+
   vo::Input  input{};
   vo::Window window{&input, 800, 600};
   initDefaults(); // ! AFTER WINDOW INIT
@@ -168,8 +162,8 @@ void sandbox() {
 
   // === SCENE UPDATE SETUP ===================================================
 
-  scene.setOnUpdateFn([&, &input = input, &window = window]() {
-    camera.defaultBehaviour(scene.getDeltaTime(), window.getAspectRatio(), cameraUBO, input);
+  scene1.setOnUpdateFn([&, &input = input, &window = window]() {
+    camera.defaultBehaviour(scene1.getDeltaTime(), window.getAspectRatio(), cameraUBO, input);
 
     if (shadingOpts == 0) {
       SHADERS.debug->setFloat1("u_debug_mode", debugMode);
@@ -188,13 +182,13 @@ void sandbox() {
 
   // === SCENE GUI SETUP ======================================================
 
-  scene.setOnGuiFn([&]() {
+  scene1.setOnGuiFn([&]() {
     if (mainWindow) {
       ImGui::Begin("Main", &mainWindow);
 
       ImGui::TextColored({1.f, 0.5f, 1.f, 1.f}, "DATA");
       ImGui::Separator();
-      ImGui::Text("FPS: %d", scene.getFPS());
+      ImGui::Text("FPS: %d", scene1.getFPS());
       ImGui::Separator();
 
       ImGui::Spacing();
@@ -237,9 +231,17 @@ void sandbox() {
 
   // === GAME LOOP ============================================================
 
-  while (window.update(scene.getOnUpdateFn(), scene.getOnGuiFn())) {
+  unsigned int currScene = 0u;
+  std::vector scenes = {scene1, scene2};
+
+  if(scenes.size() < 1) { return; }
+  scene = &scenes[0];
+
+  while (window.update(scene->getOnUpdateFn(), scene->getOnGuiFn())) {
     input.resetScrollAndAxis();
     if (input.key(vo::KeyCode::Esc)) { window.close(); }
+    if (input.key(vo::KeyCode::Right)) { scene = &scenes.at(++currScene % scenes.size()); }
+    if (input.key(vo::KeyCode::Left)) { scene = &scenes.at(--currScene % scenes.size()); }
   }
   window.shutdown();
 
@@ -250,11 +252,11 @@ int main() {
   try {
     sandbox();
   } catch (std::exception &e) {
-    vo_err("EXCEPTION CAUGHT: {}", e.what()); //
+    vo_err("EXCEPTION: {}", e.what()); //
   } catch (const char *msg) {
-    vo_err("EXCEPTION CAUGHT: {}", msg); //
+    vo_err("EXCEPTION: {}", msg); //
   } catch (...) {
-    vo_err("EXCEPTION CAUGHT: {}", "No Info"); //
-    throw;                                     // Re-throw the exception so OS gives you a debug opportunity.
+    vo_err("EXCEPTION: {}", "No Info"); //
+    throw;                              // Re-throw the exception so OS gives you a debug opportunity.
   }
 }

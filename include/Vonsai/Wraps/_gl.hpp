@@ -39,6 +39,7 @@ inline void clearColor(float r, float g, float b) { glClearColor(r, g, b, 1.f); 
 
 
 // Verify OpenGL action
+// TODO : Check if exists a context before run the func...
 #define GL_ASSERT(funcToCheck) \
   ___glErrClear();             \
   funcToCheck;                 \

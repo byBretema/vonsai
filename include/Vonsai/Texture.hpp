@@ -18,7 +18,7 @@ public:
 
   // TODO : Change this to a Copy-Swap idiom to be less verbose and error-prone
 
-  Texture(Texture &&rhs) {
+  Texture(Texture &&rhs) noexcept {
     if (this != &rhs) {
       m_ID     = rhs.m_ID;
       m_path   = rhs.m_path;
@@ -33,7 +33,7 @@ public:
       rhs.m_height = 0;
     }
   }
-  Texture &operator=(Texture &&rhs) {
+  Texture &operator=(Texture &&rhs) noexcept {
     if (this != &rhs) {
       m_ID     = rhs.m_ID;
       m_path   = rhs.m_path;
@@ -49,25 +49,25 @@ public:
     }
     return *this;
   };
-  // Texture(Texture const &rhs) {
-  //   if (this != &rhs) {
-  //     m_ID     = rhs.m_ID;
-  //     m_path   = rhs.m_path;
-  //     m_bytes  = rhs.m_bytes;
-  //     m_width  = rhs.m_width;
-  //     m_height = rhs.m_height;
-  //   }
-  // };
-  // Texture &operator=(Texture const &rhs) {
-  //   if (this != &rhs) {
-  //     m_ID     = rhs.m_ID;
-  //     m_path   = rhs.m_path;
-  //     m_bytes  = rhs.m_bytes;
-  //     m_width  = rhs.m_width;
-  //     m_height = rhs.m_height;
-  //   }
-  //   return *this;
-  // };
+  Texture(Texture const &rhs) {
+    if (this != &rhs) {
+      m_ID     = rhs.m_ID;
+      m_path   = rhs.m_path;
+      m_bytes  = rhs.m_bytes;
+      m_width  = rhs.m_width;
+      m_height = rhs.m_height;
+    }
+  };
+  Texture &operator=(Texture const &rhs) {
+    if (this != &rhs) {
+      m_ID     = rhs.m_ID;
+      m_path   = rhs.m_path;
+      m_bytes  = rhs.m_bytes;
+      m_width  = rhs.m_width;
+      m_height = rhs.m_height;
+    }
+    return *this;
+  };
 
 private:
   unsigned int m_ID     = 0u;
