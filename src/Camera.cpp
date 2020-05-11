@@ -67,25 +67,25 @@ void Camera::defaultBehaviour(float deltaTime, float a_aspectRatio, UBO &a_ubo, 
   a_ubo.setData("u_view", getView());
 
   // Camera movement
-  if (a_io.key(KeyCode::Q)) { movement.U = true; } // Up
-  if (!a_io.key(KeyCode::Q)) { movement.U = false; }
-  if (a_io.key(KeyCode::E)) { movement.D = true; } // Down
-  if (!a_io.key(KeyCode::E)) { movement.D = false; }
-  if (a_io.key(KeyCode::W)) { movement.F = true; } // Front
-  if (!a_io.key(KeyCode::W)) { movement.F = false; }
-  if (a_io.key(KeyCode::S)) { movement.B = true; } // Back
-  if (!a_io.key(KeyCode::S)) { movement.B = false; }
-  if (a_io.key(KeyCode::D)) { movement.R = true; } // Right
-  if (!a_io.key(KeyCode::D)) { movement.R = false; }
-  if (a_io.key(KeyCode::A)) { movement.L = true; } // Left
-  if (!a_io.key(KeyCode::A)) { movement.L = false; }
-  if (a_io.key(KeyCode::Num0)) { pivot.reset(); } // Reset
+  if (a_io.keyHold(KeyCode::Q)) { movement.U = true; } // Up
+  if (!a_io.keyHold(KeyCode::Q)) { movement.U = false; }
+  if (a_io.keyHold(KeyCode::E)) { movement.D = true; } // Down
+  if (!a_io.keyHold(KeyCode::E)) { movement.D = false; }
+  if (a_io.keyHold(KeyCode::W)) { movement.F = true; } // Front
+  if (!a_io.keyHold(KeyCode::W)) { movement.F = false; }
+  if (a_io.keyHold(KeyCode::S)) { movement.B = true; } // Back
+  if (!a_io.keyHold(KeyCode::S)) { movement.B = false; }
+  if (a_io.keyHold(KeyCode::D)) { movement.R = true; } // Right
+  if (!a_io.keyHold(KeyCode::D)) { movement.R = false; }
+  if (a_io.keyHold(KeyCode::A)) { movement.L = true; } // Left
+  if (!a_io.keyHold(KeyCode::A)) { movement.L = false; }
+  if (a_io.keyHold(KeyCode::Num0)) { pivot.reset(); } // Reset
 
   // Scroll for Fov / Shift + Scroll for Zoom
-  (a_io.key(KeyCode::LeftShift)) ? setZoom(a_io.scrollV()) : setFOV(a_io.scrollV());
+  (a_io.keyHold(KeyCode::LeftShift)) ? setZoom(a_io.scrollV()) : setFOV(a_io.scrollV());
 
   // Cmd/Ctrl: to rotate camera
-  if (a_io.key(KeyCode::LeftSuper)) { pivot.modRot(glm::vec3{a_io.axisV(), a_io.axisH(), 0.f} * 0.25f); }
+  if (a_io.keyHold(KeyCode::LeftSuper)) { pivot.modRot(glm::vec3{a_io.axisV(), a_io.axisH(), 0.f} * 0.25f); }
 }
 
 glm::mat4 const &Camera::getView() const { return m_view; }

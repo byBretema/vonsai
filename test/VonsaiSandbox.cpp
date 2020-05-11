@@ -13,6 +13,8 @@
 #include <Vonsai/Utils/Mesh.hpp>
 #include <Vonsai/Utils/Timer.hpp>
 
+namespace vo = Vonsai;
+
 // =========================================================================
 
 
@@ -84,10 +86,9 @@ void initDefaults() {
 // =========================================================================
 
 void sandbox() {
-  vo::Scene*  scene;
+  vo::Scene *scene;
   vo::Scene  scene1{};
   vo::Scene  scene2{};
-
   vo::Input  input{};
   vo::Window window{&input, 800, 600};
   initDefaults(); // ! AFTER WINDOW INIT
@@ -163,6 +164,7 @@ void sandbox() {
   // === SCENE UPDATE SETUP ===================================================
 
   scene1.setOnUpdateFn([&, &input = input, &window = window]() {
+    scene1.setClearColor(0.2, 0.1, 0.2);
     camera.defaultBehaviour(scene1.getDeltaTime(), window.getAspectRatio(), cameraUBO, input);
 
     if (shadingOpts == 0) {
@@ -232,16 +234,16 @@ void sandbox() {
   // === GAME LOOP ============================================================
 
   unsigned int currScene = 0u;
-  std::vector scenes = {scene1, scene2};
+  std::vector  scenes    = {scene1, scene2};
 
-  if(scenes.size() < 1) { return; }
+  if (scenes.size() < 1) { return; }
   scene = &scenes[0];
 
   while (window.update(scene->getOnUpdateFn(), scene->getOnGuiFn())) {
     input.resetScrollAndAxis();
-    if (input.key(vo::KeyCode::Esc)) { window.close(); }
-    if (input.key(vo::KeyCode::Right)) { scene = &scenes.at(++currScene % scenes.size()); }
-    if (input.key(vo::KeyCode::Left)) { scene = &scenes.at(--currScene % scenes.size()); }
+    if (input.keyHold(vo::KeyCode::Esc)) { window.close(); }
+    if (input.keyPress(vo::KeyCode::Right)) { scene = &scenes.at(++currScene % scenes.size()); }
+    if (input.keyPress(vo::KeyCode::Left)) { scene = &scenes.at(--currScene % scenes.size()); }
   }
   window.shutdown();
 

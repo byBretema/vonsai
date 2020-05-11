@@ -149,16 +149,20 @@ public:
   int  scrollH() const;
   void resetScrollAndAxis();
 
-  bool anyShift() const;
-  bool anyAlt() const;
-  bool anyCtrl() const;
-  bool anySuper() const;
+  bool keyPress(int a_keyCode) const;
+  bool anyShiftPress() const;
+  bool anyAltPress() const;
+  bool anyCtrlPress() const;
+  bool anySuperPress() const;
 
-  bool key(int a_keyCode) const;
+  bool keyHold(int a_keyCode) const;
+  bool anyShiftHold() const;
+  bool anyAltHold() const;
+  bool anyCtrlHold() const;
+  bool anySuperHold() const;
+
 
 private:
-  static inline Input *s_inputPtr{nullptr}; // TODO : To support many move this to a vector
-
   struct {
     float H{0.f}; // -1 / 0 / 1
     float V{0.f}; // -1 / 0 / 1
@@ -172,9 +176,12 @@ private:
   } m_scroll;
 
   struct {
-    bool L{false};
-    bool R{false};
-    bool M{false};
+    mutable bool prevL{false};
+    bool         L{false};
+    mutable bool prevR{false};
+    bool         R{false};
+    mutable bool prevM{false};
+    bool         M{false};
   } m_click;
 
   friend void onClickL(bool a_state, Input &a_ref);
@@ -183,9 +190,11 @@ private:
   friend void onScroll(float a_displX, float a_displY, Input &a_ref);
   friend void onCursorMove(double a_x, double a_y, Input &a_ref);
 
-  std::unordered_map<int, bool> m_keys;
-  friend void                   onKeyPress(int a_key, Input &a_ref);
-  friend void                   onKeyRelease(int a_key, Input &a_ref);
+  mutable std::unordered_map<int, unsigned int> m_keysPrev; // TODO: Reserve on init to avoid several allocations
+  std::unordered_map<int, unsigned int>         m_keys;     // TODO: Reserve on init to avoid several allocations
+  friend void                                   onKeyRelease(int a_key, Input &a_ref);
+  friend void                                   onKeyPress(int a_key, Input &a_ref);
+  friend void                                   onKeyHold(int a_key, Input &a_ref);
 
   void linkCallbacks(void *a_window);
 

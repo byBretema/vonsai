@@ -3,21 +3,33 @@
 #include <Vonsai/IO/Window.hpp>
 #include <Vonsai/Wraps/_glfw.hpp>
 
-#include <iostream>
+#include <Vonsai/Utils/Logger.hpp>
 
 namespace Vonsai {
 
 // - PUBLIC -
 
-bool Input::clickL() const { return m_click.L; }
-bool Input::clickR() const { return m_click.R; }
-bool Input::clickM() const { return m_click.M; }
+bool Input::clickL() const {
+  bool state    = !m_click.prevL and m_click.L;
+  m_click.prevL = m_click.L;
+  return state;
+}
+bool Input::clickR() const {
+  bool state    = !m_click.prevR and m_click.R;
+  m_click.prevR = m_click.R;
+  return state;
+}
+bool Input::clickM() const {
+  bool state    = !m_click.prevM and m_click.M;
+  m_click.prevM = m_click.M;
+  return state;
+}
 
 int Input::axisV() const { return m_axis.V; }
 int Input::axisH() const { return m_axis.H; }
 
-int Input::scrollV() const { return (anyShift()) ? m_scroll.H : m_scroll.V; }
-int Input::scrollH() const { return (anyShift()) ? m_scroll.V : m_scroll.H; }
+int Input::scrollV() const { return (anyShiftHold()) ? m_scroll.H : m_scroll.V; }
+int Input::scrollH() const { return (anyShiftHold()) ? m_scroll.V : m_scroll.H; }
 
 void Input::resetScrollAndAxis() {
   m_scroll.V = 0.f;
@@ -26,15 +38,29 @@ void Input::resetScrollAndAxis() {
   m_axis.H   = 0.f;
 }
 
-bool Input::anyShift() const { return key(KeyCode::LeftShift) or key(KeyCode::RightShift); }
-bool Input::anyAlt() const { return key(KeyCode::LeftAlt) or key(KeyCode::RightAlt); }
-bool Input::anyCtrl() const { return key(KeyCode::LeftCtrl) or key(KeyCode::RightCtrl); }
-bool Input::anySuper() const { return key(KeyCode::LeftSuper) or key(KeyCode::RightSuper); }
-
-bool Input::key(int a_keyCode) const {
-  if (m_keys.count(a_keyCode) > 0) { return m_keys.at(a_keyCode); };
+bool Input::keyPress(int a_keyCode) const {
+  if (m_keys.count(a_keyCode) > 0) {
+    bool state            = (m_keysPrev[a_keyCode] != 1) and (m_keys.at(a_keyCode) == 1); /*PRESSED*/
+    m_keysPrev[a_keyCode] = m_keys.at(a_keyCode);
+    return state;
+  };
   return false;
 }
+
+bool Input::anyShiftPress() const { return keyPress(KeyCode::LeftShift) or keyPress(KeyCode::RightShift); }
+bool Input::anyAltPress() const { return keyPress(KeyCode::LeftAlt) or keyPress(KeyCode::RightAlt); }
+bool Input::anyCtrlPress() const { return keyPress(KeyCode::LeftCtrl) or keyPress(KeyCode::RightCtrl); }
+bool Input::anySuperPress() const { return keyPress(KeyCode::LeftSuper) or keyPress(KeyCode::RightSuper); }
+
+bool Input::keyHold(int a_keyCode) const {
+  if (m_keys.count(a_keyCode) > 0) { return m_keys.at(a_keyCode) > 0; };
+  return false;
+}
+
+bool Input::anyShiftHold() const { return keyHold(KeyCode::LeftShift) or keyHold(KeyCode::RightShift); }
+bool Input::anyAltHold() const { return keyHold(KeyCode::LeftAlt) or keyHold(KeyCode::RightAlt); }
+bool Input::anyCtrlHold() const { return keyHold(KeyCode::LeftCtrl) or keyHold(KeyCode::RightCtrl); }
+bool Input::anySuperHold() const { return keyHold(KeyCode::LeftSuper) or keyHold(KeyCode::RightSuper); }
 
 // - PRIVATE -
 
@@ -54,8 +80,9 @@ void onCursorMove(double a_x, double a_y, Input &a_ref) {
   a_ref.m_y = a_y;
 }
 
-void onKeyPress(int a_key, Input &a_ref) { a_ref.m_keys[a_key] = true; }
-void onKeyRelease(int a_key, Input &a_ref) { a_ref.m_keys[a_key] = false; }
+void onKeyRelease(int a_key, Input &a_ref) { a_ref.m_keys[a_key] = 0u; }
+void onKeyPress(int a_key, Input &a_ref) { a_ref.m_keys[a_key] = 1u; }
+void onKeyHold(int a_key, Input &a_ref) { a_ref.m_keys[a_key] = 2u; }
 
 void Input::linkCallbacks(void *a_window) {
   auto GLFW_PTR = static_cast<GLFWwindow *>(a_window);
@@ -89,7 +116,12 @@ void Input::linkCallbacks(void *a_window) {
   glfwSetKeyCallback(GLFW_PTR, []([[maybe_unused]] GLFWwindow *ptr, int key, [[maybe_unused]] int scancode, int action,
                                   [[maybe_unused]] int modifier) {
     auto curr = InputAttorney::s_inputPtrs[InputAttorney::s_inputPtrs.size() - 1];
-    (action) ? onKeyPress(key, *curr) : onKeyRelease(key, *curr);
+    switch (action) {
+      case GLFW_RELEASE: onKeyRelease(key, *curr); break;
+      case GLFW_PRESS: onKeyPress(key, *curr); break;
+      case GLFW_REPEAT: onKeyHold(key, *curr); break;
+      default: break;
+    }
   });
 }
 

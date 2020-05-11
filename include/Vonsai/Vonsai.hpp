@@ -7,5 +7,3 @@
 #include "Shader.hpp"
 #include "Texture.hpp"
 #include "UBO.hpp"
-
-namespace vo = Vonsai;
