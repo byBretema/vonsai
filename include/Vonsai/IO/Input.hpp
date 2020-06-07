@@ -1,4 +1,5 @@
 #pragma once
+#include <Vonsai/Utils/Logger.hpp>
 
 #include <unordered_map>
 #include <vector>
@@ -137,11 +138,14 @@ namespace KeyCode {
 
 class Input {
 public:
-  explicit Input() = default;
+  explicit Input();
 
-  bool clickL() const;
-  bool clickR() const;
-  bool clickM() const;
+  bool clickPressL() const;
+  bool clickPressR() const;
+  bool clickPressM() const;
+  bool clickHoldL() const;
+  bool clickHoldR() const;
+  bool clickHoldM() const;
 
   int  axisV() const;
   int  axisH() const;
@@ -160,7 +164,6 @@ public:
   bool anyAltHold() const;
   bool anyCtrlHold() const;
   bool anySuperHold() const;
-
 
 private:
   struct {

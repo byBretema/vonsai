@@ -29,7 +29,6 @@ void aiCopyMeshAttrib(std::vector<glm::vec2> &out, aiVector3D const *in, unsigne
   for (auto i = 0u; i < numVertices; ++i) {
     auto &&v = in[i];
     out.emplace_back(v.x, v.y);
-    // out.emplace_back(v.x, v.y, v.z);
   }
 }
 
@@ -98,8 +97,11 @@ RenderablePOD meshProcessing(aiMesh const *mesh) {
 std::vector<RenderablePOD> import(std::string const &filePath) {
 
   // * CACHE FRIENDLY
-
-  static std::unordered_map<std::string, std::vector<RenderablePOD>> cache;
+  static auto cache = []() {
+    std::unordered_map<std::string, std::vector<RenderablePOD>> ca;
+    ca.reserve(256);
+    return ca;
+  }();
   auto [KV, needsProcessing] = cache.try_emplace(filePath, std::vector<RenderablePOD>{});
   auto &&out                 = KV->second;
   if (!needsProcessing) { return out; }

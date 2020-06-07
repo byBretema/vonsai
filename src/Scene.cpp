@@ -30,8 +30,8 @@ Scene::Scene()
 unsigned int Scene::getFPS() { return m_exposedFrameCounter; }
 float        Scene::getDeltaTime() { return m_deltaTime; }
 
-std::function<void(void)> const &        Scene::getOnGuiFn() { return m_internalOnGui; }
-std::function<unsigned int(void)> const &Scene::getOnUpdateFn() { return m_internalOnUpdate; }
+std::function<void(void)> const &        Scene::getOnGuiFn() const { return m_internalOnGui; }
+std::function<unsigned int(void)> const &Scene::getOnUpdateFn() const { return m_internalOnUpdate; }
 
 void Scene::setOnGuiFn(std::function<void(void)> a_fn) { m_onGui = a_fn; }
 void Scene::setOnUpdateFn(std::function<void(void)> a_fn) { m_onUpdate = a_fn; }

@@ -9,17 +9,26 @@ namespace Vonsai {
 
 // - PUBLIC -
 
-bool Input::clickL() const {
+Input::Input() {
+  m_keys.reserve(KeyCode::Last);
+  m_keysPrev.reserve(KeyCode::Last);
+}
+
+bool Input::clickHoldL() const { return m_click.L; }
+bool Input::clickHoldR() const { return m_click.R; }
+bool Input::clickHoldM() const { return m_click.M; }
+
+bool Input::clickPressL() const {
   bool state    = !m_click.prevL and m_click.L;
   m_click.prevL = m_click.L;
   return state;
 }
-bool Input::clickR() const {
+bool Input::clickPressR() const {
   bool state    = !m_click.prevR and m_click.R;
   m_click.prevR = m_click.R;
   return state;
 }
-bool Input::clickM() const {
+bool Input::clickPressM() const {
   bool state    = !m_click.prevM and m_click.M;
   m_click.prevM = m_click.M;
   return state;
@@ -72,7 +81,7 @@ void onScroll(float a_displX, float a_displY, Input &a_ref) {
   a_ref.m_scroll.V = a_displY;
 }
 void onCursorMove(double a_x, double a_y, Input &a_ref) {
-  if (a_ref.clickL()) {
+  if (a_ref.clickHoldM()) {
     a_ref.m_axis.H = a_x - a_ref.m_x;
     a_ref.m_axis.V = a_y - a_ref.m_y;
   }

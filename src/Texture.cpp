@@ -55,4 +55,14 @@ void Texture::unbind() const {
   GL_ASSERT(glActiveTexture(GL_TEXTURE0));
 }
 
+void swap(Texture &lhs, Texture &rhs) noexcept {
+  vo_warn("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
+  using std::swap;
+  swap(lhs.m_ID, rhs.m_ID);
+  swap(lhs.m_path, rhs.m_path);
+  swap(lhs.m_bytes, rhs.m_bytes);
+  swap(lhs.m_width, rhs.m_width);
+  swap(lhs.m_height, rhs.m_height);
+}
+
 } // namespace Vonsai

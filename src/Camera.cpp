@@ -85,12 +85,12 @@ void Camera::defaultBehaviour(float deltaTime, float a_aspectRatio, UBO &a_ubo, 
   (a_io.keyHold(KeyCode::LeftShift)) ? setZoom(a_io.scrollV()) : setFOV(a_io.scrollV());
 
   // Cmd/Ctrl: to rotate camera
-  if (a_io.keyHold(KeyCode::LeftSuper)) { pivot.modRot(glm::vec3{a_io.axisV(), a_io.axisH(), 0.f} * 0.25f); }
+  if (a_io.clickHoldM()) { pivot.modRot(glm::vec3{a_io.axisV(), a_io.axisH(), 0.f} * 0.25f); }
 }
 
-glm::mat4 const &Camera::getView() const { return m_view; }
-glm::mat4 const &Camera::getProj() const { return m_proj; }
-glm::mat4 const &Camera::getViewProj() const { return m_viewproj; }
+glm::mat4 Camera::getView() const { return m_view; }
+glm::mat4 Camera::getProj() const { return m_proj; }
+glm::mat4 Camera::getViewProj() const { return m_viewproj; }
 
 void Camera::info() {
   vo_print("\nCAMERA\n  Fovy: {}\n  Offset: {},{},{}\n", m_fovY, m_offset.x, ",", m_offset.y, ",", m_offset.z);

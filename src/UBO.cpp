@@ -20,6 +20,7 @@ void UBO::internalSetData(char const *a_name, size_t a_dataSize, void *a_dataDir
 UBO::UBO() {
   GL_ASSERT(glGenBuffers(1, &m_ID));
   GL_ASSERT(glBindBufferBase(GL_UNIFORM_BUFFER, m_bindPoint, m_ID));
+  m_itemsOffset.reserve(128);
 }
 
 } // namespace Vonsai

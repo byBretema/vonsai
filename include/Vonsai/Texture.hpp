@@ -1,4 +1,5 @@
 #pragma once
+#include <utility>
 
 #include "Bindable.hpp"
 
@@ -16,56 +17,17 @@ public:
   void         bind() const override;
   void         unbind() const override;
 
-  // TODO : Change this to a Copy-Swap idiom to be less verbose and error-prone
 
-  Texture(Texture &&rhs) noexcept {
-    if (this != &rhs) {
-      m_ID     = rhs.m_ID;
-      m_path   = rhs.m_path;
-      m_bytes  = rhs.m_bytes;
-      m_width  = rhs.m_width;
-      m_height = rhs.m_height;
-      // ---
-      rhs.m_ID     = 0u;
-      rhs.m_path   = "";
-      rhs.m_bytes  = 0;
-      rhs.m_width  = 0;
-      rhs.m_height = 0;
-    }
-  }
+  friend void swap(Texture &lhs, Texture &rhs) noexcept;
+
+  // Not copiable
+  Texture(Texture const &) = delete;
+  Texture &operator=(Texture const &) = delete;
+
+  // Move semantics
+  Texture(Texture &&rhs) noexcept { swap(*this, rhs); }
   Texture &operator=(Texture &&rhs) noexcept {
-    if (this != &rhs) {
-      m_ID     = rhs.m_ID;
-      m_path   = rhs.m_path;
-      m_bytes  = rhs.m_bytes;
-      m_width  = rhs.m_width;
-      m_height = rhs.m_height;
-      // ---
-      rhs.m_ID     = 0u;
-      rhs.m_path   = "";
-      rhs.m_bytes  = 0;
-      rhs.m_width  = 0;
-      rhs.m_height = 0;
-    }
-    return *this;
-  };
-  Texture(Texture const &rhs) {
-    if (this != &rhs) {
-      m_ID     = rhs.m_ID;
-      m_path   = rhs.m_path;
-      m_bytes  = rhs.m_bytes;
-      m_width  = rhs.m_width;
-      m_height = rhs.m_height;
-    }
-  };
-  Texture &operator=(Texture const &rhs) {
-    if (this != &rhs) {
-      m_ID     = rhs.m_ID;
-      m_path   = rhs.m_path;
-      m_bytes  = rhs.m_bytes;
-      m_width  = rhs.m_width;
-      m_height = rhs.m_height;
-    }
+    swap(*this, rhs);
     return *this;
   };
 

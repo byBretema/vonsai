@@ -16,6 +16,7 @@ set (ASSIMP_NO_EXPORT ON CACHE BOOL "" FORCE)
 set (ASSIMP_BUILD_FBX_IMPORTER ON BOOL)
 set (ASSIMP_BUILD_OBJ_IMPORTER ON BOOL)
 set (ASSIMP_BUILD_ALL_IMPORTERS_BY_DEFAULT OFF CACHE BOOL "" FORCE)
+set (ASSIMP_BUILD_SHARED_LIBS OFF BOOL)
 
 add_subdirectory(vendor/assimp)
 add_subdirectory(vendor/fmt)
@@ -35,7 +36,7 @@ set(CMAKE_CXX_FLAGS "")
 set(CMAKE_CXX_FLAGS_RELEASE "-Ofast")
 set(CMAKE_CXX_FLAGS_DEBUG "-O0 -g3 -ggdb -Wall -Wpedantic -Wextra -Wweak-vtables -fexceptions")
 # if(VONSAI_SANITIZE_THREAD)
-# set(CMAKE_CXX_FLAGS_DEBUG "-O0 -g3 -ggdb -Wall -Wpedantic -Wextra -Wweak-vtables -fexceptions -fsanitize=address -fsanitize=undefined -fsanitize=dataflow -fsanitize=safe-stack")
+# set(CMAKE_CXX_FLAGS_DEBUG "-O0 -g3 -ggdb -Wall -Wpedantic -Wextra -Wweak-vtables -fexceptions -fsanitize=address -fsanitize=undefined")
 # set(CMAKE_CXX_FLAGS_DEBUG "-O0 -g3 -ggdb -Wall -Wpedantic -Wextra -Wweak-vtables -fexceptions -fsanitize=thread -fsanitize=undefined -fsanitize=dataflow -fsanitize=safe-stack")
 # set(CMAKE_CXX_FLAGS_DEBUG "-O0 -g3 -ggdb -Wall -Wpedantic -Wextra -Wweak-vtables -fexceptions -fsanitize=memory -fsanitize=undefined -fsanitize=dataflow -fsanitize=safe-stack")
 
@@ -73,6 +74,7 @@ add_library(${lib_name} STATIC
 
     ./src/Bindable.cpp
     ./src/Camera.cpp
+    ./src/Context.cpp
     ./src/Renderable.cpp
     ./src/Scene.cpp
     ./src/Shader.cpp
@@ -84,25 +86,17 @@ target_link_libraries(${lib_name} PRIVATE assimp fmt glad glm glfw)
 target_include_directories(${lib_name} PUBLIC "./src" "./include" "./vendor" "./vendor/assimp/include")
 
 # ------------------------------------------------------------------------- #
-# TESTING
+# EXE and TESTING
 # ------------------------------------------------------------------------- #
 
-# Vars
-set(test_path test)
-# set(test_lib Catch)
+function(add_exe_and_test test_name)
+    set(test_path test)
+    set(exe_name ${lib_name}${test_name})
 
-# Link
-# add_library(${test_lib} INTERFACE)
-# target_link_libraries(${test_lib} INTERFACE assimp fmt glad glm glfw ${lib_name})
+    add_executable(${exe_name} ${test_path}/${exe_name}.cpp)
+    target_link_libraries(${exe_name} PRIVATE assimp fmt glad glm glfw ${lib_name})
 
-# Executables
-add_executable(${lib_name}Sandbox ${test_path}/${lib_name}Sandbox.cpp)
-target_link_libraries(${lib_name}Sandbox PRIVATE assimp fmt glad glm glfw ${lib_name})
+    add_test(COMMAND ${exe_name})
+endfunction()
 
-
-# ------------------------------------------------------------------------- #
-# TESTs ADDITION
-# ------------------------------------------------------------------------- #
-
-enable_testing()
-add_test(COMMAND ${lib_name}Sandbox)
+add_exe_and_test(Sandbox)

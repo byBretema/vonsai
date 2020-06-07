@@ -4,6 +4,7 @@ namespace Vonsai::Strings {
 
 std::vector<std::string> split(std::string const &str, std::string const &delimeter) {
   std::vector<std::string> splitted;
+  splitted.resize(128);
 
   std::string token;
   size_t      ini{0}, end{0};

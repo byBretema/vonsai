@@ -29,9 +29,9 @@ public:
 
   void defaultBehaviour(float deltaTime, float a_aspectRatio, UBO &a_ubo, Input const &a_io);
 
-  glm::mat4 const &getView() const;
-  glm::mat4 const &getProj() const;
-  glm::mat4 const &getViewProj() const;
+  glm::mat4 getView() const;
+  glm::mat4 getProj() const;
+  glm::mat4 getViewProj() const;
 
   void info();
 

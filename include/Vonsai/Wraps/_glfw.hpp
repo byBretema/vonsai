@@ -6,7 +6,7 @@
 
 #include "../Utils/Logger.hpp"
 
-static inline int initGLFW = []() {
+static inline const int initGLFW = []() {
   if (!glfwInit()) {
     vo_err("Couldn't initialize GLFW");
     return 0;

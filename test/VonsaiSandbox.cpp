@@ -1,123 +1,66 @@
-// #define CATCH_CONFIG_MAIN
-// #include "catch.hpp"
-
-#include <array>
-
-#include <imgui/imgui.h>
-
 #include <Vonsai/Vonsai.hpp>
 
-// #include <Vonsai/Bindable.hpp>
-#include <Vonsai/Utils/Colors.hpp>
-#include <Vonsai/Utils/Logger.hpp>
-#include <Vonsai/Utils/Mesh.hpp>
-#include <Vonsai/Utils/Timer.hpp>
-
-namespace vo = Vonsai;
-
 // =========================================================================
 
-
-// =========================================================================
-
-auto drawOne(vo::Renderable &R, vo::Shader const &S, vo::Texture const *T, vo::Camera const &cam, bool active) {
-  if (!active) { return; }
-  Vonsai::BindGuard bgS{S};
-  Vonsai::BindGuard bgT{T};
-  if (T) { S.setTexture("u_texture", T->getID()); }
-
-  auto &&[modelView, normalMat] = cam.genModelMatrices(R);
-  S.setMat4("u_modelView", modelView);
-  S.setMat4("u_normalMat", normalMat);
-  R.draw();
-
-  if (T) { S.setTexture("u_texture", 0); }
-};
-
-// =========================================================================
-
-struct {
-  std::unique_ptr<vo::Shader> light;
-  std::unique_ptr<vo::Shader> normals;
-  std::unique_ptr<vo::Shader> debug;
-} SHADERS;
-
-struct {
-  std::unique_ptr<vo::Renderable> monkey;
-  std::unique_ptr<vo::Renderable> cube;
-  std::unique_ptr<vo::Renderable> plane;
-  std::unique_ptr<vo::Renderable> chandelier;
-  std::unique_ptr<vo::Renderable> body;
-  std::unique_ptr<vo::Renderable> dragon;
-} MESHES;
-
-void initDefaults() {
-
-  MESHES.monkey     = std::make_unique<vo::Renderable>(Vonsai::Mesh::import("assets/models/monkey.obj").at(0));
-  MESHES.cube       = std::make_unique<vo::Renderable>(Vonsai::Mesh::import("assets/models/cube.fbx").at(0));
-  MESHES.plane      = std::make_unique<vo::Renderable>(Vonsai::Mesh::import("assets/models/plane.obj").at(0));
-  MESHES.chandelier = std::make_unique<vo::Renderable>(Vonsai::Mesh::import("assets/models/chandelier.obj").at(0));
-
-  MESHES.body = std::make_unique<vo::Renderable>(Vonsai::Mesh::import("assets/models/kenney/character.fbx").at(0));
-  MESHES.body->transform.modRotX(-90.f);
-  MESHES.body->transform.modPosY(-1.75f);
-
-  MESHES.dragon = std::make_unique<vo::Renderable>(Vonsai::Mesh::import("assets/models/dragon.obj").at(0));
-
-  Vonsai::ShaderPath lightSP;
-  lightSP.vertex   = "assets/shaders/light/light.vert";
-  lightSP.geometry = "assets/shaders/light/light.geom";
-  lightSP.fragment = "assets/shaders/light/light.frag";
-  SHADERS.light    = std::make_unique<vo::Shader>("light", lightSP);
-
-  Vonsai::ShaderPath normalsSP;
-  normalsSP.vertex   = "assets/shaders/normals/normals.vert";
-  normalsSP.geometry = "assets/shaders/normals/normals.geom";
-  normalsSP.fragment = "assets/shaders/normals/normals.frag";
-  SHADERS.normals    = std::make_unique<vo::Shader>("normals", normalsSP);
-
-  Vonsai::ShaderPath debugSP;
-  debugSP.vertex   = "assets/shaders/debug/debug.vert";
-  debugSP.geometry = "assets/shaders/debug/debug.geom";
-  debugSP.fragment = "assets/shaders/debug/debug.frag";
-  SHADERS.debug    = std::make_unique<vo::Shader>("debug", debugSP);
-}
+void drawOne(vo::Renderable &R, vo::Shader const &S, vo::Texture const *T, vo::Camera const &cam, bool active);
 
 // =========================================================================
 
 void sandbox() {
-  vo::Scene *scene;
-  vo::Scene  scene1{};
-  vo::Scene  scene2{};
-  vo::Input  input{};
-  vo::Window window{&input, 800, 600};
-  initDefaults(); // ! AFTER WINDOW INIT
+  vo::Context ctx;
 
-  // === OBJECTS SETUP ========================================================
+  // === OBJECTS SETUP -------------------------------------------------------
 
-  vo::Light              l1({0, 2, 5}, {1, 1, 1});
-  vo::Light              l2({0, 2, -5}, {1, 1, 1});
-  std::vector<vo::Light> lv{l1, l2};
+  /*
+
+  TODO : implement something like...
+  auto &&s = ctx.get(EScene::S0);
+
+  * LIGHT *
+  vo::Light         l1({0, 2, 5}, {1, 1, 1});
+  vo::Light         l2({0, 2, -5}, {1, 1, 1});
+  s.setLights({l1,l2});
+
+  * CAMERA - Implies camera list - *
+  vo::Camera camera;
+  camera.setZoom(17.5f);
+  s.addCamera(camera)
+
+  ! Makes the linkage of UBO in the:
+    ? Scene side
+    ? Shader side
+
+  */
+
+  // --- LIGHT ---
+  vo::Light         l1({0, 2, 5}, {1, 1, 1});
+  vo::Light         l2({0, 2, -5}, {1, 1, 1});
+  std::vector const lv = {l1, l2};
 
   vo::UBO lightsUBO;
   lightsUBO.setData("u_numLights", glm::vec4{static_cast<float>(lv.size())});
   lightsUBO.setData("u_lights", lv);
-  SHADERS.light->linkUBO("lights", lightsUBO.getBindPoint());
-  SHADERS.debug->linkUBO("lights", lightsUBO.getBindPoint());
-  // SHADERS.normals->linkUBO("lights", lightsUBO.getBindPoint());
+  ctx.linkUBO("lights", lightsUBO.getBindPoint());
+  // --- / CAMERA ---
+
+  // --- CAMERA ---
+  vo::Camera camera;
+  camera.setZoom(17.5f);
 
   vo::UBO cameraUBO;
-  SHADERS.light->linkUBO("camera", cameraUBO.getBindPoint()); // TODO : make this transparent
-  SHADERS.debug->linkUBO("camera", cameraUBO.getBindPoint());
-  SHADERS.normals->linkUBO("camera", cameraUBO.getBindPoint());
+  ctx.linkUBO("camera", cameraUBO.getBindPoint());
+  // --- / CAMERA ---
 
-  std::vector<vo::Texture> textures{};
+
+  std::vector<vo::Texture> textures;
+  textures.reserve(16);
   textures.emplace_back("assets/textures/dac.png");
   textures.emplace_back("assets/textures/Vonsai.png");
   textures.emplace_back("assets/textures/chess.jpg");
 
   int                      bodyTexID = 6;
   std::vector<vo::Texture> bodyTextures;
+  bodyTextures.reserve(16);
   bodyTextures.emplace_back("assets/models/kenney/skins/cyborg.png");
   bodyTextures.emplace_back("assets/models/kenney/skins/criminal.png");
   bodyTextures.emplace_back("assets/models/kenney/skins/skater1.png");
@@ -127,13 +70,7 @@ void sandbox() {
   bodyTextures.emplace_back("assets/models/kenney/skins/zombie1.png");
   bodyTextures.emplace_back("assets/models/kenney/skins/zombie2.png");
 
-  vo::Camera camera;
-  camera.setZoom(17.5f);
-
-  // === / OBJECTS SETUP ======================================================
-
-
-  // === UI VARS SETUP ========================================================
+  // === UI VARS SETUP -------------------------------------------------------
 
   std::array<bool, 3> show = {false}; // Set all to false
   show[0]                  = true;    // Show by default de simplest Scene
@@ -144,10 +81,8 @@ void sandbox() {
 
   bool mainWindow{true};
 
-  // === / UI VARS SETUP ======================================================
 
-
-  // === MODELS STUFF SETUP ===================================================
+  // === 3D MULTIMESH SETUP --------------------------------------------------
 
   std::vector<vo::Renderable> nanosuit;
   for (auto &&mesh : Vonsai::Mesh::import("assets/models/nanosuit/nanosuit.fbx")) { nanosuit.emplace_back(mesh); }
@@ -158,39 +93,40 @@ void sandbox() {
     }
   };
 
-  // === / MODELS STUFF SETUP =================================================
 
+  // === SCENE UPDATE SETUP --------------------------------------------------
 
-  // === SCENE UPDATE SETUP ===================================================
+  auto &&s = ctx.get(EScene::S0);
 
-  scene1.setOnUpdateFn([&, &input = input, &window = window]() {
-    scene1.setClearColor(0.2, 0.1, 0.2);
-    camera.defaultBehaviour(scene1.getDeltaTime(), window.getAspectRatio(), cameraUBO, input);
+  s.setOnUpdateFn([&]() {
+    s.setClearColor(0.2, 0.1, 0.2);
+    camera.defaultBehaviour(s.getDeltaTime(), ctx.getAspectRatio(), cameraUBO, ctx.getInput());
+    drawOne(ctx.get(EMesh::BODY), ctx.get(EShader::LIGHT), &bodyTextures.at(bodyTexID), camera, show[0]);
 
-    if (shadingOpts == 0) {
-      SHADERS.debug->setFloat1("u_debug_mode", debugMode);
-      drawOne(*MESHES.body, *SHADERS.debug, &bodyTextures.at(bodyTexID), camera, show[0]);
-      renderNanosuit(*SHADERS.debug);
-      drawOne(*MESHES.dragon, *SHADERS.debug, nullptr, camera, show[2]);
-    }
+    // if (shadingOpts == 0) {
+    //   ctx.getShader(EShader::DEBUG).setFloat1("u_debug_mode", debugMode);
+    //   drawOne(ctx.getMesh(EMesh::BODY), ctx.getShader(EShader::DEBUG), &bodyTextures.at(bodyTexID), camera, show[0]);
+    //   renderNanosuit(ctx.getShader(EShader::DEBUG));
+    //   drawOne(ctx.getMesh(EMesh::DRAGON), ctx.getShader(EShader::DEBUG), nullptr, camera, show[2]);
+    // }
 
-    if (shadingOpts >= 1) {
-      drawOne(*MESHES.body, *SHADERS.light, &bodyTextures.at(bodyTexID), camera, show[0]);
-      renderNanosuit(*SHADERS.light);
-      drawOne(*MESHES.dragon, *SHADERS.light, nullptr, camera, show[2]);
-    }
+    // if (shadingOpts >= 1) {
+    //   drawOne(ctx.getMesh(EMesh::BODY), ctx.getShader(EShader::LIGHT), &bodyTextures.at(bodyTexID), camera, show[0]);
+    //   renderNanosuit(ctx.getShader(EShader::LIGHT));
+    //   drawOne(ctx.getMesh(EMesh::DRAGON), ctx.getShader(EShader::LIGHT), nullptr, camera, show[2]);
+    // }
   });
-  // === / SCENE UPDATE SETUP =================================================
 
-  // === SCENE GUI SETUP ======================================================
 
-  scene1.setOnGuiFn([&]() {
+  // == = SCENE GUI SETUP -----------------------------------------------------
+
+  s.setOnGuiFn([&]() {
     if (mainWindow) {
       ImGui::Begin("Main", &mainWindow);
 
       ImGui::TextColored({1.f, 0.5f, 1.f, 1.f}, "DATA");
       ImGui::Separator();
-      ImGui::Text("FPS: %d", scene1.getFPS());
+      ImGui::Text("FPS: %d", s.getFPS());
       ImGui::Separator();
 
       ImGui::Spacing();
@@ -228,29 +164,17 @@ void sandbox() {
     }
   });
 
-  // === / SCENE GUI SETUP ====================================================
 
+  // === GAME LOOP INVOCATION ------------------------------------------------
 
-  // === GAME LOOP ============================================================
-
-  unsigned int currScene = 0u;
-  std::vector  scenes    = {scene1, scene2};
-
-  if (scenes.size() < 1) { return; }
-  scene = &scenes[0];
-
-  while (window.update(scene->getOnUpdateFn(), scene->getOnGuiFn())) {
-    input.resetScrollAndAxis();
-    if (input.keyHold(vo::KeyCode::Esc)) { window.close(); }
-    if (input.keyPress(vo::KeyCode::Right)) { scene = &scenes.at(++currScene % scenes.size()); }
-    if (input.keyPress(vo::KeyCode::Left)) { scene = &scenes.at(--currScene % scenes.size()); }
-  }
-  window.shutdown();
-
-  // === / GAME LOOP ==========================================================
+  ctx.run();
 }
 
+
+// ! === MAIN ================================================================
+
 int main() {
+
   try {
     sandbox();
   } catch (std::exception &e) {
@@ -259,6 +183,30 @@ int main() {
     vo_err("EXCEPTION: {}", msg); //
   } catch (...) {
     vo_err("EXCEPTION: {}", "No Info"); //
-    throw;                              // Re-throw the exception so OS gives you a debug opportunity.
   }
 }
+
+// ! === / MAIN ==============================================================
+
+
+// =========================================================================
+// HELPERS
+// =========================================================================
+
+// :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+void drawOne(vo::Renderable &R, vo::Shader const &S, vo::Texture const *T, vo::Camera const &cam, bool active) {
+  if (!active) { return; }
+  Vonsai::BindGuard bgR{R};
+  Vonsai::BindGuard bgS{S};
+  Vonsai::BindGuard bgT{T};
+  if (T) { S.setTexture("u_texture", T->getID()); }
+
+  auto &&[modelView, normalMat] = cam.genModelMatrices(R);
+  S.setMat4("u_modelView", modelView);
+  S.setMat4("u_normalMat", normalMat);
+
+  R.draw();
+};
+
+// :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::

@@ -16,8 +16,8 @@ public:
   unsigned int getFPS();
   float        getDeltaTime();
 
-  std::function<void(void)> const &        getOnGuiFn();
-  std::function<unsigned int(void)> const &getOnUpdateFn();
+  std::function<void(void)> const &        getOnGuiFn() const;
+  std::function<unsigned int(void)> const &getOnUpdateFn() const;
 
   void setOnGuiFn(std::function<void(void)> a_fn);
   void setOnUpdateFn(std::function<void(void)> a_fn);
