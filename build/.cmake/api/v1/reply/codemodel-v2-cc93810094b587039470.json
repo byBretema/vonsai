@@ -1,0 +1,365 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"childIndexes" : 
+					[
+						1,
+						5,
+						6,
+						8,
+						11
+					],
+					"hasInstallRule" : true,
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.0"
+					},
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						1,
+						2
+					]
+				},
+				{
+					"build" : "vendor/assimp",
+					"childIndexes" : 
+					[
+						2,
+						4
+					],
+					"hasInstallRule" : true,
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.0"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 1,
+					"source" : "vendor/assimp",
+					"targetIndexes" : 
+					[
+						9
+					]
+				},
+				{
+					"build" : "vendor/assimp/contrib",
+					"childIndexes" : 
+					[
+						3
+					],
+					"hasInstallRule" : true,
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.0"
+					},
+					"parentIndex" : 1,
+					"projectIndex" : 1,
+					"source" : "vendor/assimp/contrib"
+				},
+				{
+					"build" : "vendor/assimp/contrib/irrXML",
+					"hasInstallRule" : true,
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.0"
+					},
+					"parentIndex" : 2,
+					"projectIndex" : 1,
+					"source" : "vendor/assimp/contrib/irrXML",
+					"targetIndexes" : 
+					[
+						0
+					]
+				},
+				{
+					"build" : "vendor/assimp/code",
+					"hasInstallRule" : true,
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.0"
+					},
+					"parentIndex" : 1,
+					"projectIndex" : 1,
+					"source" : "vendor/assimp/code",
+					"targetIndexes" : 
+					[
+						3
+					]
+				},
+				{
+					"build" : "vendor/fmt",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.1.0"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 2,
+					"source" : "vendor/fmt",
+					"targetIndexes" : 
+					[
+						5
+					]
+				},
+				{
+					"build" : "vendor/glm",
+					"childIndexes" : 
+					[
+						7
+					],
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.2"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 3,
+					"source" : "vendor/glm"
+				},
+				{
+					"build" : "vendor/glm/glm",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.2"
+					},
+					"parentIndex" : 6,
+					"projectIndex" : 3,
+					"source" : "vendor/glm/glm",
+					"targetIndexes" : 
+					[
+						8
+					]
+				},
+				{
+					"build" : "vendor/glfw",
+					"childIndexes" : 
+					[
+						9,
+						10
+					],
+					"hasInstallRule" : true,
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.1"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 4,
+					"source" : "vendor/glfw"
+				},
+				{
+					"build" : "vendor/glfw/src",
+					"hasInstallRule" : true,
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.1"
+					},
+					"parentIndex" : 8,
+					"projectIndex" : 4,
+					"source" : "vendor/glfw/src",
+					"targetIndexes" : 
+					[
+						7
+					]
+				},
+				{
+					"build" : "vendor/glfw/docs",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.1"
+					},
+					"parentIndex" : 8,
+					"projectIndex" : 4,
+					"source" : "vendor/glfw/docs",
+					"targetIndexes" : 
+					[
+						4
+					]
+				},
+				{
+					"build" : "vendor/glad_opengl_4.1",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.0"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 0,
+					"source" : "vendor/glad_opengl_4.1",
+					"targetIndexes" : 
+					[
+						6
+					]
+				}
+			],
+			"name" : "Debug",
+			"projects" : 
+			[
+				{
+					"childIndexes" : 
+					[
+						1,
+						2,
+						3,
+						4
+					],
+					"directoryIndexes" : 
+					[
+						0,
+						11
+					],
+					"name" : "Vonsai",
+					"targetIndexes" : 
+					[
+						1,
+						2,
+						6
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						1,
+						2,
+						3,
+						4
+					],
+					"name" : "Assimp",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						0,
+						3,
+						9
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						5
+					],
+					"name" : "FMT",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						5
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						6,
+						7
+					],
+					"name" : "glm",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						8
+					]
+				},
+				{
+					"directoryIndexes" : 
+					[
+						8,
+						9,
+						10
+					],
+					"name" : "GLFW",
+					"parentIndex" : 0,
+					"targetIndexes" : 
+					[
+						4,
+						7
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 3,
+					"id" : "IrrXML::@f1fa78227a12ba6b4b3f",
+					"jsonFile" : "target-IrrXML-Debug-6c7ac6aa57774031799c.json",
+					"name" : "IrrXML",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "Vonsai::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-Vonsai-Debug-c7bd6ab10e727ec3678c.json",
+					"name" : "Vonsai",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "VonsaiSandbox::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-VonsaiSandbox-Debug-024b2cdd7f710ba0d50a.json",
+					"name" : "VonsaiSandbox",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 4,
+					"id" : "assimp::@73aa4729bf46b0baaf8e",
+					"jsonFile" : "target-assimp-Debug-a82d906ac89332f16406.json",
+					"name" : "assimp",
+					"projectIndex" : 1
+				},
+				{
+					"directoryIndex" : 10,
+					"id" : "docs::@e20363e25641143920c9",
+					"jsonFile" : "target-docs-Debug-4e2b6ac7130c12bdf627.json",
+					"name" : "docs",
+					"projectIndex" : 4
+				},
+				{
+					"directoryIndex" : 5,
+					"id" : "fmt::@38cc4212e091d63328f6",
+					"jsonFile" : "target-fmt-Debug-cfdb47191e0045c2350c.json",
+					"name" : "fmt",
+					"projectIndex" : 2
+				},
+				{
+					"directoryIndex" : 11,
+					"id" : "glad::@de7cac3fcd3c3817b182",
+					"jsonFile" : "target-glad-Debug-0967bfc541ddc7d405ba.json",
+					"name" : "glad",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 9,
+					"id" : "glfw::@31bd9730e6b8c71cc656",
+					"jsonFile" : "target-glfw-Debug-0667412d8c0c1abaab68.json",
+					"name" : "glfw",
+					"projectIndex" : 4
+				},
+				{
+					"directoryIndex" : 7,
+					"id" : "glm_shared::@613f4c0f156fd21f7bfb",
+					"jsonFile" : "target-glm_shared-Debug-93799bcbad0b60046245.json",
+					"name" : "glm_shared",
+					"projectIndex" : 3
+				},
+				{
+					"directoryIndex" : 1,
+					"id" : "uninstall::@c4807781decb42661c27",
+					"jsonFile" : "target-uninstall-Debug-9c12ac747c4bd3091f82.json",
+					"name" : "uninstall",
+					"projectIndex" : 1
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "/Users/cambalamas/dev/vonsai/build",
+		"source" : "/Users/cambalamas/dev/vonsai"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 0
+	}
+}

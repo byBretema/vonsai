@@ -123,7 +123,7 @@ std::vector<RenderablePOD> import(std::string const &filePath) {
     vo_warn("Animations are not supported yet!"); //
   }
   if (scene->HasLights() or scene->HasCameras() or scene->HasTextures()) {
-    vo_warn("Light, Cameras and Embedded-Textures aren't and won't be supported")
+    vo_warn("Light, Cameras and Embedded-Textures aren't and won't be supported.")
   }
 
 
@@ -131,7 +131,7 @@ std::vector<RenderablePOD> import(std::string const &filePath) {
 
   if (scene->HasMeshes()) {
     out.reserve(scene->mNumMeshes);
-    vo_log("Processing file {}", filePath);
+    vo_log("Processing file '{}'", filePath);
     for (auto i = 0u; i < scene->mNumMeshes; ++i) { out.emplace_back(meshProcessing(scene->mMeshes[i])); }
   }
 

@@ -83,7 +83,7 @@ int Shader::getUniformLocation(std::string const &a_name) const {
   auto [kv, ins]      = m_uniformCache.try_emplace(a_name, glGetUniformLocation(m_programID, a_name.c_str()));
   int uniformLocation = kv->second;
 
-  if (uniformLocation < 0) {
+  if (ins and uniformLocation < 0) {
     vo_log("({}) Not found/used uniform: {}", m_programName, a_name);
     m_uniformAlertCache[a_name] = true;
   }
@@ -115,18 +115,18 @@ void Shader::setMat4(std::string const &a_name, glm::mat4 const &a_mat) const {
 
 // Connect a given UBO
 void Shader::linkUBO(std::string const &a_name, unsigned int a_uboBindPoint) const {
-  glUniformBlockBinding(m_programID, glGetUniformBlockIndex(m_programID, a_name.c_str()), a_uboBindPoint);
-  return;
+  // glUniformBlockBinding(m_programID, glGetUniformBlockIndex(m_programID, a_name.c_str()), a_uboBindPoint);
+  // return;
 
-  vo_log("linking UBO: {} / {}", a_name, a_uboBindPoint);
+  vo_log("({}) Linking UBO '{}' at idx {}", m_programName, a_name, a_uboBindPoint);
 
   auto [kv, ins] = m_uniformBlockCache.try_emplace(a_name, glGetUniformBlockIndex(m_programID, a_name.c_str()));
   if (!ins) return;
 
-  if (int ubShaderIdx = kv->second; ubShaderIdx > 0)
+  if (int ubShaderIdx = kv->second; ubShaderIdx >= 0)
     glUniformBlockBinding(m_programID, ubShaderIdx, a_uboBindPoint);
   else if (!m_uniformBlockAlertCache[a_name]) {
-    vo_log("({}) Not found uniform_block: {}", m_programName, a_name);
+    vo_log("({}) Not found UBO '{}'", m_programName, a_name);
     m_uniformBlockAlertCache[a_name] = true;
   }
 }
@@ -135,28 +135,6 @@ void Shader::linkUBO(std::string const &a_name, unsigned int a_uboBindPoint) con
 
 void Shader::bind() const { GL_ASSERT(glUseProgram(m_programID)); }
 void Shader::unbind() const { GL_ASSERT(glUseProgram(0)); }
-
-// ---------------------------------------------------------------------------
-
-void Shader::reset() noexcept {
-  vo_log("r_1");
-  m_programID = 0u;
-  vo_log("r_2");
-  m_programName.clear();
-  vo_log("r_3");
-  m_valid = false;
-  vo_log("r_4");
-  m_built = false;
-  vo_log("r_5");
-  m_uniformCache.clear();
-  vo_log("r_6");
-  m_uniformAlertCache.clear();
-  vo_log("r_7");
-  m_uniformBlockCache.clear();
-  vo_log("r_8");
-  m_uniformBlockAlertCache.clear();
-  vo_log("r_9");
-}
 
 // ---------------------------------------------------------------------------
 

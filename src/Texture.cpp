@@ -15,7 +15,7 @@ static int stbFlip = []() {
 Texture::Texture(char const *path) {
 
   m_path = path;
-  if (!Files::isValid(path, true)) { return; }
+  if (!Files::isValid(path, false)) { return; }
 
   // Parse image data
   auto pixels = stbi_load(path, &m_width, &m_height, &m_bytes, 4);
@@ -42,6 +42,8 @@ Texture::Texture(char const *path) {
   GL_ASSERT(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);)
   GL_ASSERT(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);)
 }
+
+Texture::Texture(std::string const &path) : Texture(path.c_str()) {}
 
 unsigned int Texture::getID() const { return m_ID; }
 

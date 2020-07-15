@@ -1,7 +1,6 @@
 #include <Vonsai/Camera.hpp>
 
 #include <Vonsai/IO/Input.hpp>
-#include <Vonsai/Renderable.hpp>
 #include <Vonsai/UBO.hpp>
 
 #include <Vonsai/Utils/Logger.hpp>
@@ -50,12 +49,6 @@ void Camera::frame(float a_aspectRatio, float a_speed, bool a_orbital, glm::vec3
   m_viewproj          = m_proj * m_view;
 }
 
-std::tuple<glm::mat4, glm::mat4> Camera::genModelMatrices(Renderable const &a_r) const {
-  auto const modelView = getView() * a_r.transform.matrix();
-  auto const normalMat = glm::transpose(glm::inverse(modelView));
-  return {modelView, normalMat};
-}
-
 void Camera::defaultBehaviour(float deltaTime, float a_aspectRatio, UBO &a_ubo, Input const &a_io) {
   float DT = deltaTime * 2.f;
 
@@ -85,7 +78,7 @@ void Camera::defaultBehaviour(float deltaTime, float a_aspectRatio, UBO &a_ubo, 
   (a_io.keyHold(KeyCode::LeftShift)) ? setZoom(a_io.scrollV()) : setFOV(a_io.scrollV());
 
   // Cmd/Ctrl: to rotate camera
-  if (a_io.clickHoldM()) { pivot.modRot(glm::vec3{a_io.axisV(), a_io.axisH(), 0.f} * 0.25f); }
+  if (a_io.clickHoldL()) { pivot.modRot(glm::vec3{a_io.axisV(), a_io.axisH(), 0.f} * 0.25f); }
 }
 
 glm::mat4 Camera::getView() const { return m_view; }

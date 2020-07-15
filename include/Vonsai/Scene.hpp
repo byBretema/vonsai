@@ -26,6 +26,9 @@ public:
   void setClearColor(float a_r, float a_g, float a_b);
 
 private:
+  static inline unsigned int s_sceneCounter;
+  unsigned int               m_sceneGlobalIdx{s_sceneCounter++};
+
   std::function<void(void)>       m_onGui{nullptr}; // * User defined
   std::function<void(void)> const m_internalOnGui{[]() {}};
 

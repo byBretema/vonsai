@@ -132,7 +132,6 @@ private:
 
   explicit Shader(std::string const &a_name);
 
-  void reset() noexcept;
   void buildPipeline(ShaderCode const &a_rawCode);
 };
 

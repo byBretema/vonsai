@@ -14,7 +14,7 @@ Scene::Scene()
         if (showAlert && (!m_onUpdate or !m_onGui)) {
           int const flags = ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoCollapse;
           ImGui::Begin(">>> WARNING <<<", &showAlert, flags);
-          if (!m_onUpdate) { ImGui::BulletText("SCENE IS EMPTY\t"); }
+          if (!m_onUpdate) { ImGui::BulletText("SCENE %u IS EMPTY\t", m_sceneGlobalIdx); }
           if (!m_onGui) { ImGui::BulletText("GUI IS EMPTY\t"); }
           ImGui::End();
         }

@@ -1,0 +1,208 @@
+{
+	"archive" : {},
+	"artifacts" : 
+	[
+		{
+			"path" : "vendor/assimp/lib/libIrrXMLd.a"
+		}
+	],
+	"backtrace" : 1,
+	"backtraceGraph" : 
+	{
+		"commands" : 
+		[
+			"add_library",
+			"install",
+			"ADD_DEFINITIONS",
+			"INCLUDE_DIRECTORIES"
+		],
+		"files" : 
+		[
+			"vendor/assimp/contrib/irrXML/CMakeLists.txt",
+			"vendor/assimp/CMakeLists.txt"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 0
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 19,
+				"parent" : 0
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 29,
+				"parent" : 0
+			},
+			{
+				"file" : 1
+			},
+			{
+				"command" : 2,
+				"file" : 1,
+				"line" : 583,
+				"parent" : 3
+			},
+			{
+				"command" : 2,
+				"file" : 1,
+				"line" : 516,
+				"parent" : 3
+			},
+			{
+				"command" : 2,
+				"file" : 1,
+				"line" : 497,
+				"parent" : 3
+			},
+			{
+				"command" : 3,
+				"file" : 1,
+				"line" : 223,
+				"parent" : 3
+			}
+		]
+	},
+	"compileGroups" : 
+	[
+		{
+			"compileCommandFragments" : 
+			[
+				{
+					"fragment" : "-g -fvisibility=hidden -fno-strict-aliasing -Wall -Wno-long-long -fPIC -std=c++11  -Werror -g -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk  "
+				}
+			],
+			"defines" : 
+			[
+				{
+					"backtrace" : 4,
+					"define" : "ASSIMP_BUILD_NO_C4D_IMPORTER"
+				},
+				{
+					"backtrace" : 5,
+					"define" : "ASSIMP_BUILD_NO_EXPORT"
+				},
+				{
+					"backtrace" : 6,
+					"define" : "ASSIMP_BUILD_NO_OWN_ZLIB"
+				}
+			],
+			"includes" : 
+			[
+				{
+					"backtrace" : 7,
+					"path" : "/Users/cambalamas/dev/vonsai/build/vendor/assimp/include"
+				},
+				{
+					"backtrace" : 7,
+					"path" : "/Users/cambalamas/dev/vonsai/build/vendor/assimp"
+				},
+				{
+					"backtrace" : 7,
+					"path" : "/Users/cambalamas/dev/vonsai/vendor/assimp/include"
+				},
+				{
+					"backtrace" : 7,
+					"path" : "/Users/cambalamas/dev/vonsai/vendor/assimp/code"
+				},
+				{
+					"backtrace" : 7,
+					"path" : "/Users/cambalamas/dev/vonsai/vendor/assimp/."
+				}
+			],
+			"language" : "CXX",
+			"sourceIndexes" : 
+			[
+				5
+			]
+		}
+	],
+	"id" : "IrrXML::@f1fa78227a12ba6b4b3f",
+	"install" : 
+	{
+		"destinations" : 
+		[
+			{
+				"backtrace" : 2,
+				"path" : "lib"
+			}
+		],
+		"prefix" : 
+		{
+			"path" : "/usr/local"
+		}
+	},
+	"name" : "IrrXML",
+	"nameOnDisk" : "libIrrXMLd.a",
+	"paths" : 
+	{
+		"build" : "vendor/assimp/contrib/irrXML",
+		"source" : "vendor/assimp/contrib/irrXML"
+	},
+	"sourceGroups" : 
+	[
+		{
+			"name" : "Header Files",
+			"sourceIndexes" : 
+			[
+				0,
+				1,
+				2,
+				3,
+				4,
+				6
+			]
+		},
+		{
+			"name" : "Source Files",
+			"sourceIndexes" : 
+			[
+				5
+			]
+		}
+	],
+	"sources" : 
+	[
+		{
+			"backtrace" : 1,
+			"path" : "vendor/assimp/contrib/irrXML/CXMLReaderImpl.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "vendor/assimp/contrib/irrXML/heapsort.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "vendor/assimp/contrib/irrXML/irrArray.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "vendor/assimp/contrib/irrXML/irrString.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "vendor/assimp/contrib/irrXML/irrTypes.h",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 0,
+			"path" : "vendor/assimp/contrib/irrXML/irrXML.cpp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 1,
+			"path" : "vendor/assimp/contrib/irrXML/irrXML.h",
+			"sourceGroupIndex" : 0
+		}
+	],
+	"type" : "STATIC_LIBRARY"
+}

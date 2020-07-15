@@ -1,11 +1,5 @@
 #include <Vonsai/Vonsai.hpp>
 
-// =========================================================================
-
-void drawOne(vo::Renderable &R, vo::Shader const &S, vo::Texture const *T, vo::Camera const &cam, bool active);
-
-// =========================================================================
-
 void sandbox() {
   vo::Context ctx;
 
@@ -27,9 +21,8 @@ void sandbox() {
   s.addCamera(camera)
 
   ! Makes the linkage of UBO in the:
-    ? Scene side
-    ? Shader side
-
+    ? Scene side   [V]
+    ? Shader side  [X]
   */
 
   // --- LIGHT ---
@@ -41,7 +34,7 @@ void sandbox() {
   lightsUBO.setData("u_numLights", glm::vec4{static_cast<float>(lv.size())});
   lightsUBO.setData("u_lights", lv);
   ctx.linkUBO("lights", lightsUBO.getBindPoint());
-  // --- / CAMERA ---
+  // --- / LIGHT ---
 
   // --- CAMERA ---
   vo::Camera camera;
@@ -54,21 +47,21 @@ void sandbox() {
 
   std::vector<vo::Texture> textures;
   textures.reserve(16);
-  textures.emplace_back("assets/textures/dac.png");
-  textures.emplace_back("assets/textures/Vonsai.png");
-  textures.emplace_back("assets/textures/chess.jpg");
+  textures.emplace_back(vo_res + "textures/dac.png");
+  textures.emplace_back(vo_res + "textures/Vonsai.png");
+  textures.emplace_back(vo_res + "textures/chess.jpg");
 
   int                      bodyTexID = 6;
   std::vector<vo::Texture> bodyTextures;
   bodyTextures.reserve(16);
-  bodyTextures.emplace_back("assets/models/kenney/skins/cyborg.png");
-  bodyTextures.emplace_back("assets/models/kenney/skins/criminal.png");
-  bodyTextures.emplace_back("assets/models/kenney/skins/skater1.png");
-  bodyTextures.emplace_back("assets/models/kenney/skins/skater2.png");
-  bodyTextures.emplace_back("assets/models/kenney/skins/survivor1.png");
-  bodyTextures.emplace_back("assets/models/kenney/skins/survivor2.png");
-  bodyTextures.emplace_back("assets/models/kenney/skins/zombie1.png");
-  bodyTextures.emplace_back("assets/models/kenney/skins/zombie2.png");
+  bodyTextures.emplace_back(vo_res + "models/kenney/skins/cyborg.png");
+  bodyTextures.emplace_back(vo_res + "models/kenney/skins/criminal.png");
+  bodyTextures.emplace_back(vo_res + "models/kenney/skins/skater1.png");
+  bodyTextures.emplace_back(vo_res + "models/kenney/skins/skater2.png");
+  bodyTextures.emplace_back(vo_res + "models/kenney/skins/survivor1.png");
+  bodyTextures.emplace_back(vo_res + "models/kenney/skins/survivor2.png");
+  bodyTextures.emplace_back(vo_res + "models/kenney/skins/zombie1.png");
+  bodyTextures.emplace_back(vo_res + "models/kenney/skins/zombie2.png");
 
   // === UI VARS SETUP -------------------------------------------------------
 
@@ -76,7 +69,7 @@ void sandbox() {
   show[0]                  = true;    // Show by default de simplest Scene
 
   int   debugMode   = 0;
-  int   shadingOpts = 1;
+  int   shadingOpts = 0;
   float normalSize  = 0.05f;
 
   bool mainWindow{true};
@@ -84,14 +77,17 @@ void sandbox() {
 
   // === 3D MULTIMESH SETUP --------------------------------------------------
 
-  std::vector<vo::Renderable> nanosuit;
-  for (auto &&mesh : Vonsai::Mesh::import("assets/models/nanosuit/nanosuit.fbx")) { nanosuit.emplace_back(mesh); }
+  // std::vector<vo::Renderable> nanosuit;
+  // for (auto &&mesh : Vonsai::Mesh::import(vo_res + "models/nanosuit/nanosuit.fbx")) {
+  //   static int i = 0;
+  //   nanosuit.emplace_back(vo_res + "models/nanosuit/nanosuit.fbx" + std::to_string(++i), mesh);
+  // }
 
-  auto renderNanosuit = [&](vo::Shader const &S) {
-    for (auto &&renderable : nanosuit) {
-      drawOne(renderable, S, nullptr, camera, show[1]); //
-    }
-  };
+  // auto renderNanosuit = [&](vo::Shader const &S) {
+  //   for (auto &&renderable : nanosuit) {
+  //     drawOne(renderable, S, nullptr, camera, show[1]); //
+  //   }
+  // };
 
 
   // === SCENE UPDATE SETUP --------------------------------------------------
@@ -101,20 +97,19 @@ void sandbox() {
   s.setOnUpdateFn([&]() {
     s.setClearColor(0.2, 0.1, 0.2);
     camera.defaultBehaviour(s.getDeltaTime(), ctx.getAspectRatio(), cameraUBO, ctx.getInput());
-    drawOne(ctx.get(EMesh::BODY), ctx.get(EShader::LIGHT), &bodyTextures.at(bodyTexID), camera, show[0]);
 
-    // if (shadingOpts == 0) {
-    //   ctx.getShader(EShader::DEBUG).setFloat1("u_debug_mode", debugMode);
-    //   drawOne(ctx.getMesh(EMesh::BODY), ctx.getShader(EShader::DEBUG), &bodyTextures.at(bodyTexID), camera, show[0]);
-    //   renderNanosuit(ctx.getShader(EShader::DEBUG));
-    //   drawOne(ctx.getMesh(EMesh::DRAGON), ctx.getShader(EShader::DEBUG), nullptr, camera, show[2]);
-    // }
+    if (shadingOpts == 0) {
+      ctx.get(EShader::DEBUG).setFloat1("u_debug_mode", debugMode);
+      vo_draw(ctx.get(EMesh::BODY), ctx.get(EShader::DEBUG), &bodyTextures.at(bodyTexID), camera, show[0]);
+      vo_draw(ctx.get(EMesh::NANOSUIT), ctx.get(EShader::DEBUG), &bodyTextures.at(bodyTexID), camera, show[1]);
+      vo_draw(ctx.get(EMesh::DRAGON), ctx.get(EShader::DEBUG), nullptr, camera, show[2]);
+    }
 
-    // if (shadingOpts >= 1) {
-    //   drawOne(ctx.getMesh(EMesh::BODY), ctx.getShader(EShader::LIGHT), &bodyTextures.at(bodyTexID), camera, show[0]);
-    //   renderNanosuit(ctx.getShader(EShader::LIGHT));
-    //   drawOne(ctx.getMesh(EMesh::DRAGON), ctx.getShader(EShader::LIGHT), nullptr, camera, show[2]);
-    // }
+    if (shadingOpts >= 1) {
+      vo_draw(ctx.get(EMesh::BODY), ctx.get(EShader::LIGHT), &bodyTextures.at(bodyTexID), camera, show[0]);
+      vo_draw(ctx.get(EMesh::NANOSUIT), ctx.get(EShader::LIGHT), &bodyTextures.at(bodyTexID), camera, show[1]);
+      vo_draw(ctx.get(EMesh::DRAGON), ctx.get(EShader::LIGHT), nullptr, camera, show[2]);
+    }
   });
 
 
@@ -195,18 +190,6 @@ int main() {
 
 // :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-void drawOne(vo::Renderable &R, vo::Shader const &S, vo::Texture const *T, vo::Camera const &cam, bool active) {
-  if (!active) { return; }
-  Vonsai::BindGuard bgR{R};
-  Vonsai::BindGuard bgS{S};
-  Vonsai::BindGuard bgT{T};
-  if (T) { S.setTexture("u_texture", T->getID()); }
 
-  auto &&[modelView, normalMat] = cam.genModelMatrices(R);
-  S.setMat4("u_modelView", modelView);
-  S.setMat4("u_normalMat", normalMat);
-
-  R.draw();
-};
 
 // :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::

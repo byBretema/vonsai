@@ -12,6 +12,7 @@ namespace Vonsai {
 class Texture : public Bindable {
 public:
   explicit Texture(const char *path);
+  explicit Texture(std::string const &path);
 
   unsigned int getID() const;
   void         bind() const override;
