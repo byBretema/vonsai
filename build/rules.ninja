@@ -33,7 +33,7 @@ rule CXX_COMPILER__Vonsai_Debug
 # Rule for linking CXX static library.
 
 rule CXX_STATIC_LIBRARY_LINKER__Vonsai_Debug
-  command = $PRE_LINK && /usr/local/Cellar/cmake/3.17.1/bin/cmake -E rm -f $TARGET_FILE && /usr/bin/ar qc $TARGET_FILE $LINK_FLAGS $in && /usr/bin/ranlib $TARGET_FILE && /usr/local/Cellar/cmake/3.17.1/bin/cmake -E touch $TARGET_FILE && $POST_BUILD
+  command = $PRE_LINK && /usr/local/Cellar/cmake/3.17.1/bin/cmake -E rm -f $TARGET_FILE && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ar qc $TARGET_FILE $LINK_FLAGS $in && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ranlib $TARGET_FILE && /usr/local/Cellar/cmake/3.17.1/bin/cmake -E touch $TARGET_FILE && $POST_BUILD
   description = Linking CXX static library $TARGET_FILE
   restat = $RESTAT
 
@@ -71,7 +71,7 @@ rule CXX_COMPILER__IrrXML_Debug
 # Rule for linking CXX static library.
 
 rule CXX_STATIC_LIBRARY_LINKER__IrrXML_Debug
-  command = $PRE_LINK && /usr/local/Cellar/cmake/3.17.1/bin/cmake -E rm -f $TARGET_FILE && /usr/bin/ar qc $TARGET_FILE $LINK_FLAGS $in && /usr/bin/ranlib $TARGET_FILE && /usr/local/Cellar/cmake/3.17.1/bin/cmake -E touch $TARGET_FILE && $POST_BUILD
+  command = $PRE_LINK && /usr/local/Cellar/cmake/3.17.1/bin/cmake -E rm -f $TARGET_FILE && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ar qc $TARGET_FILE $LINK_FLAGS $in && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ranlib $TARGET_FILE && /usr/local/Cellar/cmake/3.17.1/bin/cmake -E touch $TARGET_FILE && $POST_BUILD
   description = Linking CXX static library $TARGET_FILE
   restat = $RESTAT
 
@@ -82,7 +82,7 @@ rule CXX_STATIC_LIBRARY_LINKER__IrrXML_Debug
 rule C_COMPILER__assimp_Debug
   depfile = $DEP_FILE
   deps = gcc
-  command = /usr/bin/clang $DEFINES $INCLUDES $FLAGS -MD -MT $out -MF $DEP_FILE -o $out   -c $in
+  command = /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/cc $DEFINES $INCLUDES $FLAGS -MD -MT $out -MF $DEP_FILE -o $out   -c $in
   description = Building C object $out
 
 
@@ -157,7 +157,7 @@ rule CXX_SHARED_LIBRARY_LINKER__glm_shared_Debug
 rule C_COMPILER__glfw_Debug
   depfile = $DEP_FILE
   deps = gcc
-  command = /usr/bin/clang $DEFINES $INCLUDES $FLAGS -MD -MT $out -MF $DEP_FILE -o $out   -c $in
+  command = /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/cc $DEFINES $INCLUDES $FLAGS -MD -MT $out -MF $DEP_FILE -o $out   -c $in
   description = Building C object $out
 
 
@@ -165,7 +165,7 @@ rule C_COMPILER__glfw_Debug
 # Rule for linking C shared library.
 
 rule C_SHARED_LIBRARY_LINKER__glfw_Debug
-  command = $PRE_LINK && /usr/bin/clang $LANGUAGE_COMPILE_FLAGS $ARCH_FLAGS -dynamiclib -Wl,-headerpad_max_install_names $LINK_FLAGS -o $TARGET_FILE $SONAME_FLAG $INSTALLNAME_DIR$SONAME $in $LINK_PATH $LINK_LIBRARIES && $POST_BUILD
+  command = $PRE_LINK && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/cc $LANGUAGE_COMPILE_FLAGS $ARCH_FLAGS -dynamiclib -Wl,-headerpad_max_install_names $LINK_FLAGS -o $TARGET_FILE $SONAME_FLAG $INSTALLNAME_DIR$SONAME $in $LINK_PATH $LINK_LIBRARIES && $POST_BUILD
   description = Linking C shared library $TARGET_FILE
   restat = $RESTAT
 
@@ -176,7 +176,7 @@ rule C_SHARED_LIBRARY_LINKER__glfw_Debug
 rule C_COMPILER__glad_Debug
   depfile = $DEP_FILE
   deps = gcc
-  command = /usr/bin/clang $DEFINES $INCLUDES $FLAGS -MD -MT $out -MF $DEP_FILE -o $out   -c $in
+  command = /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/cc $DEFINES $INCLUDES $FLAGS -MD -MT $out -MF $DEP_FILE -o $out   -c $in
   description = Building C object $out
 
 
@@ -184,7 +184,7 @@ rule C_COMPILER__glad_Debug
 # Rule for linking C static library.
 
 rule C_STATIC_LIBRARY_LINKER__glad_Debug
-  command = $PRE_LINK && /usr/local/Cellar/cmake/3.17.1/bin/cmake -E rm -f $TARGET_FILE && /usr/bin/ar qc $TARGET_FILE $LINK_FLAGS $in && /usr/bin/ranlib $TARGET_FILE && /usr/local/Cellar/cmake/3.17.1/bin/cmake -E touch $TARGET_FILE && $POST_BUILD
+  command = $PRE_LINK && /usr/local/Cellar/cmake/3.17.1/bin/cmake -E rm -f $TARGET_FILE && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ar qc $TARGET_FILE $LINK_FLAGS $in && /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ranlib $TARGET_FILE && /usr/local/Cellar/cmake/3.17.1/bin/cmake -E touch $TARGET_FILE && $POST_BUILD
   description = Linking C static library $TARGET_FILE
   restat = $RESTAT
 

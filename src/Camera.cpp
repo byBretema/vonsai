@@ -78,7 +78,15 @@ void Camera::defaultBehaviour(float deltaTime, float a_aspectRatio, UBO &a_ubo, 
   (a_io.keyHold(KeyCode::LeftShift)) ? setZoom(a_io.scrollV()) : setFOV(a_io.scrollV());
 
   // Cmd/Ctrl: to rotate camera
-  if (a_io.clickHoldL()) { pivot.modRot(glm::vec3{a_io.axisV(), a_io.axisH(), 0.f} * 0.25f); }
+  if (a_io.clickHoldM() or
+#ifdef __APPLE__
+      (a_io.anySuperHold() and a_io.clickHoldL())
+#else
+      (a_io.anyCtrlHold() and a_io.clickHoldL())
+#endif
+  ) {
+    pivot.modRot(glm::vec3{a_io.axisV(), a_io.axisH(), 0.f} * 0.25f);
+  }
 }
 
 glm::mat4 Camera::getView() const { return m_view; }

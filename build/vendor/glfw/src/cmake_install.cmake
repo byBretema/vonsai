@@ -47,7 +47,7 @@ if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_
         -id "lib/libglfwd.3.dylib"
         "${file}")
       if(CMAKE_INSTALL_DO_STRIP)
-        execute_process(COMMAND "/usr/bin/strip" -x "${file}")
+        execute_process(COMMAND "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/strip" -x "${file}")
       endif()
     endif()
   endforeach()
@@ -61,7 +61,7 @@ if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_
       -id "lib/libglfwd.3.dylib"
       "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/libglfwd.dylib")
     if(CMAKE_INSTALL_DO_STRIP)
-      execute_process(COMMAND "/usr/bin/strip" -x "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/libglfwd.dylib")
+      execute_process(COMMAND "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/strip" -x "$ENV{DESTDIR}${CMAKE_INSTALL_PREFIX}/lib/libglfwd.dylib")
     endif()
   endif()
 endif()

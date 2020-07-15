@@ -81,7 +81,7 @@ void onScroll(float a_displX, float a_displY, Input &a_ref) {
   a_ref.m_scroll.V = a_displY;
 }
 void onCursorMove(double a_x, double a_y, Input &a_ref) {
-  if (a_ref.clickHoldM()) {
+  if (a_ref.clickHoldM() or a_ref.clickHoldL()) {
     a_ref.m_axis.H = a_x - a_ref.m_x;
     a_ref.m_axis.V = a_y - a_ref.m_y;
   }

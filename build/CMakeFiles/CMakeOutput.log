@@ -1,6 +1,6 @@
 The system is: Darwin - 19.5.0 - x86_64
 Compiling the C compiler identification source file "CMakeCCompilerId.c" succeeded.
-Compiler: /usr/bin/clang 
+Compiler: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/cc 
 Build flags: 
 Id flags:  
 
@@ -28,21 +28,21 @@ The CXX compiler identification is AppleClang, found in "/Users/cambalamas/dev/v
 Determining if the C compiler works passed with the following output:
 Change Dir: /Users/cambalamas/dev/vonsai/build/CMakeFiles/CMakeTmp
 
-Run Build Command(s):/usr/local/bin/ninja cmTC_81067 && [1/2] Building C object CMakeFiles/cmTC_81067.dir/testCCompiler.c.o
-[2/2] Linking C executable cmTC_81067
+Run Build Command(s):/usr/local/bin/ninja cmTC_f9f81 && [1/2] Building C object CMakeFiles/cmTC_f9f81.dir/testCCompiler.c.o
+[2/2] Linking C executable cmTC_f9f81
 
 
 
 Detecting C compiler ABI info compiled with the following output:
 Change Dir: /Users/cambalamas/dev/vonsai/build/CMakeFiles/CMakeTmp
 
-Run Build Command(s):/usr/local/bin/ninja cmTC_33286 && [1/2] Building C object CMakeFiles/cmTC_33286.dir/CMakeCCompilerABI.c.o
+Run Build Command(s):/usr/local/bin/ninja cmTC_16d91 && [1/2] Building C object CMakeFiles/cmTC_16d91.dir/CMakeCCompilerABI.c.o
 Apple clang version 11.0.3 (clang-1103.0.32.62)
 Target: x86_64-apple-darwin19.5.0
 Thread model: posix
 InstalledDir: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin
 clang: warning: -Wl,-v: 'linker' input unused [-Wunused-command-line-argument]
- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang" -cc1 -triple x86_64-apple-macosx10.15.0 -Wdeprecated-objc-isa-usage -Werror=deprecated-objc-isa-usage -emit-obj -mrelax-all -disable-free -disable-llvm-verifier -discard-value-names -main-file-name CMakeCCompilerABI.c -mrelocation-model pic -pic-level 2 -mthread-model posix -mframe-pointer=all -fno-strict-return -masm-verbose -munwind-tables -target-sdk-version=10.15.4 -target-cpu penryn -dwarf-column-info -debugger-tuning=lldb -target-linker-version 556.6 -v -coverage-notes-file /Users/cambalamas/dev/vonsai/build/CMakeFiles/CMakeTmp/CMakeFiles/cmTC_33286.dir/CMakeCCompilerABI.c.gcno -resource-dir /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/11.0.3 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk -internal-isystem /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk/usr/local/include -internal-isystem /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/11.0.3/include -internal-externc-isystem /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk/usr/include -internal-externc-isystem /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include -Wno-objc-signed-char-bool-implicit-int-conversion -Wno-extra-semi-stmt -Wno-quoted-include-in-framework-header -fdebug-compilation-dir /Users/cambalamas/dev/vonsai/build/CMakeFiles/CMakeTmp -ferror-limit 19 -fmessage-length 0 -stack-protector 1 -fstack-check -mdarwin-stkchk-strong-link -fblocks -fencode-extended-block-signature -fregister-global-dtors-with-atexit -fobjc-runtime=macosx-10.15.0 -fmax-type-align=16 -fdiagnostics-show-option -o CMakeFiles/cmTC_33286.dir/CMakeCCompilerABI.c.o -x c /usr/local/Cellar/cmake/3.17.1/share/cmake/Modules/CMakeCCompilerABI.c
+ "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang" -cc1 -triple x86_64-apple-macosx10.15.0 -Wdeprecated-objc-isa-usage -Werror=deprecated-objc-isa-usage -emit-obj -mrelax-all -disable-free -disable-llvm-verifier -discard-value-names -main-file-name CMakeCCompilerABI.c -mrelocation-model pic -pic-level 2 -mthread-model posix -mframe-pointer=all -fno-strict-return -masm-verbose -munwind-tables -target-sdk-version=10.15.4 -target-cpu penryn -dwarf-column-info -debugger-tuning=lldb -target-linker-version 556.6 -v -coverage-notes-file /Users/cambalamas/dev/vonsai/build/CMakeFiles/CMakeTmp/CMakeFiles/cmTC_16d91.dir/CMakeCCompilerABI.c.gcno -resource-dir /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/11.0.3 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk -internal-isystem /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk/usr/local/include -internal-isystem /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/11.0.3/include -internal-externc-isystem /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk/usr/include -internal-externc-isystem /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include -Wno-objc-signed-char-bool-implicit-int-conversion -Wno-extra-semi-stmt -Wno-quoted-include-in-framework-header -fdebug-compilation-dir /Users/cambalamas/dev/vonsai/build/CMakeFiles/CMakeTmp -ferror-limit 19 -fmessage-length 0 -stack-protector 1 -fstack-check -mdarwin-stkchk-strong-link -fblocks -fencode-extended-block-signature -fregister-global-dtors-with-atexit -fobjc-runtime=macosx-10.15.0 -fmax-type-align=16 -fdiagnostics-show-option -o CMakeFiles/cmTC_16d91.dir/CMakeCCompilerABI.c.o -x c /usr/local/Cellar/cmake/3.17.1/share/cmake/Modules/CMakeCCompilerABI.c
 clang -cc1 version 11.0.3 (clang-1103.0.32.62) default target x86_64-apple-darwin19.5.0
 ignoring nonexistent directory "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk/usr/local/include"
 ignoring nonexistent directory "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk/Library/Frameworks"
@@ -53,12 +53,12 @@ ignoring nonexistent directory "/Applications/Xcode.app/Contents/Developer/Platf
  /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include
  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk/System/Library/Frameworks (framework directory)
 End of search list.
-[2/2] Linking C executable cmTC_33286
+[2/2] Linking C executable cmTC_16d91
 Apple clang version 11.0.3 (clang-1103.0.32.62)
 Target: x86_64-apple-darwin19.5.0
 Thread model: posix
 InstalledDir: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin
- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ld" -demangle -lto_library /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/libLTO.dylib -dynamic -arch x86_64 -platform_version macos 10.15.0 10.15.4 -syslibroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk -o cmTC_33286 -search_paths_first -headerpad_max_install_names -v CMakeFiles/cmTC_33286.dir/CMakeCCompilerABI.c.o -lSystem /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/11.0.3/lib/darwin/libclang_rt.osx.a
+ "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ld" -demangle -lto_library /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/libLTO.dylib -dynamic -arch x86_64 -platform_version macos 10.15.0 10.15.4 -syslibroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk -o cmTC_16d91 -search_paths_first -headerpad_max_install_names -v CMakeFiles/cmTC_16d91.dir/CMakeCCompilerABI.c.o -lSystem /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/11.0.3/lib/darwin/libclang_rt.osx.a
 @(#)PROGRAM:ld  PROJECT:ld64-556.6
 BUILD 17:57:49 Apr 24 2020
 configured to support archs: armv6 armv7 armv7s arm64 arm64e arm64_32 i386 x86_64 x86_64h armv6m armv7k armv7m armv7em
@@ -86,13 +86,13 @@ Parsed C implicit link information from above output:
   link line regex: [^( *|.*[/\])(ld|CMAKE_LINK_STARTFILE-NOTFOUND|([^/\]+-)?ld|collect2)[^/\]*( |$)]
   ignore line: [Change Dir: /Users/cambalamas/dev/vonsai/build/CMakeFiles/CMakeTmp]
   ignore line: []
-  ignore line: [Run Build Command(s):/usr/local/bin/ninja cmTC_33286 && [1/2] Building C object CMakeFiles/cmTC_33286.dir/CMakeCCompilerABI.c.o]
+  ignore line: [Run Build Command(s):/usr/local/bin/ninja cmTC_16d91 && [1/2] Building C object CMakeFiles/cmTC_16d91.dir/CMakeCCompilerABI.c.o]
   ignore line: [Apple clang version 11.0.3 (clang-1103.0.32.62)]
   ignore line: [Target: x86_64-apple-darwin19.5.0]
   ignore line: [Thread model: posix]
   ignore line: [InstalledDir: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin]
   ignore line: [clang: warning: -Wl -v: 'linker' input unused [-Wunused-command-line-argument]]
-  ignore line: [ "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang" -cc1 -triple x86_64-apple-macosx10.15.0 -Wdeprecated-objc-isa-usage -Werror=deprecated-objc-isa-usage -emit-obj -mrelax-all -disable-free -disable-llvm-verifier -discard-value-names -main-file-name CMakeCCompilerABI.c -mrelocation-model pic -pic-level 2 -mthread-model posix -mframe-pointer=all -fno-strict-return -masm-verbose -munwind-tables -target-sdk-version=10.15.4 -target-cpu penryn -dwarf-column-info -debugger-tuning=lldb -target-linker-version 556.6 -v -coverage-notes-file /Users/cambalamas/dev/vonsai/build/CMakeFiles/CMakeTmp/CMakeFiles/cmTC_33286.dir/CMakeCCompilerABI.c.gcno -resource-dir /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/11.0.3 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk -internal-isystem /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk/usr/local/include -internal-isystem /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/11.0.3/include -internal-externc-isystem /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk/usr/include -internal-externc-isystem /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include -Wno-objc-signed-char-bool-implicit-int-conversion -Wno-extra-semi-stmt -Wno-quoted-include-in-framework-header -fdebug-compilation-dir /Users/cambalamas/dev/vonsai/build/CMakeFiles/CMakeTmp -ferror-limit 19 -fmessage-length 0 -stack-protector 1 -fstack-check -mdarwin-stkchk-strong-link -fblocks -fencode-extended-block-signature -fregister-global-dtors-with-atexit -fobjc-runtime=macosx-10.15.0 -fmax-type-align=16 -fdiagnostics-show-option -o CMakeFiles/cmTC_33286.dir/CMakeCCompilerABI.c.o -x c /usr/local/Cellar/cmake/3.17.1/share/cmake/Modules/CMakeCCompilerABI.c]
+  ignore line: [ "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang" -cc1 -triple x86_64-apple-macosx10.15.0 -Wdeprecated-objc-isa-usage -Werror=deprecated-objc-isa-usage -emit-obj -mrelax-all -disable-free -disable-llvm-verifier -discard-value-names -main-file-name CMakeCCompilerABI.c -mrelocation-model pic -pic-level 2 -mthread-model posix -mframe-pointer=all -fno-strict-return -masm-verbose -munwind-tables -target-sdk-version=10.15.4 -target-cpu penryn -dwarf-column-info -debugger-tuning=lldb -target-linker-version 556.6 -v -coverage-notes-file /Users/cambalamas/dev/vonsai/build/CMakeFiles/CMakeTmp/CMakeFiles/cmTC_16d91.dir/CMakeCCompilerABI.c.gcno -resource-dir /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/11.0.3 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk -internal-isystem /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk/usr/local/include -internal-isystem /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/11.0.3/include -internal-externc-isystem /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk/usr/include -internal-externc-isystem /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include -Wno-objc-signed-char-bool-implicit-int-conversion -Wno-extra-semi-stmt -Wno-quoted-include-in-framework-header -fdebug-compilation-dir /Users/cambalamas/dev/vonsai/build/CMakeFiles/CMakeTmp -ferror-limit 19 -fmessage-length 0 -stack-protector 1 -fstack-check -mdarwin-stkchk-strong-link -fblocks -fencode-extended-block-signature -fregister-global-dtors-with-atexit -fobjc-runtime=macosx-10.15.0 -fmax-type-align=16 -fdiagnostics-show-option -o CMakeFiles/cmTC_16d91.dir/CMakeCCompilerABI.c.o -x c /usr/local/Cellar/cmake/3.17.1/share/cmake/Modules/CMakeCCompilerABI.c]
   ignore line: [clang -cc1 version 11.0.3 (clang-1103.0.32.62) default target x86_64-apple-darwin19.5.0]
   ignore line: [ignoring nonexistent directory "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk/usr/local/include"]
   ignore line: [ignoring nonexistent directory "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk/Library/Frameworks"]
@@ -103,12 +103,12 @@ Parsed C implicit link information from above output:
   ignore line: [ /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include]
   ignore line: [ /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk/System/Library/Frameworks (framework directory)]
   ignore line: [End of search list.]
-  ignore line: [[2/2] Linking C executable cmTC_33286]
+  ignore line: [[2/2] Linking C executable cmTC_16d91]
   ignore line: [Apple clang version 11.0.3 (clang-1103.0.32.62)]
   ignore line: [Target: x86_64-apple-darwin19.5.0]
   ignore line: [Thread model: posix]
   ignore line: [InstalledDir: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin]
-  link line: [ "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ld" -demangle -lto_library /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/libLTO.dylib -dynamic -arch x86_64 -platform_version macos 10.15.0 10.15.4 -syslibroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk -o cmTC_33286 -search_paths_first -headerpad_max_install_names -v CMakeFiles/cmTC_33286.dir/CMakeCCompilerABI.c.o -lSystem /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/11.0.3/lib/darwin/libclang_rt.osx.a]
+  link line: [ "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ld" -demangle -lto_library /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/libLTO.dylib -dynamic -arch x86_64 -platform_version macos 10.15.0 10.15.4 -syslibroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk -o cmTC_16d91 -search_paths_first -headerpad_max_install_names -v CMakeFiles/cmTC_16d91.dir/CMakeCCompilerABI.c.o -lSystem /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/11.0.3/lib/darwin/libclang_rt.osx.a]
     arg [/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ld] ==> ignore
     arg [-demangle] ==> ignore
     arg [-lto_library] ==> ignore, skip following value
@@ -123,11 +123,11 @@ Parsed C implicit link information from above output:
     arg [-syslibroot] ==> ignore
     arg [/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk] ==> ignore
     arg [-o] ==> ignore
-    arg [cmTC_33286] ==> ignore
+    arg [cmTC_16d91] ==> ignore
     arg [-search_paths_first] ==> ignore
     arg [-headerpad_max_install_names] ==> ignore
     arg [-v] ==> ignore
-    arg [CMakeFiles/cmTC_33286.dir/CMakeCCompilerABI.c.o] ==> ignore
+    arg [CMakeFiles/cmTC_16d91.dir/CMakeCCompilerABI.c.o] ==> ignore
     arg [-lSystem] ==> lib [System]
     arg [/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/11.0.3/lib/darwin/libclang_rt.osx.a] ==> lib [/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/11.0.3/lib/darwin/libclang_rt.osx.a]
   Library search paths: [;/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk/usr/lib]
@@ -144,21 +144,21 @@ Parsed C implicit link information from above output:
 Determining if the CXX compiler works passed with the following output:
 Change Dir: /Users/cambalamas/dev/vonsai/build/CMakeFiles/CMakeTmp
 
-Run Build Command(s):/usr/local/bin/ninja cmTC_c0466 && [1/2] Building CXX object CMakeFiles/cmTC_c0466.dir/testCXXCompiler.cxx.o
-[2/2] Linking CXX executable cmTC_c0466
+Run Build Command(s):/usr/local/bin/ninja cmTC_d2efe && [1/2] Building CXX object CMakeFiles/cmTC_d2efe.dir/testCXXCompiler.cxx.o
+[2/2] Linking CXX executable cmTC_d2efe
 
 
 
 Detecting CXX compiler ABI info compiled with the following output:
 Change Dir: /Users/cambalamas/dev/vonsai/build/CMakeFiles/CMakeTmp
 
-Run Build Command(s):/usr/local/bin/ninja cmTC_5d5c5 && [1/2] Building CXX object CMakeFiles/cmTC_5d5c5.dir/CMakeCXXCompilerABI.cpp.o
+Run Build Command(s):/usr/local/bin/ninja cmTC_0f8b2 && [1/2] Building CXX object CMakeFiles/cmTC_0f8b2.dir/CMakeCXXCompilerABI.cpp.o
 Apple clang version 11.0.3 (clang-1103.0.32.62)
 Target: x86_64-apple-darwin19.5.0
 Thread model: posix
 InstalledDir: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin
 clang: warning: -Wl,-v: 'linker' input unused [-Wunused-command-line-argument]
- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang" -cc1 -triple x86_64-apple-macosx10.15.0 -Wdeprecated-objc-isa-usage -Werror=deprecated-objc-isa-usage -emit-obj -mrelax-all -disable-free -disable-llvm-verifier -discard-value-names -main-file-name CMakeCXXCompilerABI.cpp -mrelocation-model pic -pic-level 2 -mthread-model posix -mframe-pointer=all -fno-strict-return -masm-verbose -munwind-tables -target-sdk-version=10.15.4 -target-cpu penryn -dwarf-column-info -debugger-tuning=lldb -target-linker-version 556.6 -v -coverage-notes-file /Users/cambalamas/dev/vonsai/build/CMakeFiles/CMakeTmp/CMakeFiles/cmTC_5d5c5.dir/CMakeCXXCompilerABI.cpp.gcno -resource-dir /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/11.0.3 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk -stdlib=libc++ -internal-isystem /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1 -internal-isystem /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk/usr/include/c++/v1 -internal-isystem /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk/usr/local/include -internal-isystem /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/11.0.3/include -internal-externc-isystem /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk/usr/include -internal-externc-isystem /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include -Wno-objc-signed-char-bool-implicit-int-conversion -Wno-extra-semi-stmt -Wno-quoted-include-in-framework-header -fdeprecated-macro -fdebug-compilation-dir /Users/cambalamas/dev/vonsai/build/CMakeFiles/CMakeTmp -ferror-limit 19 -fmessage-length 0 -stack-protector 1 -fstack-check -mdarwin-stkchk-strong-link -fblocks -fencode-extended-block-signature -fregister-global-dtors-with-atexit -fobjc-runtime=macosx-10.15.0 -fcxx-exceptions -fexceptions -fmax-type-align=16 -fdiagnostics-show-option -o CMakeFiles/cmTC_5d5c5.dir/CMakeCXXCompilerABI.cpp.o -x c++ /usr/local/Cellar/cmake/3.17.1/share/cmake/Modules/CMakeCXXCompilerABI.cpp
+ "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang" -cc1 -triple x86_64-apple-macosx10.15.0 -Wdeprecated-objc-isa-usage -Werror=deprecated-objc-isa-usage -emit-obj -mrelax-all -disable-free -disable-llvm-verifier -discard-value-names -main-file-name CMakeCXXCompilerABI.cpp -mrelocation-model pic -pic-level 2 -mthread-model posix -mframe-pointer=all -fno-strict-return -masm-verbose -munwind-tables -target-sdk-version=10.15.4 -target-cpu penryn -dwarf-column-info -debugger-tuning=lldb -target-linker-version 556.6 -v -coverage-notes-file /Users/cambalamas/dev/vonsai/build/CMakeFiles/CMakeTmp/CMakeFiles/cmTC_0f8b2.dir/CMakeCXXCompilerABI.cpp.gcno -resource-dir /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/11.0.3 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk -stdlib=libc++ -internal-isystem /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1 -internal-isystem /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk/usr/include/c++/v1 -internal-isystem /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk/usr/local/include -internal-isystem /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/11.0.3/include -internal-externc-isystem /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk/usr/include -internal-externc-isystem /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include -Wno-objc-signed-char-bool-implicit-int-conversion -Wno-extra-semi-stmt -Wno-quoted-include-in-framework-header -fdeprecated-macro -fdebug-compilation-dir /Users/cambalamas/dev/vonsai/build/CMakeFiles/CMakeTmp -ferror-limit 19 -fmessage-length 0 -stack-protector 1 -fstack-check -mdarwin-stkchk-strong-link -fblocks -fencode-extended-block-signature -fregister-global-dtors-with-atexit -fobjc-runtime=macosx-10.15.0 -fcxx-exceptions -fexceptions -fmax-type-align=16 -fdiagnostics-show-option -o CMakeFiles/cmTC_0f8b2.dir/CMakeCXXCompilerABI.cpp.o -x c++ /usr/local/Cellar/cmake/3.17.1/share/cmake/Modules/CMakeCXXCompilerABI.cpp
 clang -cc1 version 11.0.3 (clang-1103.0.32.62) default target x86_64-apple-darwin19.5.0
 ignoring nonexistent directory "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk/usr/include/c++/v1"
 ignoring nonexistent directory "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk/usr/local/include"
@@ -171,12 +171,12 @@ ignoring nonexistent directory "/Applications/Xcode.app/Contents/Developer/Platf
  /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include
  /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk/System/Library/Frameworks (framework directory)
 End of search list.
-[2/2] Linking CXX executable cmTC_5d5c5
+[2/2] Linking CXX executable cmTC_0f8b2
 Apple clang version 11.0.3 (clang-1103.0.32.62)
 Target: x86_64-apple-darwin19.5.0
 Thread model: posix
 InstalledDir: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin
- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ld" -demangle -lto_library /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/libLTO.dylib -dynamic -arch x86_64 -platform_version macos 10.15.0 10.15.4 -syslibroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk -o cmTC_5d5c5 -search_paths_first -headerpad_max_install_names -v CMakeFiles/cmTC_5d5c5.dir/CMakeCXXCompilerABI.cpp.o -lc++ -lSystem /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/11.0.3/lib/darwin/libclang_rt.osx.a
+ "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ld" -demangle -lto_library /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/libLTO.dylib -dynamic -arch x86_64 -platform_version macos 10.15.0 10.15.4 -syslibroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk -o cmTC_0f8b2 -search_paths_first -headerpad_max_install_names -v CMakeFiles/cmTC_0f8b2.dir/CMakeCXXCompilerABI.cpp.o -lc++ -lSystem /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/11.0.3/lib/darwin/libclang_rt.osx.a
 @(#)PROGRAM:ld  PROJECT:ld64-556.6
 BUILD 17:57:49 Apr 24 2020
 configured to support archs: armv6 armv7 armv7s arm64 arm64e arm64_32 i386 x86_64 x86_64h armv6m armv7k armv7m armv7em
@@ -206,13 +206,13 @@ Parsed CXX implicit link information from above output:
   link line regex: [^( *|.*[/\])(ld|CMAKE_LINK_STARTFILE-NOTFOUND|([^/\]+-)?ld|collect2)[^/\]*( |$)]
   ignore line: [Change Dir: /Users/cambalamas/dev/vonsai/build/CMakeFiles/CMakeTmp]
   ignore line: []
-  ignore line: [Run Build Command(s):/usr/local/bin/ninja cmTC_5d5c5 && [1/2] Building CXX object CMakeFiles/cmTC_5d5c5.dir/CMakeCXXCompilerABI.cpp.o]
+  ignore line: [Run Build Command(s):/usr/local/bin/ninja cmTC_0f8b2 && [1/2] Building CXX object CMakeFiles/cmTC_0f8b2.dir/CMakeCXXCompilerABI.cpp.o]
   ignore line: [Apple clang version 11.0.3 (clang-1103.0.32.62)]
   ignore line: [Target: x86_64-apple-darwin19.5.0]
   ignore line: [Thread model: posix]
   ignore line: [InstalledDir: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin]
   ignore line: [clang: warning: -Wl -v: 'linker' input unused [-Wunused-command-line-argument]]
-  ignore line: [ "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang" -cc1 -triple x86_64-apple-macosx10.15.0 -Wdeprecated-objc-isa-usage -Werror=deprecated-objc-isa-usage -emit-obj -mrelax-all -disable-free -disable-llvm-verifier -discard-value-names -main-file-name CMakeCXXCompilerABI.cpp -mrelocation-model pic -pic-level 2 -mthread-model posix -mframe-pointer=all -fno-strict-return -masm-verbose -munwind-tables -target-sdk-version=10.15.4 -target-cpu penryn -dwarf-column-info -debugger-tuning=lldb -target-linker-version 556.6 -v -coverage-notes-file /Users/cambalamas/dev/vonsai/build/CMakeFiles/CMakeTmp/CMakeFiles/cmTC_5d5c5.dir/CMakeCXXCompilerABI.cpp.gcno -resource-dir /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/11.0.3 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk -stdlib=libc++ -internal-isystem /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1 -internal-isystem /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk/usr/include/c++/v1 -internal-isystem /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk/usr/local/include -internal-isystem /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/11.0.3/include -internal-externc-isystem /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk/usr/include -internal-externc-isystem /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include -Wno-objc-signed-char-bool-implicit-int-conversion -Wno-extra-semi-stmt -Wno-quoted-include-in-framework-header -fdeprecated-macro -fdebug-compilation-dir /Users/cambalamas/dev/vonsai/build/CMakeFiles/CMakeTmp -ferror-limit 19 -fmessage-length 0 -stack-protector 1 -fstack-check -mdarwin-stkchk-strong-link -fblocks -fencode-extended-block-signature -fregister-global-dtors-with-atexit -fobjc-runtime=macosx-10.15.0 -fcxx-exceptions -fexceptions -fmax-type-align=16 -fdiagnostics-show-option -o CMakeFiles/cmTC_5d5c5.dir/CMakeCXXCompilerABI.cpp.o -x c++ /usr/local/Cellar/cmake/3.17.1/share/cmake/Modules/CMakeCXXCompilerABI.cpp]
+  ignore line: [ "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang" -cc1 -triple x86_64-apple-macosx10.15.0 -Wdeprecated-objc-isa-usage -Werror=deprecated-objc-isa-usage -emit-obj -mrelax-all -disable-free -disable-llvm-verifier -discard-value-names -main-file-name CMakeCXXCompilerABI.cpp -mrelocation-model pic -pic-level 2 -mthread-model posix -mframe-pointer=all -fno-strict-return -masm-verbose -munwind-tables -target-sdk-version=10.15.4 -target-cpu penryn -dwarf-column-info -debugger-tuning=lldb -target-linker-version 556.6 -v -coverage-notes-file /Users/cambalamas/dev/vonsai/build/CMakeFiles/CMakeTmp/CMakeFiles/cmTC_0f8b2.dir/CMakeCXXCompilerABI.cpp.gcno -resource-dir /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/11.0.3 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk -stdlib=libc++ -internal-isystem /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/../include/c++/v1 -internal-isystem /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk/usr/include/c++/v1 -internal-isystem /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk/usr/local/include -internal-isystem /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/11.0.3/include -internal-externc-isystem /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk/usr/include -internal-externc-isystem /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include -Wno-objc-signed-char-bool-implicit-int-conversion -Wno-extra-semi-stmt -Wno-quoted-include-in-framework-header -fdeprecated-macro -fdebug-compilation-dir /Users/cambalamas/dev/vonsai/build/CMakeFiles/CMakeTmp -ferror-limit 19 -fmessage-length 0 -stack-protector 1 -fstack-check -mdarwin-stkchk-strong-link -fblocks -fencode-extended-block-signature -fregister-global-dtors-with-atexit -fobjc-runtime=macosx-10.15.0 -fcxx-exceptions -fexceptions -fmax-type-align=16 -fdiagnostics-show-option -o CMakeFiles/cmTC_0f8b2.dir/CMakeCXXCompilerABI.cpp.o -x c++ /usr/local/Cellar/cmake/3.17.1/share/cmake/Modules/CMakeCXXCompilerABI.cpp]
   ignore line: [clang -cc1 version 11.0.3 (clang-1103.0.32.62) default target x86_64-apple-darwin19.5.0]
   ignore line: [ignoring nonexistent directory "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk/usr/include/c++/v1"]
   ignore line: [ignoring nonexistent directory "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk/usr/local/include"]
@@ -225,12 +225,12 @@ Parsed CXX implicit link information from above output:
   ignore line: [ /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include]
   ignore line: [ /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk/System/Library/Frameworks (framework directory)]
   ignore line: [End of search list.]
-  ignore line: [[2/2] Linking CXX executable cmTC_5d5c5]
+  ignore line: [[2/2] Linking CXX executable cmTC_0f8b2]
   ignore line: [Apple clang version 11.0.3 (clang-1103.0.32.62)]
   ignore line: [Target: x86_64-apple-darwin19.5.0]
   ignore line: [Thread model: posix]
   ignore line: [InstalledDir: /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin]
-  link line: [ "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ld" -demangle -lto_library /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/libLTO.dylib -dynamic -arch x86_64 -platform_version macos 10.15.0 10.15.4 -syslibroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk -o cmTC_5d5c5 -search_paths_first -headerpad_max_install_names -v CMakeFiles/cmTC_5d5c5.dir/CMakeCXXCompilerABI.cpp.o -lc++ -lSystem /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/11.0.3/lib/darwin/libclang_rt.osx.a]
+  link line: [ "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ld" -demangle -lto_library /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/libLTO.dylib -dynamic -arch x86_64 -platform_version macos 10.15.0 10.15.4 -syslibroot /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk -o cmTC_0f8b2 -search_paths_first -headerpad_max_install_names -v CMakeFiles/cmTC_0f8b2.dir/CMakeCXXCompilerABI.cpp.o -lc++ -lSystem /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/11.0.3/lib/darwin/libclang_rt.osx.a]
     arg [/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ld] ==> ignore
     arg [-demangle] ==> ignore
     arg [-lto_library] ==> ignore, skip following value
@@ -245,11 +245,11 @@ Parsed CXX implicit link information from above output:
     arg [-syslibroot] ==> ignore
     arg [/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.15.sdk] ==> ignore
     arg [-o] ==> ignore
-    arg [cmTC_5d5c5] ==> ignore
+    arg [cmTC_0f8b2] ==> ignore
     arg [-search_paths_first] ==> ignore
     arg [-headerpad_max_install_names] ==> ignore
     arg [-v] ==> ignore
-    arg [CMakeFiles/cmTC_5d5c5.dir/CMakeCXXCompilerABI.cpp.o] ==> ignore
+    arg [CMakeFiles/cmTC_0f8b2.dir/CMakeCXXCompilerABI.cpp.o] ==> ignore
     arg [-lc++] ==> lib [c++]
     arg [-lSystem] ==> lib [System]
     arg [/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/11.0.3/lib/darwin/libclang_rt.osx.a] ==> lib [/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/11.0.3/lib/darwin/libclang_rt.osx.a]
@@ -267,8 +267,8 @@ Parsed CXX implicit link information from above output:
 Performing C++ SOURCE FILE Test has_std_11_flag succeeded with the following output:
 Change Dir: /Users/cambalamas/dev/vonsai/build/CMakeFiles/CMakeTmp
 
-Run Build Command(s):/usr/local/bin/ninja cmTC_e06ba && [1/2] Building CXX object CMakeFiles/cmTC_e06ba.dir/src.cxx.o
-[2/2] Linking CXX executable cmTC_e06ba
+Run Build Command(s):/usr/local/bin/ninja cmTC_1a67c && [1/2] Building CXX object CMakeFiles/cmTC_1a67c.dir/src.cxx.o
+[2/2] Linking CXX executable cmTC_1a67c
 
 
 Source file was:
@@ -276,8 +276,8 @@ int main() { return 0; }
 Performing C++ SOURCE FILE Test has_std_0x_flag succeeded with the following output:
 Change Dir: /Users/cambalamas/dev/vonsai/build/CMakeFiles/CMakeTmp
 
-Run Build Command(s):/usr/local/bin/ninja cmTC_44040 && [1/2] Building CXX object CMakeFiles/cmTC_44040.dir/src.cxx.o
-[2/2] Linking CXX executable cmTC_44040
+Run Build Command(s):/usr/local/bin/ninja cmTC_7beac && [1/2] Building CXX object CMakeFiles/cmTC_7beac.dir/src.cxx.o
+[2/2] Linking CXX executable cmTC_7beac
 
 
 Source file was:
@@ -285,8 +285,8 @@ int main() { return 0; }
 Performing C++ SOURCE FILE Test SUPPORTS_USER_DEFINED_LITERALS succeeded with the following output:
 Change Dir: /Users/cambalamas/dev/vonsai/build/CMakeFiles/CMakeTmp
 
-Run Build Command(s):/usr/local/bin/ninja cmTC_2c872 && [1/2] Building CXX object CMakeFiles/cmTC_2c872.dir/src.cxx.o
-[2/2] Linking CXX executable cmTC_2c872
+Run Build Command(s):/usr/local/bin/ninja cmTC_dbd41 && [1/2] Building CXX object CMakeFiles/cmTC_dbd41.dir/src.cxx.o
+[2/2] Linking CXX executable cmTC_dbd41
 
 
 Source file was:
@@ -296,8 +296,8 @@ Source file was:
 Performing C++ SOURCE FILE Test FMT_HAS_VARIANT succeeded with the following output:
 Change Dir: /Users/cambalamas/dev/vonsai/build/CMakeFiles/CMakeTmp
 
-Run Build Command(s):/usr/local/bin/ninja cmTC_cd174 && [1/2] Building CXX object CMakeFiles/cmTC_cd174.dir/src.cxx.o
-[2/2] Linking CXX executable cmTC_cd174
+Run Build Command(s):/usr/local/bin/ninja cmTC_854d4 && [1/2] Building CXX object CMakeFiles/cmTC_854d4.dir/src.cxx.o
+[2/2] Linking CXX executable cmTC_854d4
 
 
 Source file was:
@@ -307,8 +307,8 @@ Source file was:
 Performing C++ SOURCE FILE Test HAS_NULLPTR_WARNING succeeded with the following output:
 Change Dir: /Users/cambalamas/dev/vonsai/build/CMakeFiles/CMakeTmp
 
-Run Build Command(s):/usr/local/bin/ninja cmTC_c7166 && [1/2] Building CXX object CMakeFiles/cmTC_c7166.dir/src.cxx.o
-[2/2] Linking CXX executable cmTC_c7166
+Run Build Command(s):/usr/local/bin/ninja cmTC_e7883 && [1/2] Building CXX object CMakeFiles/cmTC_e7883.dir/src.cxx.o
+[2/2] Linking CXX executable cmTC_e7883
 
 
 Source file was:
@@ -316,8 +316,8 @@ int main() { return 0; }
 Determining if the strtod_l exist passed with the following output:
 Change Dir: /Users/cambalamas/dev/vonsai/build/CMakeFiles/CMakeTmp
 
-Run Build Command(s):/usr/local/bin/ninja cmTC_da377 && [1/2] Building C object CMakeFiles/cmTC_da377.dir/CheckSymbolExists.c.o
-[2/2] Linking C executable cmTC_da377
+Run Build Command(s):/usr/local/bin/ninja cmTC_c9dd0 && [1/2] Building C object CMakeFiles/cmTC_c9dd0.dir/CheckSymbolExists.c.o
+[2/2] Linking C executable cmTC_c9dd0
 
 
 File /Users/cambalamas/dev/vonsai/build/CMakeFiles/CMakeTmp/CheckSymbolExists.c:
@@ -338,16 +338,16 @@ int main(int argc, char** argv)
 Determining if the include file pthread.h exists passed with the following output:
 Change Dir: /Users/cambalamas/dev/vonsai/build/CMakeFiles/CMakeTmp
 
-Run Build Command(s):/usr/local/bin/ninja cmTC_2c30e && [1/2] Building C object CMakeFiles/cmTC_2c30e.dir/CheckIncludeFile.c.o
-[2/2] Linking C executable cmTC_2c30e
+Run Build Command(s):/usr/local/bin/ninja cmTC_b8e7d && [1/2] Building C object CMakeFiles/cmTC_b8e7d.dir/CheckIncludeFile.c.o
+[2/2] Linking C executable cmTC_b8e7d
 
 
 
 Performing C SOURCE FILE Test CMAKE_HAVE_LIBC_PTHREAD succeeded with the following output:
 Change Dir: /Users/cambalamas/dev/vonsai/build/CMakeFiles/CMakeTmp
 
-Run Build Command(s):/usr/local/bin/ninja cmTC_07d79 && [1/2] Building C object CMakeFiles/cmTC_07d79.dir/src.c.o
-[2/2] Linking C executable cmTC_07d79
+Run Build Command(s):/usr/local/bin/ninja cmTC_2d85c && [1/2] Building C object CMakeFiles/cmTC_2d85c.dir/src.c.o
+[2/2] Linking C executable cmTC_2d85c
 
 
 Source file was:
