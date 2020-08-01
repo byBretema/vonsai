@@ -18,7 +18,7 @@ void sandbox() {
   * CAMERA - Implies camera list - *
   vo::Camera camera;
   camera.setZoom(17.5f);
-  s.addCamera(camera)
+  s.addCamera(camera);
 
   ! Makes the linkage of UBO in the:
     ? Scene side   [V]
@@ -67,7 +67,7 @@ void sandbox() {
 
   int ui_dbgMode = 0;
   int ui_shade   = 0;
-  int ui_scene   = 0;
+  int ui_mesh    = 0;
 
   // === SCENE UPDATE SETUP --------------------------------------------------
 
@@ -79,15 +79,15 @@ void sandbox() {
 
     if (ui_shade == 0) {
       ctx.get(EShader::DEBUG).setFloat1("u_debug_mode", ui_dbgMode);
-      vo_draw(ctx.get(EMesh::BODY), ctx.get(EShader::DEBUG), &bodyTextures.at(bodyTexID), camera, ui_scene == 0);
-      vo_draw(ctx.get(EMesh::NANOSUIT), ctx.get(EShader::DEBUG), &bodyTextures.at(bodyTexID), camera, ui_scene == 1);
-      vo_draw(ctx.get(EMesh::DRAGON), ctx.get(EShader::DEBUG), &bodyTextures.at(bodyTexID), camera, ui_scene == 2);
+      vo_draw(ctx.get(EMesh::BODY), ctx.get(EShader::DEBUG), &bodyTextures.at(bodyTexID), camera, ui_mesh == 0);
+      vo_draw(ctx.get(EMesh::NANOSUIT), ctx.get(EShader::DEBUG), &bodyTextures.at(bodyTexID), camera, ui_mesh == 1);
+      vo_draw(ctx.get(EMesh::DRAGON), ctx.get(EShader::DEBUG), &bodyTextures.at(bodyTexID), camera, ui_mesh == 2);
     }
 
     if (ui_shade >= 1) {
-      vo_draw(ctx.get(EMesh::BODY), ctx.get(EShader::LIGHT), &bodyTextures.at(bodyTexID), camera, ui_scene == 0);
-      vo_draw(ctx.get(EMesh::NANOSUIT), ctx.get(EShader::LIGHT), &bodyTextures.at(bodyTexID), camera, ui_scene == 1);
-      vo_draw(ctx.get(EMesh::DRAGON), ctx.get(EShader::LIGHT), &bodyTextures.at(bodyTexID), camera, ui_scene == 2);
+      vo_draw(ctx.get(EMesh::BODY), ctx.get(EShader::LIGHT), &bodyTextures.at(bodyTexID), camera, ui_mesh == 0);
+      vo_draw(ctx.get(EMesh::NANOSUIT), ctx.get(EShader::LIGHT), &bodyTextures.at(bodyTexID), camera, ui_mesh == 1);
+      vo_draw(ctx.get(EMesh::DRAGON), ctx.get(EShader::LIGHT), &bodyTextures.at(bodyTexID), camera, ui_mesh == 2);
     }
   });
 
@@ -105,11 +105,11 @@ void sandbox() {
     ImGui::Separator(); // ----------------------------------------------------------------
     ImGui::Spacing();   // ----------------------------------------------------------------
 
-    ImGui::TextColored({1.f, 1.f, 0.5f, 1.f}, "SCENES");
+    ImGui::TextColored({1.f, 1.f, 0.5f, 1.f}, "MESH PICKER");
     ImGui::Separator();
     // for (auto i = 0u; i < show.size(); ++i) { ImGui::Checkbox(vo_fmt("Scene {}", i).c_str(), &show[i]); }
-    for (auto i = 0u; i < 3; ++i) { ImGui::RadioButton(vo_fmt("Scene {}", i).c_str(), &ui_scene, i); }
-    if (ui_scene == 0) {
+    for (auto i = 0u; i < 3; ++i) { ImGui::RadioButton(vo_fmt("Mesh {}", i).c_str(), &ui_mesh, i); }
+    if (ui_mesh == 0) {
       ImGui::TextColored({0.75, 1, 1, 1}, "Select skin:");
       ImGui::Combo("#Skin", &bodyTexID, "Cyborg\0Criminal\0Skater1\0Skater2\0Survivor1\0Survivor2\0Zombie1\0Zombie2\0",
                    8);

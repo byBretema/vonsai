@@ -22,7 +22,6 @@ public:
   void setOnGuiFn(std::function<void(void)> a_fn);
   void setOnUpdateFn(std::function<void(void)> a_fn);
 
-
   void setClearColor(float a_r, float a_g, float a_b);
 
 private:
@@ -30,10 +29,10 @@ private:
   unsigned int               m_sceneGlobalIdx{s_sceneCounter++};
 
   std::function<void(void)>       m_onGui{nullptr}; // * User defined
-  std::function<void(void)> const m_internalOnGui{[]() {}};
+  std::function<void(void)> const m_internalOnGui{nullptr};
 
   std::function<void(void)>               m_onUpdate{nullptr}; // * User defined
-  std::function<unsigned int(void)> const m_internalOnUpdate{[]() { return 0u; }};
+  std::function<unsigned int(void)> const m_internalOnUpdate{};
 
   float             m_deltaTime{0.f};
   Clock::time_point m_deltaTimeStamp{Clock::now()};
@@ -45,5 +44,4 @@ private:
   void updateFPS();
   void updateDeltaTime();
 };
-
 } // namespace Vonsai
