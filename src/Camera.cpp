@@ -9,14 +9,15 @@
 
 namespace Vonsai {
 
-void Camera::setZoom(float a_variation) { m_offset.z += a_variation; }
-void Camera::setFOV(float a_variation) {
-  m_fovY += glm::radians(a_variation);
+void Camera::setZoom(float aVariation) { m_offset.z += aVariation; }
+
+void Camera::setFOV(float aVariation) {
+  m_fovY += glm::radians(aVariation);
   m_fovY = glm::clamp(m_fovY, MIN_FOV, MAX_FOV);
 }
 
-void Camera::frame(float a_aspectRatio, float a_speed, bool a_orbital, glm::vec3 const &a_target) {
-  if (a_target != INF3) { pivot.setPos(a_target); }
+void Camera::frame(float aAspectRatio, float aSpeed, bool aOrbital, glm::vec3 const &aTarget) {
+  if (aTarget != INF3) { pivot.setPos(aTarget); }
 
   if (pivot.getRotZ() != 0.f) { pivot.setRotZ(0.f); }                                 // ! Avoid any ROLL
   if (pivot.getRotX() >= 90.f and pivot.getRotX() < 180.f) { pivot.setRotX(89.9f); }  // * Avoid camera flip at 90º
@@ -25,67 +26,68 @@ void Camera::frame(float a_aspectRatio, float a_speed, bool a_orbital, glm::vec3
 
   // Movement
   //----------
-  if (a_orbital) {
-    if (movement.F) { m_offset.z -= a_speed; }
-    if (movement.B) { m_offset.z += a_speed; }
-    if (movement.R) { m_offset.x += a_speed; }
-    if (movement.L) { m_offset.x -= a_speed; }
-    if (movement.U) { m_offset.y -= a_speed; }
-    if (movement.D) { m_offset.y += a_speed; }
+  if (aOrbital) {
+    if (movement.F) { m_offset.z -= aSpeed; }
+    if (movement.B) { m_offset.z += aSpeed; }
+    if (movement.R) { m_offset.x += aSpeed; }
+    if (movement.L) { m_offset.x -= aSpeed; }
+    if (movement.U) { m_offset.y -= aSpeed; }
+    if (movement.D) { m_offset.y += aSpeed; }
   } else { // * FPS
-    if (movement.F) { pivot.modPos(F * a_speed); }
-    if (movement.B) { pivot.modPos(-F * a_speed); }
-    if (movement.R) { pivot.modPos(R * a_speed); }
-    if (movement.L) { pivot.modPos(-R * a_speed); }
-    if (movement.U) { pivot.modPos(-U * a_speed); }
-    if (movement.D) { pivot.modPos(U * a_speed); }
+    if (movement.F) { pivot.modPos(F * aSpeed); }
+    if (movement.B) { pivot.modPos(-F * aSpeed); }
+    if (movement.R) { pivot.modPos(R * aSpeed); }
+    if (movement.L) { pivot.modPos(-R * aSpeed); }
+    if (movement.U) { pivot.modPos(-U * aSpeed); }
+    if (movement.D) { pivot.modPos(U * aSpeed); }
   }
 
   // Matrices
   //----------
   glm::vec3 const eye = pivot.getPos() + (m_offset.x * R) + (m_offset.y * U) - (m_offset.z * F);
   m_view              = glm::lookAt(eye, eye + F, UP);
-  m_proj              = glm::perspective(m_fovY, a_aspectRatio, 0.0001f, 1000.f);
-  m_viewproj          = m_proj * m_view;
+  m_proj              = glm::perspective(m_fovY, aAspectRatio, 0.1f, 1'000'000.f);
+  // m_proj              = glm::perspective(m_fovY, aAspectRatio, 0.0001f, 1'000'000.f);
+  m_viewproj = m_proj * m_view;
 }
 
-void Camera::defaultBehaviour(float deltaTime, float a_aspectRatio, UBO &a_ubo, Input const &a_io) {
-  float DT = deltaTime * 2.f;
+void Camera::defaultBehaviour(float aDeltaTime, float aAspectRatio, UBO &aUBO, Input const &aIO) {
+  float DT = aDeltaTime * 2.f;
 
   // Camera update
-  frame(a_aspectRatio, DT);
+  frame(aAspectRatio, DT);
 
   // UBO update
-  a_ubo.setData("u_proj", getProj());
-  a_ubo.setData("u_view", getView());
+  aUBO.setData("u_proj", getProj());
+  aUBO.setData("u_view", getView());
 
   // Camera movement
-  if (a_io.keyHold(KeyCode::Q)) { movement.U = true; } // Up
-  if (!a_io.keyHold(KeyCode::Q)) { movement.U = false; }
-  if (a_io.keyHold(KeyCode::E)) { movement.D = true; } // Down
-  if (!a_io.keyHold(KeyCode::E)) { movement.D = false; }
-  if (a_io.keyHold(KeyCode::W)) { movement.F = true; } // Front
-  if (!a_io.keyHold(KeyCode::W)) { movement.F = false; }
-  if (a_io.keyHold(KeyCode::S)) { movement.B = true; } // Back
-  if (!a_io.keyHold(KeyCode::S)) { movement.B = false; }
-  if (a_io.keyHold(KeyCode::D)) { movement.R = true; } // Right
-  if (!a_io.keyHold(KeyCode::D)) { movement.R = false; }
-  if (a_io.keyHold(KeyCode::A)) { movement.L = true; } // Left
-  if (!a_io.keyHold(KeyCode::A)) { movement.L = false; }
-  if (a_io.keyHold(KeyCode::Num0)) { pivot.reset(); } // Reset
+  if (aIO.keyHold(KeyCode::Q)) { movement.U = true; } // Up
+  if (!aIO.keyHold(KeyCode::Q)) { movement.U = false; }
+  if (aIO.keyHold(KeyCode::E)) { movement.D = true; } // Down
+  if (!aIO.keyHold(KeyCode::E)) { movement.D = false; }
+  if (aIO.keyHold(KeyCode::W)) { movement.F = true; } // Front
+  if (!aIO.keyHold(KeyCode::W)) { movement.F = false; }
+  if (aIO.keyHold(KeyCode::S)) { movement.B = true; } // Back
+  if (!aIO.keyHold(KeyCode::S)) { movement.B = false; }
+  if (aIO.keyHold(KeyCode::D)) { movement.R = true; } // Right
+  if (!aIO.keyHold(KeyCode::D)) { movement.R = false; }
+  if (aIO.keyHold(KeyCode::A)) { movement.L = true; } // Left
+  if (!aIO.keyHold(KeyCode::A)) { movement.L = false; }
+  if (aIO.keyHold(KeyCode::Num0)) { pivot.reset(); } // Reset
 
   // Scroll for Fov / Shift + Scroll for Zoom
-  (a_io.keyHold(KeyCode::LeftShift)) ? setZoom(a_io.scrollV()) : setFOV(a_io.scrollV());
+  (aIO.keyHold(KeyCode::LeftShift)) ? setZoom(aIO.scrollV()) : setFOV(aIO.scrollV());
 
   // Cmd/Ctrl: to rotate camera
-  if (a_io.clickHoldM() or
+  if (aIO.clickHoldM() or
 #ifdef __APPLE__
-      (a_io.anySuperHold() and a_io.clickHoldL())
+      (aIO.anySuperHold() and aIO.clickHoldL())
 #else
-      (a_io.anyCtrlHold() and a_io.clickHoldL())
+      (aIO.anyCtrlHold() and aIO.clickHoldL())
 #endif
   ) {
-    pivot.modRot(glm::vec3{a_io.axisV(), a_io.axisH(), 0.f} * 0.25f);
+    pivot.modRot(glm::vec3{aIO.axisV(), aIO.axisH(), 0.f} * 0.25f);
   }
 }
 

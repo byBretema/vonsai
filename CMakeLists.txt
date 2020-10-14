@@ -3,15 +3,17 @@ set(lib_name Vonsai)
 project(${lib_name})
 
 # ------------------------------------------------------------------------- #
-# THIRD PARTY
+# THIRD PARTY : ASSIMP
 # ------------------------------------------------------------------------- #
 
 # Disable assimp extras
 set (ASSIMP_INSTALL OFF CACHE BOOL "" FORCE)
 set (ASSIMP_BUILD_TESTS OFF CACHE BOOL "" FORCE)
 set (ASSIMP_BUILD_ASSIMP_TOOLS OFF CACHE BOOL "" FORCE)
+
 # Disable assimp exports
 set (ASSIMP_NO_EXPORT ON CACHE BOOL "" FORCE)
+
 # Enable specific assimp imports
 set (ASSIMP_BUILD_FBX_IMPORTER ON BOOL)
 set (ASSIMP_BUILD_OBJ_IMPORTER ON BOOL)
@@ -19,6 +21,11 @@ set (ASSIMP_BUILD_ALL_IMPORTERS_BY_DEFAULT OFF CACHE BOOL "" FORCE)
 set (ASSIMP_BUILD_SHARED_LIBS OFF BOOL)
 
 add_subdirectory(vendor/assimp)
+
+# ------------------------------------------------------------------------- #
+# THIRD PARTY : OTHERS
+# ------------------------------------------------------------------------- #
+
 add_subdirectory(vendor/fmt)
 add_subdirectory(vendor/glm)
 add_subdirectory(vendor/glfw)
@@ -35,7 +42,6 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_FLAGS "")
 set(CMAKE_CXX_FLAGS_RELEASE "-Ofast")
 set(CMAKE_CXX_FLAGS_DEBUG "-O0 -g3 -ggdb -Wall -Wpedantic -Wextra -Wweak-vtables -fexceptions")
-# if(VONSAI_SANITIZE_THREAD)
 # set(CMAKE_CXX_FLAGS_DEBUG "-O0 -g3 -ggdb -Wall -Wpedantic -Wextra -Wweak-vtables -fexceptions -fsanitize=address -fsanitize=undefined")
 # set(CMAKE_CXX_FLAGS_DEBUG "-O0 -g3 -ggdb -Wall -Wpedantic -Wextra -Wweak-vtables -fexceptions -fsanitize=thread -fsanitize=undefined -fsanitize=dataflow -fsanitize=safe-stack")
 # set(CMAKE_CXX_FLAGS_DEBUG "-O0 -g3 -ggdb -Wall -Wpedantic -Wextra -Wweak-vtables -fexceptions -fsanitize=memory -fsanitize=undefined -fsanitize=dataflow -fsanitize=safe-stack")

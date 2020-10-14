@@ -42,10 +42,13 @@ private:
 
 public:
   UBO();
-  UBO(UBO &&)  = delete;
-  UBO &operator=(UBO &&) = delete;
-  UBO(UBO const &)       = delete;
-  UBO &operator=(UBO const &) = delete;
+
+  // TODO : Make movable UBO but not copiable (?)
+
+  // UBO(UBO &&)  = delete;
+  // UBO &operator=(UBO &&) = delete;
+  // UBO(UBO const &)       = delete;
+  // UBO &operator=(UBO const &) = delete;
 
   // TODO : Avoid code-bloat produced by templates...
 

@@ -7,6 +7,8 @@
 #include <unordered_map>
 #include <vector>
 
+#include "CPP_HELPERS.hpp"
+
 namespace Vonsai {
 
 // --------------------------------------------------------------------------------------------------------------------
@@ -26,7 +28,10 @@ class Renderable : public Bindable {
 public:
   Transform transform;
 
-  explicit Renderable(std::string const &name, RenderablePOD const &a_data);
+  Renderable(std::string const &name, RenderablePOD const &a_data);
+  DC_DISALLOW_COPY(Renderable)
+  DC_ALLOW_MOVE(Renderable)
+  virtual ~Renderable() = default;
 
   void draw() const;
   bool isValid() const;
@@ -35,15 +40,6 @@ public:
   void addVBO(const std::vector<glm::vec3> &a_data);
   void addVBO(const std::vector<glm::vec2> &a_data);
   void addVBO(const std::vector<float> &a_data, int a_dataSize);
-
-  // Not copiable
-  Renderable(Renderable const &rhs) = delete;
-  Renderable &operator=(Renderable const &rhs) = delete;
-
-  // Move semantics
-  Renderable(Renderable &&rhs) noexcept;
-  Renderable &operator=(Renderable &&rhs) noexcept;
-  friend void swap(Renderable &lhs, Renderable &rhs) noexcept;
 
 private:
   std::string                                                 m_name;

@@ -26,22 +26,14 @@ void sandbox() {
   */
 
   // --- LIGHT ---
-  vo::Light         l1({0, 2, 5}, {1, 1, 1});
-  vo::Light         l2({0, 2, -5}, {1, 1, 1});
-  std::vector const lv = {l1, l2};
-
-  vo::UBO lightsUBO;
-  lightsUBO.setData("u_numLights", glm::vec4{static_cast<float>(lv.size())});
-  lightsUBO.setData("u_lights", lv);
-  ctx.linkUBO("lights", lightsUBO.getBindPoint());
+  vo::Light l1({0, 2, 5}, {1, 1, 1});
+  vo::Light l2({0, 2, -5}, {1, 1, 1});
+  vo::UBO   lightsUBO = ctx.linkLightUBO("lights", {l1, l2});
   // --- / LIGHT ---
 
   // --- CAMERA ---
-  vo::Camera camera;
-  camera.setZoom(17.5f);
-
-  vo::UBO cameraUBO;
-  ctx.linkUBO("camera", cameraUBO.getBindPoint());
+  vo::Camera camera(17.5f);
+  vo::UBO    cameraUBO = ctx.linkCameraUBO("camera", camera);
   // --- / CAMERA ---
 
 
@@ -71,7 +63,9 @@ void sandbox() {
 
   // === SCENE UPDATE SETUP --------------------------------------------------
 
-  auto &&s = ctx.get(EScene::S0);
+  auto &&     s = ctx.get(EScene::S0);
+  vo::Texture textureGlories{"/Users/cambalamas/Desktop/Glories/GloriesTowerMapping.jpg"};
+
 
   s.setOnUpdateFn([&]() {
     s.setClearColor(0.2, 0.1, 0.2);
@@ -79,13 +73,13 @@ void sandbox() {
 
     if (ui_shade == 0) {
       ctx.get(EShader::DEBUG).setFloat1("u_debug_mode", ui_dbgMode);
-      vo_draw(ctx.get(EMesh::BODY), ctx.get(EShader::DEBUG), &bodyTextures.at(bodyTexID), camera, ui_mesh == 0);
+      vo_draw(ctx.get(EMesh::GLORIES), ctx.get(EShader::DEBUG), &textureGlories, camera, ui_mesh == 0);
       vo_draw(ctx.get(EMesh::NANOSUIT), ctx.get(EShader::DEBUG), &bodyTextures.at(bodyTexID), camera, ui_mesh == 1);
       vo_draw(ctx.get(EMesh::DRAGON), ctx.get(EShader::DEBUG), &bodyTextures.at(bodyTexID), camera, ui_mesh == 2);
     }
 
     if (ui_shade >= 1) {
-      vo_draw(ctx.get(EMesh::BODY), ctx.get(EShader::LIGHT), &bodyTextures.at(bodyTexID), camera, ui_mesh == 0);
+      vo_draw(ctx.get(EMesh::GLORIES), ctx.get(EShader::LIGHT), &textureGlories, camera, ui_mesh == 0);
       vo_draw(ctx.get(EMesh::NANOSUIT), ctx.get(EShader::LIGHT), &bodyTextures.at(bodyTexID), camera, ui_mesh == 1);
       vo_draw(ctx.get(EMesh::DRAGON), ctx.get(EShader::LIGHT), &bodyTextures.at(bodyTexID), camera, ui_mesh == 2);
     }

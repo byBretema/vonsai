@@ -4,6 +4,9 @@
 #include <Vonsai/Scene.hpp>
 #include <Vonsai/Shader.hpp>
 
+#include <Vonsai/Camera.hpp>
+#include <Vonsai/Light.hpp>
+
 #include <Vonsai/Utils/Strings.hpp>
 #include <Vonsai/Wraps/_globals.hpp>
 
@@ -24,6 +27,7 @@ Context::Context() {
   loadMesh(EMesh::DRAGON, vo_res + "models/dragon.obj");
   loadMesh(EMesh::NANOSUIT, vo_res + "models/nanosuit/nanosuit.fbx");
   loadMesh(EMesh::BODY, vo_res + "models/kenney/character.fbx");
+  loadMesh(EMesh::GLORIES, "/Users/cambalamas/Desktop/Glories/HighPoly/GloriesTower_HP.obj");
   m_meshes[(int)EMesh::BODY]->transform(0u)->modRotX(-90.f);
   m_meshes[(int)EMesh::BODY]->transform(0u)->modPosY(-1.75f);
 
@@ -54,6 +58,17 @@ Context::~Context() {
 
 void Context::linkUBO(std::string const &name, int bindPoint) {
   for (auto &&s : m_shaders) s->linkUBO(name, bindPoint);
+}
+UBO Context::linkLightUBO([[maybe_unused]] std::string const &name, std::vector<Light> const &lights) {
+  UBO lightsUBO;
+  lightsUBO.setData("u_numLights", glm::vec4{static_cast<float>(lights.size())});
+  lightsUBO.setData("u_lights", lights);
+  return lightsUBO;
+}
+UBO Context::linkCameraUBO([[maybe_unused]] std::string const &name, [[maybe_unused]] Camera const &camera) {
+  UBO cameraUBO;
+  linkUBO("camera", cameraUBO.getBindPoint());
+  return cameraUBO;
 }
 
 Shader &Context::get(EShader idx) {

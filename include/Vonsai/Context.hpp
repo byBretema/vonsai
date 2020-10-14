@@ -7,9 +7,11 @@
 
 #include <string>
 
+#include <Vonsai/UBO.hpp>
+
 /* clang-format off */
 enum class EShader : unsigned char { LIGHT, NORMALS, DEBUG, LAST };
-enum class EMesh   : unsigned char { MONKEY, CUBE, PLANE, BODY, DRAGON, NANOSUIT, LAST };
+enum class EMesh   : unsigned char { MONKEY, CUBE, PLANE, BODY, DRAGON, NANOSUIT, GLORIES, LAST };
 enum class EScene  : unsigned char { S0, S1, S2, S3, S4, S5, S6, S7, S8, S9, LAST };
 /* clang-format on */
 
@@ -18,6 +20,8 @@ namespace Vonsai {
 class Renderable;
 class Shader;
 class Scene;
+class Light;
+class Camera;
 
 // =========================================================================
 
@@ -27,8 +31,9 @@ public:
   ~Context();
 
   // Link UBOs and other actions to execute over ALL shaders in this context
-  // ! FIXME : Just not working
   void linkUBO(std::string const &name, int bindPoint);
+  UBO  linkLightUBO(std::string const &name, std::vector<Light> const &lights);
+  UBO  linkCameraUBO(std::string const &name, Camera const &camera);
 
   // Below we can return a derreferenced pointer (a reference) because
   // we know that exist a data for every 'index' in the respective 'enum' specific type

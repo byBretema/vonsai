@@ -106,17 +106,6 @@ void Renderable::unbind() const {
 
 // --------------------------------------------------------------------------------------------------------------------
 
-Renderable::Renderable(Renderable &&rhs) noexcept { swap(*this, rhs); }
-
-// --------------------------------------------------------------------------------------------------------------------
-
-Renderable &Renderable::operator=(Renderable &&rhs) noexcept {
-  swap(*this, rhs);
-  return *this;
-}
-
-// --------------------------------------------------------------------------------------------------------------------
-
 void swap(Renderable &lhs, Renderable &rhs) noexcept {
   using std::swap;
   swap(lhs.m_name, rhs.m_name);
