@@ -150,6 +150,7 @@ RenderableGroup import(std::string const &filePath) {
             //*Insert here the logic for: Move texture from load-path to project-path and save the new on voMat*
             //*texturesPaths.emplace(texturePath.C_Str(), newTexturePath);
             voMat.texPaths.at(VoAssimpTex.at(texType)) = texturePath.C_Str();
+            break; // Just pick the fist texture of each type.
           }
         }
       }
