@@ -86,6 +86,7 @@ bool Window::update(std::function<unsigned int(void)> const &a_onUpdate, std::fu
   unsigned int const FPS = a_onUpdate();
   glfwSetWindowTitle(GLFW_PTR, vo_fmt("{} :: {} fps", m_title, FPS).c_str());
 
+
   if (ImGui::GetCurrentContext() == IMGUI_PTR) {
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplGlfw_NewFrame();

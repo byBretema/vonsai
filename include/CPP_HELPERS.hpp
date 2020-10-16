@@ -24,13 +24,18 @@ private:                        \
 //   ClassName(ClassName const &);  \
 //   ClassName &operator=(ClassName const &);
 
-#define DC_ALLOW_MOVE(ClassName)                             \
+#define DC_ALLOW_MOVE_H(ClassName)                           \
 public:                                                      \
   friend void swap(ClassName &lhs, ClassName &rhs) noexcept; \
   ClassName(ClassName &&rhs) noexcept { swap(*this, rhs); }  \
   ClassName &operator=(ClassName &&rhs) noexcept {           \
     swap(*this, rhs);                                        \
     return *this;                                            \
+  }
+#define DC_ALLOW_MOVE_C(ClassName, code)               \
+  void swap(ClassName &lhs, ClassName &rhs) noexcept { \
+    using std::swap;                                   \
+    code;                                              \
   }
 
 

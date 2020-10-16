@@ -7,7 +7,30 @@
 
 namespace Vonsai {
 
-// --------------------------------------------------------------------------------------------------------------------
+void VoMaterial::info() const {
+  vo_log(" NAME: {}", name);
+  vo_log(" SHININESS: {}", shine);
+  vo_log(" SHININESS_STRENGTH: {}", shineI);
+  vo_log(" REFLECTIVITY: {}", reflectivity);
+  vo_log(" REFRACTION: {}", refraction);
+  vo_log(" COLOR DIFFUSE:  ( {}, {}, {}, {} )", diffuse.r, diffuse.g, diffuse.b, diffuse.a);
+  vo_log(" COLOR AMBIENT:  ( {}, {}, {}, {} )", ambient.r, ambient.g, ambient.b, ambient.a);
+  vo_log(" COLOR SPECULAR: ( {}, {}, {}, {} )", specular.r, specular.g, specular.b, specular.a);
+  vo_log(" COLOR EMISSIVE: ( {}, {}, {}, {} )", emissive.r, emissive.g, emissive.b, emissive.a);
+  if (!texPaths.at(VoTexs::DIFFUSE).empty()) vo_log(" TEXTURE DIFFUSE: {}", texPaths.at(VoTexs::DIFFUSE));
+  if (!texPaths.at(VoTexs::SPECULAR).empty()) vo_log(" TEXTURE SPECULAR: {}", texPaths.at(VoTexs::SPECULAR));
+  if (!texPaths.at(VoTexs::AMBIENT).empty()) vo_log(" TEXTURE AMBIENT: {}", texPaths.at(VoTexs::AMBIENT));
+  if (!texPaths.at(VoTexs::EMISSIVE).empty()) vo_log(" TEXTURE EMISSIVE: {}", texPaths.at(VoTexs::EMISSIVE));
+  if (!texPaths.at(VoTexs::HEIGHT).empty()) vo_log(" TEXTURE HEIGHT: {}", texPaths.at(VoTexs::HEIGHT));
+  if (!texPaths.at(VoTexs::NORMALS).empty()) vo_log(" TEXTURE NORMALS: {}", texPaths.at(VoTexs::NORMALS));
+  if (!texPaths.at(VoTexs::SHININESS).empty()) vo_log(" TEXTURE SHININESS: {}", texPaths.at(VoTexs::SHININESS));
+  if (!texPaths.at(VoTexs::OPACITY).empty()) vo_log(" TEXTURE OPACITY: {}", texPaths.at(VoTexs::OPACITY));
+  if (!texPaths.at(VoTexs::DISPLACEMENT).empty()) vo_log(" TEXTURE DISPL: {}", texPaths.at(VoTexs::DISPLACEMENT));
+  if (!texPaths.at(VoTexs::LIGHTMAP).empty()) vo_log(" TEXTURE LIGHTMAP: {}", texPaths.at(VoTexs::LIGHTMAP));
+  if (!texPaths.at(VoTexs::REFLECTION).empty()) vo_log(" TEXTURE REFLECTION: {}", texPaths.at(VoTexs::REFLECTION));
+}
+
+//---------------------------------------------------------------------------------------------------------------------
 
 Renderable::Renderable(std::string const &name, RenderablePOD const &a_data) {
   m_name = name;
@@ -35,6 +58,20 @@ Renderable::Renderable(std::string const &name, RenderablePOD const &a_data) {
   m_valid      = true;
   m_indexCount = a_data.indices.size();
 }
+
+// --------------------------------------------------------------------------------------------------------------------
+
+DC_ALLOW_MOVE_C(                                          //
+    Renderable,                                           //
+    swap(lhs.m_name, rhs.m_name);                         //
+    swap(lhs.m_valid, rhs.m_valid);                       //
+    swap(lhs.m_alertOnceInvalid, rhs.m_alertOnceInvalid); //
+    swap(lhs.m_alertOnceDraw, rhs.m_alertOnceDraw);       //
+    swap(lhs.m_location, rhs.m_location);                 //
+    swap(lhs.m_VAO, rhs.m_VAO);                           //
+    swap(lhs.m_EBO, rhs.m_EBO);                           //
+    swap(lhs.m_indexCount, rhs.m_indexCount);             //
+);
 
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -104,28 +141,16 @@ void Renderable::unbind() const {
   GL_ASSERT(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0));
 }
 
-// --------------------------------------------------------------------------------------------------------------------
 
-void swap(Renderable &lhs, Renderable &rhs) noexcept {
-  using std::swap;
-  swap(lhs.m_name, rhs.m_name);
-  swap(lhs.m_valid, rhs.m_valid);
-  swap(lhs.m_alertOnceInvalid, rhs.m_alertOnceInvalid);
-  swap(lhs.m_alertOnceDraw, rhs.m_alertOnceDraw);
-  swap(lhs.m_location, rhs.m_location);
-  swap(lhs.m_VAO, rhs.m_VAO);
-  swap(lhs.m_EBO, rhs.m_EBO);
-  swap(lhs.m_indexCount, rhs.m_indexCount);
-}
+//---------------------------------------------------------------------------------------------------------------------
+//--- RENDERABLE GROUP
+//---------------------------------------------------------------------------------------------------------------------
 
-// --------------------------------------------------------------------------------------------------------------------
-// --------------------------------------------------------------------------------------------------------------------
-// --------------------------------------------------------------------------------------------------------------------
-
-RenderableGroup::RenderableGroup(std::string const &name, std::vector<RenderablePOD> podGroup) {
-  int i = 0;
-  for (auto &&mesh : podGroup) { m_group.emplace_back(name + "_" + std::to_string(++i), mesh); }
-}
+DC_ALLOW_MOVE_C(                            //
+    RenderableGroup,                        //
+    swap(lhs.m_group, rhs.m_group);         //
+    swap(lhs.m_materials, rhs.m_materials); //
+);
 
 // --------------------------------------------------------------------------------------------------------------------
 
@@ -140,7 +165,5 @@ Transform *RenderableGroup::transform(unsigned int idx) {
 }
 
 // --------------------------------------------------------------------------------------------------------------------
-
-std::vector<Renderable> &RenderableGroup::group() { return m_group; }
 
 } // namespace Vonsai

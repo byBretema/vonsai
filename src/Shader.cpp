@@ -118,7 +118,7 @@ void Shader::linkUBO(std::string const &a_name, unsigned int a_uboBindPoint) con
   // glUniformBlockBinding(m_programID, glGetUniformBlockIndex(m_programID, a_name.c_str()), a_uboBindPoint);
   // return;
 
-  vo_log("({}) Linking UBO '{}' at idx {}", m_programName, a_name, a_uboBindPoint);
+  // vo_log("({}) Linking UBO '{}' at idx {}", m_programName, a_name, a_uboBindPoint);
 
   auto [kv, ins] = m_uniformBlockCache.try_emplace(a_name, glGetUniformBlockIndex(m_programID, a_name.c_str()));
   if (!ins) return;

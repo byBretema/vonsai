@@ -37,8 +37,10 @@ bool Input::clickPressM() const {
 int Input::axisV() const { return m_axis.V; }
 int Input::axisH() const { return m_axis.H; }
 
-int Input::scrollV() const { return (anyShiftHold()) ? m_scroll.H : m_scroll.V; }
-int Input::scrollH() const { return (anyShiftHold()) ? m_scroll.V : m_scroll.H; }
+// int Input::scrollV() const { return (anyShiftHold()) ? m_scroll.H : m_scroll.V; }
+// int Input::scrollH() const { return (anyShiftHold()) ? m_scroll.V : m_scroll.H; }
+int Input::scrollV() const { return m_scroll.V; }
+int Input::scrollH() const { return m_scroll.H; }
 
 void Input::resetScrollAndAxis() {
   m_scroll.V = 0.f;

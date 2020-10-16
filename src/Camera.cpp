@@ -77,7 +77,13 @@ void Camera::defaultBehaviour(float aDeltaTime, float aAspectRatio, UBO &aUBO, I
   if (aIO.keyHold(KeyCode::Num0)) { pivot.reset(); } // Reset
 
   // Scroll for Fov / Shift + Scroll for Zoom
-  (aIO.keyHold(KeyCode::LeftShift)) ? setZoom(aIO.scrollV()) : setFOV(aIO.scrollV());
+#ifdef __APPLE__
+  (aIO.anySuperHold())
+#else
+  (aIO.anyCtrlHold())
+#endif
+      ? (aIO.keyHold(KeyCode::LeftShift)) ? setZoom(aIO.scrollV() * 10.f) : setFOV(aIO.scrollV())
+      : (aIO.keyHold(KeyCode::LeftShift)) ? setZoom(aIO.scrollV()) : setFOV(aIO.scrollV());
 
   // Cmd/Ctrl: to rotate camera
   if (aIO.clickHoldM() or

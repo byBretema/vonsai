@@ -6,6 +6,6 @@
 
 namespace Vonsai::Mesh {
 
-std::vector<RenderablePOD> import(std::string const &filePath);
+RenderableGroup import(std::string const &filePath);
 
 } // namespace Vonsai::Mesh

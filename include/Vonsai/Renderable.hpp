@@ -11,7 +11,38 @@
 
 namespace Vonsai {
 
-// --------------------------------------------------------------------------------------------------------------------
+//---------------------------------------------------------------------------------------------------------------------
+
+enum class VoTexs {
+  DIFFUSE,
+  SPECULAR,
+  AMBIENT,
+  EMISSIVE,
+  HEIGHT,
+  NORMALS,
+  SHININESS,
+  OPACITY,
+  DISPLACEMENT,
+  LIGHTMAP,
+  REFLECTION,
+  UNKNOWN,
+};
+
+//---------------------------------------------------------------------------------------------------------------------
+
+struct VoMaterial {
+  std::string                             name{""};
+  float                                   shine{0.f}, shineI{0.f}, reflectivity{0.f}, refraction{0.f};
+  glm::vec4                               diffuse{1.f}, ambient{1.f}, specular{1.f}, emissive{1.f};
+  std::unordered_map<VoTexs, std::string> texPaths{
+      {VoTexs::DIFFUSE, ""},      {VoTexs::SPECULAR, ""}, {VoTexs::AMBIENT, ""},   {VoTexs::EMISSIVE, ""},
+      {VoTexs::HEIGHT, ""},       {VoTexs::NORMALS, ""},  {VoTexs::SHININESS, ""}, {VoTexs::OPACITY, ""},
+      {VoTexs::DISPLACEMENT, ""}, {VoTexs::LIGHTMAP, ""}, {VoTexs::REFLECTION, ""}};
+
+  void info() const;
+};
+
+//---------------------------------------------------------------------------------------------------------------------
 
 struct RenderablePOD {
   std::vector<unsigned int> indices{};
@@ -22,7 +53,7 @@ struct RenderablePOD {
   std::vector<glm::vec3>    bitangents{};
 };
 
-// --------------------------------------------------------------------------------------------------------------------
+//---------------------------------------------------------------------------------------------------------------------
 
 class Renderable : public Bindable {
 public:
@@ -30,7 +61,7 @@ public:
 
   Renderable(std::string const &name, RenderablePOD const &a_data);
   DC_DISALLOW_COPY(Renderable)
-  DC_ALLOW_MOVE(Renderable)
+  DC_ALLOW_MOVE_H(Renderable)
   virtual ~Renderable() = default;
 
   void draw() const;
@@ -62,18 +93,21 @@ private:
 
 class RenderableGroup {
 public:
-  explicit RenderableGroup(std::string const &name, std::vector<RenderablePOD> podGroup);
-  // void                     draw();
-  Transform *              transform(unsigned int idx);
-  std::vector<Renderable> &group();
+  explicit RenderableGroup(std::string const &name) : m_name(name) {}
+  DC_DISALLOW_COPY(RenderableGroup)
+  DC_ALLOW_MOVE_H(RenderableGroup)
 
-  RenderableGroup(RenderableGroup &&) = delete;
-  RenderableGroup &operator=(RenderableGroup &&) = delete;
-  RenderableGroup(RenderableGroup const &)       = delete;
-  RenderableGroup &operator=(RenderableGroup const &) = delete;
+  /*TEMP*/ inline std::vector<Renderable> const &group() const { return m_group; }
+
+  Transform * transform(unsigned int idx);
+  inline void addMaterial(VoMaterial &material) { m_materials.push_back(material); }
+  inline void addRenderable(std::string const &name, RenderablePOD const &data) { m_group.emplace_back(name, data); }
+
 
 private:
+  std::string             m_name{};
   std::vector<Renderable> m_group{};
+  std::vector<VoMaterial> m_materials{};
 };
 
 // --------------------------------------------------------------------------------------------------------------------
