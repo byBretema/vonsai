@@ -110,6 +110,7 @@ public:
   void setTexture(std::string const &a_name, int a_int) const;
   void setFloat1(std::string const &a_name, float a_float) const;
   void setFloat3(std::string const &a_name, glm::vec3 const &a_floats) const;
+  void setFloat4(std::string const &a_name, glm::vec4 const &a_floats) const;
   void setMat4(std::string const &a_name, glm::mat4 const &a_mat) const;
 
   void linkUBO(std::string const &a_name, unsigned int uboBindPoint) const;

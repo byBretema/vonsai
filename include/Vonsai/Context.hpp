@@ -10,7 +10,7 @@
 #include <Vonsai/UBO.hpp>
 
 /* clang-format off */
-enum class EShader : unsigned char { LIGHT, NORMALS, DEBUG, LAST };
+enum class EShader : unsigned char { PBR, LIGHT, NORMALS, DEBUG, LAST };
 enum class EMesh   : unsigned char { /* MONKEY, CUBE, PLANE, BODY, DRAGON, NANOSUIT, */ GLORIES, LAST };
 enum class EScene  : unsigned char { S0, S1, S2, S3, S4, S5, S6, S7, S8, S9, LAST };
 /* clang-format on */

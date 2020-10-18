@@ -46,13 +46,17 @@ Context::Context() {
                                                                vo_res + "shaders/debug/debug.frag", //
                                                                vo_res + "shaders/debug/debug.geom"}));
 
+  m_shaders.emplace(EShader::PBR, Shader("PBR", ShaderPath{vo_res + "shaders/PBR/PBR.vert", //
+                                                           vo_res + "shaders/PBR/PBR.frag", //
+                                                           vo_res + "shaders/PBR/PBR.geom"}));
+
   //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 } // namespace Vonsai
 
 //---------------------------------------------------------------------------------------------------------------------
 
 void Context::linkUBO(std::string const &name, int bindPoint) {
-  for (auto &&s : m_shaders) s.second.linkUBO(name, bindPoint);
+  for (auto &[_, shader] : m_shaders) shader.linkUBO(name, bindPoint);
 }
 
 //---------------------------------------------------------------------------------------------------------------------
@@ -90,9 +94,8 @@ float        Context::getAspectRatio() const { return m_window.getAspectRatio();
 
 void Context::run() const {
   if (m_scenes.size() < 1) { return; }
-  EScene ES = (EScene)m_currSceneIdx;
 
-  while (update(m_scenes.at(ES))) {
+  while (update(m_scenes.at((EScene)m_currSceneIdx))) {
     m_input.resetScrollAndAxis();
     if (m_input.keyHold(KeyCode::Esc)) { m_window.close(); }
     if (m_input.keyPress(KeyCode::Right)) { m_currSceneIdx = ++m_currSceneIdx % m_scenes.size(); }

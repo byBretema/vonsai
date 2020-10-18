@@ -107,6 +107,10 @@ void Shader::setFloat3(std::string const &a_name, glm::vec3 const &a_floats) con
   glProgramUniform3fv(m_programID, getUniformLocation(a_name), 1, glm::value_ptr(a_floats));
 }
 
+void Shader::setFloat4(std::string const &a_name, glm::vec4 const &a_floats) const {
+  glProgramUniform3fv(m_programID, getUniformLocation(a_name), 1, glm::value_ptr(a_floats));
+}
+
 void Shader::setMat4(std::string const &a_name, glm::mat4 const &a_mat) const {
   glProgramUniformMatrix4fv(m_programID, getUniformLocation(a_name), 1, GL_FALSE, glm::value_ptr(a_mat));
 }

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Bindable.hpp"
+#include "Texture.hpp"
 #include "Transform.hpp"
 #include "Wraps/_glm.hpp"
 
@@ -10,6 +11,8 @@
 #include "CPP_HELPERS.hpp"
 
 namespace Vonsai {
+class Shader;
+class Camera;
 
 //---------------------------------------------------------------------------------------------------------------------
 
@@ -27,6 +30,11 @@ enum class VoTexs {
   REFLECTION,
   UNKNOWN,
 };
+static const std::unordered_map<VoTexs, std::string> VoTexsStr{
+    {VoTexs::DIFFUSE, "DIFFUSE"},     {VoTexs::SPECULAR, "SPECULAR"},     {VoTexs::AMBIENT, "AMBIENT"},
+    {VoTexs::EMISSIVE, "EMISSIVE"},   {VoTexs::HEIGHT, "HEIGHT"},         {VoTexs::NORMALS, "NORMALS"},
+    {VoTexs::SHININESS, "SHININESS"}, {VoTexs::OPACITY, "OPACITY"},       {VoTexs::DISPLACEMENT, "DISPLACEMENT"},
+    {VoTexs::LIGHTMAP, "LIGHTMAP"},   {VoTexs::REFLECTION, "REFLECTION"}, {VoTexs::UNKNOWN, "UNKNOWN"}};
 
 //---------------------------------------------------------------------------------------------------------------------
 
@@ -67,6 +75,8 @@ public:
   void draw() const;
   bool isValid() const;
 
+  inline std::string getName() const { return m_name; }
+
   void setEBO(const std::vector<unsigned int> &a_data);
   void addVBO(const std::vector<glm::vec3> &a_data);
   void addVBO(const std::vector<glm::vec2> &a_data);
@@ -97,17 +107,23 @@ public:
   DC_DISALLOW_COPY(RenderableGroup)
   DC_ALLOW_MOVE_H(RenderableGroup)
 
-  /*TEMP*/ inline std::vector<Renderable> const &group() const { return m_group; }
+  /*TEMP*/ inline std::vector<Renderable> const &group() const { return m_renderables; }
 
-  Transform * transform(unsigned int idx);
-  inline void addMaterial(VoMaterial &material) { m_materials.push_back(material); }
-  inline void addRenderable(std::string const &name, RenderablePOD const &data) { m_group.emplace_back(name, data); }
+  Transform *transform(unsigned int idx);
 
+  void addMaterial(VoMaterial &material);
+  void addRenderable(std::string const &name, RenderablePOD const &data, int matIdx = -1);
+
+  void drawAsPBR(Shader const &PBRShader, Camera const &cam);
 
 private:
   std::string             m_name{};
-  std::vector<Renderable> m_group{};
   std::vector<VoMaterial> m_materials{};
+  std::vector<Renderable> m_renderables{};
+
+  std::unordered_map<std::string, int> m_relationRenderableMaterial{}; // K: renderableName, V: matIdx
+
+  std::unordered_multimap<int, std::pair<VoTexs, Texture>> m_textureCache{}; // K: matIdx, V: Texture object
 };
 
 // --------------------------------------------------------------------------------------------------------------------

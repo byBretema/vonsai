@@ -1,5 +1,15 @@
 #include <Vonsai/Vonsai.hpp>
 
+auto guiSpace(int count) {
+  for (int i = 0; i < count; ++i) ImGui::Spacing();
+}
+auto guiDiv(int before = 0, int after = 0) {
+  guiSpace(before);
+  ImGui::Separator();
+  guiSpace(after);
+}
+
+
 void sandbox() {
   vo::Context ctx;
 
@@ -70,19 +80,19 @@ void sandbox() {
   s.setOnUpdateFn([&]() {
     s.setClearColor(0.2, 0.2, 0.2);
     camera.defaultBehaviour(s.getDeltaTime(), ctx.getAspectRatio(), cameraUBO, ctx.getInput());
+    ctx.get(EMesh::GLORIES).drawAsPBR(ctx.get(EShader::PBR), camera);
 
-    if (ui_shade == 0) {
-      ctx.get(EShader::DEBUG).setFloat1("u_debug_mode", ui_dbgMode);
-      vo_draw(ctx.get(EMesh::GLORIES), ctx.get(EShader::DEBUG), &textureGlories, camera, ui_mesh == 0);
-      // vo_draw(ctx.get(EMesh::NANOSUIT), ctx.get(EShader::DEBUG), &bodyTextures.at(bodyTexID), camera, ui_mesh == 1);
-      // vo_draw(ctx.get(EMesh::DRAGON), ctx.get(EShader::DEBUG), &bodyTextures.at(bodyTexID), camera, ui_mesh == 2);
-    }
-
-    if (ui_shade >= 1) {
-      vo_draw(ctx.get(EMesh::GLORIES), ctx.get(EShader::LIGHT), &textureGlories, camera, ui_mesh == 0);
-      // vo_draw(ctx.get(EMesh::NANOSUIT), ctx.get(EShader::LIGHT), &bodyTextures.at(bodyTexID), camera, ui_mesh == 1);
-      // vo_draw(ctx.get(EMesh::DRAGON), ctx.get(EShader::LIGHT), &bodyTextures.at(bodyTexID), camera, ui_mesh == 2);
-    }
+    // if (ui_shade == 0) {
+    //   ctx.get(EShader::DEBUG).setFloat1("u_debug_mode", ui_dbgMode);
+    //   vo_draw(ctx.get(EMesh::GLORIES), ctx.get(EShader::DEBUG), &textureGlories, camera, ui_mesh == 0);
+    // vo_draw(ctx.get(EMesh::NANOSUIT), ctx.get(EShader::DEBUG), &bodyTextures.at(bodyTexID), camera, ui_mesh == 1);
+    // vo_draw(ctx.get(EMesh::DRAGON), ctx.get(EShader::DEBUG), &bodyTextures.at(bodyTexID), camera, ui_mesh == 2);
+    // }
+    // if (ui_shade >= 1) {
+    //   vo_draw(ctx.get(EMesh::GLORIES), ctx.get(EShader::LIGHT), &textureGlories, camera, ui_mesh == 0);
+    // vo_draw(ctx.get(EMesh::NANOSUIT), ctx.get(EShader::LIGHT), &bodyTextures.at(bodyTexID), camera, ui_mesh == 1);
+    // vo_draw(ctx.get(EMesh::DRAGON), ctx.get(EShader::LIGHT), &bodyTextures.at(bodyTexID), camera, ui_mesh == 2);
+    // }
   });
 
 
@@ -92,40 +102,31 @@ void sandbox() {
     ImGui::Begin("Main");
 
     ImGui::TextColored({1.f, 0.5f, 1.f, 1.f}, "DATA");
-    ImGui::Separator();
+    guiSpace(1);
     ImGui::Text("FPS: %d", s.getFPS());
-
-    ImGui::Spacing();   // ----------------------------------------------------------------
-    ImGui::Separator(); // ----------------------------------------------------------------
-    ImGui::Spacing();   // ----------------------------------------------------------------
+    guiDiv(1, 1);
 
     // ImGui::TextColored({1.f, 1.f, 0.5f, 1.f}, "MESH PICKER");
-    // ImGui::Separator();
-    // // for (auto i = 0u; i < show.size(); ++i) { ImGui::Checkbox(vo_fmt("Scene {}", i).c_str(), &show[i]); }
+    // guiSpace(1);
+    // for (auto i = 0u; i < show.size(); ++i) { ImGui::Checkbox(vo_fmt("Scene {}", i).c_str(), &show[i]); }
     // for (auto i = 0u; i < 3; ++i) { ImGui::RadioButton(vo_fmt("Mesh {}", i).c_str(), &ui_mesh, i); }
     // if (ui_mesh == 0) {
     //   ImGui::TextColored({0.75, 1, 1, 1}, "Select skin:");
     //   ImGui::Combo("#Skin", &bodyTexID, "Cyborg\0Criminal\0Skater1\0Skater2\0Survivor1\0Survivor2\0Zombie1\0Zombie2\0",
     //                8);
     // }
+    // guiDiv(1, 1);
 
-    // ImGui::Spacing();   // ----------------------------------------------------------------
-    // ImGui::Separator(); // ----------------------------------------------------------------
-    // ImGui::Spacing();   // ----------------------------------------------------------------
-
-    ImGui::TextColored(ImVec4(1.f, 1.f, 0.5f, 1.f), "SHADERS");
-    ImGui::Separator();
     auto shadeCounter = 0u;
+    ImGui::TextColored(ImVec4(1.f, 1.f, 0.5f, 1.f), "SHADERS");
+    guiSpace(1);
     ImGui::RadioButton("Debug", &ui_shade, shadeCounter++);
     if (ui_shade == 0) {
       ImGui::TextColored({0.75, 1, 1, 1}, "What to Debug?");
       ImGui::Combo("#Debug", &ui_dbgMode, "Flat\0UVs\0Normals\0", 3);
     }
     ImGui::RadioButton("Shade", &ui_shade, shadeCounter++);
-
-    ImGui::Spacing();   // ----------------------------------------------------------------
-    ImGui::Separator(); // ----------------------------------------------------------------
-    ImGui::Spacing();   // ----------------------------------------------------------------
+    guiDiv(1, 1);
 
     ImGui::End();
   });

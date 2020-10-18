@@ -110,17 +110,15 @@ RenderableGroup import(std::string const &filePath) {
   if (scene->HasMeshes()) {
     // vo_log("*** Processing mesh '{}' ***", filePath);
     for (auto i = 0u; i < scene->mNumMeshes; ++i) {
-      auto const name = vo_fmt("{}_{}", filePath, i);
-      auto const data = meshDigest(scene->mMeshes[i]);
-      RG.addRenderable(name, data);
+      auto const *mesh = scene->mMeshes[i];
+      auto const  data = meshDigest(mesh);
+      RG.addRenderable(mesh->mName.C_Str(), data, mesh->mMaterialIndex);
     }
   }
 
   //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
   if (scene->HasMaterials()) {
-    std::vector<aiMaterial> materials;
-    materials.reserve(scene->mNumMaterials);
     for (auto i = 0u; i < scene->mNumMaterials; ++i) {
       auto &&        mat = scene->mMaterials[i];
       AssimpMaterial aiMat;
@@ -163,7 +161,7 @@ RenderableGroup import(std::string const &filePath) {
       // (i == 0) ? vo_print("\n=== Processing material {} ===", mat->GetName().C_Str(), i)
       //          : vo_print("=== Processing material {} ===", mat->GetName().C_Str(), i);
       // voMat.info();
-      // vo_print("=== / Processing material {} ===\n", mat->GetName().C_Str(), i);
+      // vo_print("=== / Processing material {} ===", mat->GetName().C_Str(), i);
       //..................................................
 
       // Clean if MTL

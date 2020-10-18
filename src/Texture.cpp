@@ -58,7 +58,6 @@ void Texture::unbind() const {
 }
 
 void swap(Texture &lhs, Texture &rhs) noexcept {
-  vo_warn("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
   using std::swap;
   swap(lhs.m_ID, rhs.m_ID);
   swap(lhs.m_path, rhs.m_path);

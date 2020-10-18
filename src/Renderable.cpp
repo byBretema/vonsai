@@ -1,11 +1,17 @@
+#include <Vonsai/Camera.hpp>
 #include <Vonsai/Renderable.hpp>
+#include <Vonsai/Shader.hpp>
+// #include <Vonsai/Texture.hpp>
 
 #include <Vonsai/Utils/Logger.hpp>
 #include <Vonsai/Wraps/_gl.hpp>
 
 #include <mutex>
 
+#include <typeinfo>
+
 namespace Vonsai {
+
 
 void VoMaterial::info() const {
   vo_log(" NAME: {}", name);
@@ -146,22 +152,97 @@ void Renderable::unbind() const {
 //--- RENDERABLE GROUP
 //---------------------------------------------------------------------------------------------------------------------
 
-DC_ALLOW_MOVE_C(                            //
-    RenderableGroup,                        //
-    swap(lhs.m_group, rhs.m_group);         //
-    swap(lhs.m_materials, rhs.m_materials); //
+DC_ALLOW_MOVE_C(                                                              //
+    RenderableGroup,                                                          //
+    swap(lhs.m_name, rhs.m_name);                                             //
+    swap(lhs.m_materials, rhs.m_materials);                                   //
+    swap(lhs.m_renderables, rhs.m_renderables);                               //
+    swap(lhs.m_textureCache, rhs.m_textureCache);                             //
+    swap(lhs.m_relationRenderableMaterial, rhs.m_relationRenderableMaterial); //
 );
 
 // --------------------------------------------------------------------------------------------------------------------
 
-// void RenderableGroup::draw() {
-//   for (auto &&renderable : m_group) { BindGuard bgR{renderable}; }
-// }
+Transform *RenderableGroup::transform(unsigned int idx) {
+  return (idx < m_renderables.size()) ? &m_renderables.at(idx).transform : nullptr;
+}
 
 // --------------------------------------------------------------------------------------------------------------------
 
-Transform *RenderableGroup::transform(unsigned int idx) {
-  return (idx < m_group.size()) ? &m_group.at(idx).transform : nullptr;
+void RenderableGroup::addMaterial(VoMaterial &material) {
+  auto  matIdx = m_materials.size();
+  auto &M      = m_materials.emplace_back(material);
+  for (auto &[texType, texPath] : M.texPaths) {
+    // TODO: @DANI : Fix paths issue...
+    if (!texPath.empty()) {
+      // vo_log("1 - {} >>>> {}/{} ", m_name, matIdx, VoTexsStr.at(texType));
+      m_textureCache.emplace(matIdx, std::make_pair(texType, Texture{texPath}));
+    }
+  }
+}
+
+// --------------------------------------------------------------------------------------------------------------------
+
+void RenderableGroup::addRenderable(std::string const &name, RenderablePOD const &data, int matIdx) {
+  m_renderables.emplace_back(name, data);
+  if (matIdx > 0) { m_relationRenderableMaterial.emplace(name, matIdx); }
+}
+
+// --------------------------------------------------------------------------------------------------------------------
+
+void RenderableGroup::drawAsPBR(Shader const &S, Camera const &cam) {
+  for (auto &&R : m_renderables) {
+    auto matIdx = m_relationRenderableMaterial[R.getName()];
+    auto M      = m_materials[matIdx];
+
+    BindGuard bgR{R};
+    BindGuard bgS{S};
+
+    // Upload camera to the shader
+    auto const modelView = cam.getView() * R.transform.matrix();
+    auto const normalMat = glm::transpose(glm::inverse(modelView));
+    S.setMat4("u_modelView", modelView);
+    S.setMat4("u_normalMat", normalMat);
+
+    // Upload mat props to the shader
+    S.setFloat4("u_ColorDiffuse", M.diffuse);
+    S.setFloat4("u_ColorSpecular", M.specular);
+    S.setFloat4("u_ColorAmbient", M.ambient);
+    S.setFloat4("u_ColorEmissive", M.emissive);
+    S.setFloat1("u_Shine", M.shine);
+    S.setFloat1("u_ShineIntensity", M.shineI);
+    S.setFloat1("u_Reflectivity", M.reflectivity);
+    S.setFloat1("u_Refraction", M.refraction);
+
+    // Upload mat textures to the shader
+    auto range = m_textureCache.equal_range(matIdx);
+    for_each(range.first, range.second, [&S](auto &TexData) {
+      auto &&     texType = TexData.second.first;
+      auto const *T       = &TexData.second.second;
+      // vo_log("@@@@ {} / {}", VoTexsStr.at(texType), T->getID());
+      T->bind(); // Revisit this to check IDs if it fails.
+      switch (texType) {
+        case VoTexs::DIFFUSE: S.setTexture("u_TexDiffuse", T->getID()); break;
+        case VoTexs::SPECULAR: S.setTexture("u_TexSpecular", T->getID()); break;
+        case VoTexs::AMBIENT: S.setTexture("u_TexAmbient", T->getID()); break;
+        case VoTexs::EMISSIVE: S.setTexture("u_TexEmissive", T->getID()); break;
+        case VoTexs::HEIGHT: S.setTexture("u_TexHeight", T->getID()); break;
+        case VoTexs::SHININESS: S.setTexture("u_TexShininess", T->getID()); break;
+        case VoTexs::OPACITY: S.setTexture("u_TexOpacity", T->getID()); break;
+        case VoTexs::DISPLACEMENT: S.setTexture("u_TexDisplacement", T->getID()); break;
+        case VoTexs::LIGHTMAP: S.setTexture("u_TexLightmap", T->getID()); break;
+        case VoTexs::REFLECTION: S.setTexture("u_TexReflection", T->getID()); break;
+        default: break;
+      }
+    });
+
+    // Draw call
+    R.draw();
+
+    // Unbind textures
+    for_each(range.first, range.second, [](auto &TexData) { TexData.second.second.unbind(); });
+
+  } // for (auto &&R : m_renderables)
 }
 
 // --------------------------------------------------------------------------------------------------------------------
