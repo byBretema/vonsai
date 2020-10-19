@@ -78,9 +78,16 @@ void sandbox() {
 
 
   s.setOnUpdateFn([&]() {
-    s.setClearColor(0.2, 0.2, 0.2);
+    s.setClearColor(0.1, 0.1, 0.2);
     camera.defaultBehaviour(s.getDeltaTime(), ctx.getAspectRatio(), cameraUBO, ctx.getInput());
-    ctx.get(EMesh::GLORIES).drawAsPBR(ctx.get(EShader::PBR), camera);
+    for (int i = 0; i < ((int)EMesh::LAST); ++i) {
+      if (ui_mesh == i) { ctx.get((EMesh)i).drawAsPBR(ctx.get(EShader::PBR), camera); }
+    }
+    // ctx.get(EMesh::NANOSUIT).drawAsPBR(ctx.get(EShader::PBR), camera);
+    // if (ui_mesh == 0)
+    //   ctx.get(EMesh::GLORIES_HP).drawAsPBR(ctx.get(EShader::PBR), camera);
+    // else if (ui_mesh == 1)
+    //   ctx.get(EMesh::GLORIES_LP).drawAsPBR(ctx.get(EShader::PBR), camera);
 
     // if (ui_shade == 0) {
     //   ctx.get(EShader::DEBUG).setFloat1("u_debug_mode", ui_dbgMode);
@@ -106,16 +113,17 @@ void sandbox() {
     ImGui::Text("FPS: %d", s.getFPS());
     guiDiv(1, 1);
 
-    // ImGui::TextColored({1.f, 1.f, 0.5f, 1.f}, "MESH PICKER");
-    // guiSpace(1);
-    // for (auto i = 0u; i < show.size(); ++i) { ImGui::Checkbox(vo_fmt("Scene {}", i).c_str(), &show[i]); }
-    // for (auto i = 0u; i < 3; ++i) { ImGui::RadioButton(vo_fmt("Mesh {}", i).c_str(), &ui_mesh, i); }
+    ImGui::TextColored({1.f, 1.f, 0.5f, 1.f}, "MESH PICKER");
+    guiSpace(1);
+    for (auto i = 0u; i < (int)EMesh::LAST; ++i) {
+      ImGui::RadioButton(vo_fmt("{}", ctx.get((EMesh)i).getName()).c_str(), &ui_mesh, i);
+    }
     // if (ui_mesh == 0) {
     //   ImGui::TextColored({0.75, 1, 1, 1}, "Select skin:");
     //   ImGui::Combo("#Skin", &bodyTexID, "Cyborg\0Criminal\0Skater1\0Skater2\0Survivor1\0Survivor2\0Zombie1\0Zombie2\0",
     //                8);
     // }
-    // guiDiv(1, 1);
+    guiDiv(1, 1);
 
     auto shadeCounter = 0u;
     ImGui::TextColored(ImVec4(1.f, 1.f, 0.5f, 1.f), "SHADERS");

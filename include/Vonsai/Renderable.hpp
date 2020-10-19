@@ -43,9 +43,9 @@ struct VoMaterial {
   float                                   shine{0.f}, shineI{0.f}, reflectivity{0.f}, refraction{0.f};
   glm::vec4                               diffuse{1.f}, ambient{1.f}, specular{1.f}, emissive{1.f};
   std::unordered_map<VoTexs, std::string> texPaths{
-      {VoTexs::DIFFUSE, ""},      {VoTexs::SPECULAR, ""}, {VoTexs::AMBIENT, ""},   {VoTexs::EMISSIVE, ""},
-      {VoTexs::HEIGHT, ""},       {VoTexs::NORMALS, ""},  {VoTexs::SHININESS, ""}, {VoTexs::OPACITY, ""},
-      {VoTexs::DISPLACEMENT, ""}, {VoTexs::LIGHTMAP, ""}, {VoTexs::REFLECTION, ""}};
+      {VoTexs::DIFFUSE, ""},      {VoTexs::SPECULAR, ""}, {VoTexs::AMBIENT, ""},    {VoTexs::EMISSIVE, ""},
+      {VoTexs::HEIGHT, ""},       {VoTexs::NORMALS, ""},  {VoTexs::SHININESS, ""},  {VoTexs::OPACITY, ""},
+      {VoTexs::DISPLACEMENT, ""}, {VoTexs::LIGHTMAP, ""}, {VoTexs::REFLECTION, ""}, {VoTexs::UNKNOWN, ""}};
 
   void info() const;
 };
@@ -107,6 +107,7 @@ public:
   DC_DISALLOW_COPY(RenderableGroup)
   DC_ALLOW_MOVE_H(RenderableGroup)
 
+  inline std::string                             getName() const { return m_name; }
   /*TEMP*/ inline std::vector<Renderable> const &group() const { return m_renderables; }
 
   Transform *transform(unsigned int idx);

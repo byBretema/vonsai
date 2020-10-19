@@ -108,7 +108,7 @@ RenderableGroup import(std::string const &filePath) {
   //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
   if (scene->HasMeshes()) {
-    // vo_log("*** Processing mesh '{}' ***", filePath);
+    vo_log("*** Processing mesh '{}' ***", filePath);
     for (auto i = 0u; i < scene->mNumMeshes; ++i) {
       auto const *mesh = scene->mMeshes[i];
       auto const  data = meshDigest(mesh);

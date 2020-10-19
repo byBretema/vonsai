@@ -32,6 +32,7 @@ public:                                                      \
     swap(*this, rhs);                                        \
     return *this;                                            \
   }
+
 #define DC_ALLOW_MOVE_C(ClassName, code)               \
   void swap(ClassName &lhs, ClassName &rhs) noexcept { \
     using std::swap;                                   \

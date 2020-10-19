@@ -28,7 +28,7 @@ inline void defaultSetup() {
   // glEnable(GL_BLEND);
   // glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-  glClearColor(.2f, .2f, .2f, 1.f);
+  // glClearColor(.2f, .2f, .2f, 1.f);
 }
 
 inline void clearColor(float r, float g, float b) { glClearColor(r, g, b, 1.f); }

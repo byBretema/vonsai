@@ -18,19 +18,20 @@ Context::Context() {
 
   //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-  // for (auto i = 0u; i < (unsigned int)EScene::LAST; ++i) { m_scenes.emplace((EScene)i, Scene{}); }
-  m_scenes.emplace(EScene::S0, Scene{});
+  for (auto i = 0u; i < (unsigned int)EScene::LAST; ++i) { m_scenes.emplace((EScene)i, Scene{}); }
 
   //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-  m_meshes.emplace(EMesh::GLORIES, Mesh::import("/Users/cambalamas/Desktop/Glories/HighPoly/GloriesTower_HP.obj"));
-  // m_meshes.emplace(EMesh::MONKEY, Mesh::import(vo_res + "models/monkey.obj"));
-  // m_meshes.emplace(EMesh::CUBE, Mesh::import(vo_res + "models/cube.fbx"));
-  // m_meshes.emplace(EMesh::PLANE, Mesh::import(vo_res + "models/plane.obj"));
-  // m_meshes.emplace(EMesh::DRAGON, Mesh::import(vo_res + "models/dragon.obj"));
-  // m_meshes.emplace(EMesh::BODY, Mesh::import(vo_res + "models/kenney/character.fbx"));
-  // m_meshes[(int)EMesh::BODY]->transform(0u)->modRotX(-90.f);
-  // m_meshes[(int)EMesh::BODY]->transform(0u)->modPosY(-1.75f);
+  m_meshes.emplace(EMesh::GLORIES_HP, Mesh::import("/Users/cambalamas/Desktop/Glories/HighPoly/GloriesTower_HP.obj"));
+  m_meshes.emplace(EMesh::GLORIES_LP, Mesh::import("/Users/cambalamas/Desktop/Glories/LowPoly/GloriesTower_LP.obj"));
+  m_meshes.emplace(EMesh::MONKEY, Mesh::import(vo_res + "models/monkey.obj"));
+  m_meshes.emplace(EMesh::CUBE, Mesh::import(vo_res + "models/cube.fbx"));
+  m_meshes.emplace(EMesh::PLANE, Mesh::import(vo_res + "models/plane.obj"));
+  m_meshes.emplace(EMesh::DRAGON, Mesh::import(vo_res + "models/dragon.obj"));
+  m_meshes.emplace(EMesh::NANOSUIT, Mesh::import(vo_res + "models/nanosuit/nanosuit.fbx"));
+  m_meshes.emplace(EMesh::BODY, Mesh::import(vo_res + "models/kenney/character.fbx"));
+  m_meshes.at(EMesh::BODY).transform(0u)->modRotX(-90.f);
+  m_meshes.at(EMesh::BODY).transform(0u)->modPosY(-1.75f);
 
   //:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
